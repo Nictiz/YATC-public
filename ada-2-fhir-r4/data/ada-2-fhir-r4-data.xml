@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="../sch/ada-2-fhir-r4-data.sch" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<ada-2-fhir-r4-data xmlns="https://nictiz.nl/ns/YATC-public" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://nictiz.nl/ns/YATC-public ../xsd/ada-2-fhir-r4-data.xsd">
+    <!-- ================================================================== -->
+    <!--
+        This is the production data for the ada-2-fhir-r4 processing.
+        
+        Information about the format of this document in its schema ../xsd/ada-2-fhir-r4-data.xsd
+        Information about how this file is used in the documentation in the ../doc/ subdirectory.
+    -->
+    <!-- ================================================================== -->
+    <!-- lab -->
+
+    <application name="lab" version="3.0.0" source-adarefs2ada="true">
+
+        <!-- TBD THIS IS JUST A DUMMY/TEST SETUP COPIED FROM ADA-2-WIKI!!! -->
+        
+        <message>*** DUMMY SETUP ***</message>
+
+        <setup usecase="sturen_laboratoriumresultaten" directory-id="slr">
+            <copy-data target-subdir="ada_instance_repo" source-subdir="ada_instance_repo" directory-id="slr-instance-repo">
+                <include glob="*.xml"/>
+            </copy-data>
+            <copy-data target-subdir="ada_instance" source-subdir="ada_instance" directory-id="slr-instance">
+                <include glob="*.xml"/>
+            </copy-data>
+            <copy-project-schemas>
+                <include glob="*$USECASE.xsd"/>
+            </copy-project-schemas>
+            <empty-directory target-subdir="wiki_instance" directory-id="slr-wiki-instance"/>
+        </setup>
+
+    </application>
+
+</ada-2-fhir-r4-data>

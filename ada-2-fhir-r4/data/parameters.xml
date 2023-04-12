@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<parameters xmlns="https://nictiz.nl/ns/YATC-shared" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://nictiz.nl/ns/YATC-shared ../../../YATC-shared/xsd/parameters.xsd">
+    <!-- ======================================================================= -->
+    <!-- 
+        This is the YATC system parameters file for the YATC-public/ada-2-fhir-r4 component.
+        
+        More information about the YATC parameters system can be found here: ../../../YATC-shared/doc/parameters-system.md
+    -->
+    <!-- ======================================================================= -->
+
+    <parameter name="ada2fhirr4DataDocument">
+        <!-- The *absolute* name of the file with the application ADA retrieval data. -->
+        <value>{$yatcComponentDirectory}/data/ada-2-fhir-r4-data.xml</value>
+    </parameter>
+    
+    <parameter name="ada2fhirr4BaseStorageDirectory">
+        <!-- The absolute URI of the base directory for storing the results of the ada-2-fhir-r4 processing.
+             The application's name and version are appended to this, for instance: …/lab/3.0.0. -->
+        <value>{$publicBaseStorageDirectory}/ada_2_fhir-r4</value>
+    </parameter>
+   
+</parameters>

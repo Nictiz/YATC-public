@@ -41,7 +41,7 @@
     <!-- ======================================================================= -->
     <!-- STATIC OPTIONS: -->
 
-    <p:option static="true" name="ada-2-fhir-r4-debug" as="xs:boolean" select="false()">
+    <p:option static="true" name="ada-2-fhir-r4-debug" as="xs:boolean" select="true()">
         <!-- Set this to true to get some additional output/behavior for debugging purposes -->
     </p:option>
 
@@ -69,6 +69,15 @@
              If you want all versions, leave this option empty or use $yatcs:allIndicator  -->
     </p:option>
 
+    <p:option name="setup" as="xs:boolean" required="false" select="true()">
+        <!-- If true, the application's setup will be done (the <setup> elements processed). -->
+    </p:option>
+
+    <p:option name="actions" as="xs:string*" required="false" select="()">
+        <!-- The list of actions to perform -->
+    </p:option>
+
+
     <!-- ======================================================================= -->
 
     <p:declare-step type="local:ada-2-fhir-r4-for-application" name="ada-2-fhir-r4-for-application">
@@ -81,7 +90,9 @@
             <!-- The <yatcp:application> element with the information about the data to retrieve. -->
         </p:input>
 
-        <p:option name="parameters" as="map(xs:string, xs:string*)?" required="true"/>
+        <p:option name="parameters" as="map(xs:string, xs:string*)" required="true"/>
+        <p:option name="setup" as="xs:boolean" required="true"/>
+        <p:option name="actions" as="xs:string*" required="true"/>
 
         <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
@@ -89,7 +100,6 @@
         <p:variable name="application" as="xs:string" select="xs:string(/*/@name)"/>
         <p:variable name="version" as="xs:string" select="xs:string(/*/@version)"/>
         <p:variable name="storageBaseDirectory" as="xs:string" select="xs:string(/*/@_target-dir)"/>
-        <p:variable name="sourceProjectName" as="xs:string" select="xs:string((/*/@source-project-name, $application)[1])"/>
 
         <p:identity message=""/>
         <p:identity message="* ada-2-fhir-r4 processing for {$application}/{$version}"/>
@@ -97,85 +107,119 @@
 
         <yatcs:process-application-messages/>
 
-        <!-- Perform the setup: -->
-        <p:for-each name="setups">
-            <p:with-input select="/*/yatcp:setup"/>
-            <yatcs:process-setup-element reportCount="true" loadResults="false"/>
-        </p:for-each>
+        <!-- Perform the setup if requested: -->
+        <p:if test="$setup">
+            <p:for-each name="setups">
+                <p:with-input select="/*/yatcp:setup"/>
+                <yatcs:process-setup-element reportCount="true" loadResults="false"/>
+            </p:for-each>
+        </p:if>
 
-        <!-- And perform the builds: -->
-        <!--<p:for-each name="built-documents" depends="setups">
-            <p:with-input select="/*/yatcp:build" pipe="source@ada-2-fhir-r4-for-application"/>
+        <!-- Process the actions: -->
+        <p:identity>
+            <p:with-input pipe="source@ada-2-fhir-r4-for-application"/>
+        </p:identity>
+        <p:variable name="defaultActionName" as="xs:string?" select="(/*/yatcp:action[xs:boolean((@default, false())[1])][1])/@name"/>
+        <p:choose>
+            <p:when test="empty($actions) and exists($defaultActionName)">
+                <local:process-action-by-name>
+                    <p:with-option name="actionName" select="$defaultActionName"/>
+                    <p:with-option name="parameters" select="$parameters"/>
+                </local:process-action-by-name>
+            </p:when>
+            <p:when test="exists($actions)">
+                <p:for-each>
+                    <p:with-input select="$actions">
+                        <null/>
+                    </p:with-input>
+                    <p:variable name="actionName" as="xs:string" select="."/>
+                    <local:process-action-by-name>
+                        <p:with-input pipe="source@ada-2-fhir-r4-for-application"/>
+                        <p:with-option name="actionName" select="$actionName"/>
+                        <p:with-option name="parameters" select="$parameters"/>
+                    </local:process-action-by-name>
+                </p:for-each>
+            </p:when>
+            <p:otherwise>
+                <p:identity message="  * No action(s) specified"/>
+            </p:otherwise>
+        </p:choose>
 
-            <p:variable name="buildName" as="xs:string" select="string((/*/@name, ('Build ' || p:iteration-position() || '/' || p:iteration-size()))[1])"/>
-            <p:variable name="adaWorkingSetDirectory" as="xs:string?" select="xs:string(/*/yatcp:ada-working-set/@directory)"/>
-            <p:variable name="hrefBuildStylesheet" as="xs:string" select="string(/*/yatcp:stylesheet/@href)"/>
-            <p:variable name="outputFilename" as="xs:string" select="string-join((/*/yatcp:output/@directory, /*/yatcp:output/@name), '/')"/>
-            <p:variable name="inputFilename" as="xs:string" select="if (exists(/*/yatcp:input-document)) then string-join((/*/yatcp:input-document/@directory, /*/yatcp:input-document/@name), '/') else resolve-uri('../../../YATC-shared/data/dummy.xml', static-base-uri())"/>
+    </p:declare-step>
 
-            <p:group name="preamble">
-                <p:identity message="  * Ada-2-wiki build &quot;{$buildName}&quot; for {$application}/{$version}"/>
-                <p:identity message="    * To: &quot;{$outputFilename}&quot;"/>
-                <p:identity message="    * Stylesheet: &quot;{$hrefBuildStylesheet}&quot;"/>
+    <!-- ======================================================================= -->
 
-                <!-\- Perform availability check on the build stylesheet: -\->
-                <p:if test="not(doc-available($hrefBuildStylesheet))">
-                    <p:error code="yatcs:error">
-                        <p:with-input>
-                            <p:inline content-type="text/plain" xml:space="preserve">Build stylesheet not found or not well-formed: &quot;{$hrefBuildStylesheet}&quot;</p:inline>
-                        </p:with-input>
-                    </p:error>
-                </p:if>
+    <p:declare-step type="local:process-action-by-name" name="process-action-by-name">
+        <!-- TBD identity step -->
+        <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
-                <!-\- Perform availability check on the (optional) specific input document: -\->
-                <p:if test="exists(/*/yatcp:input-document)">
-                    <p:if test="not(doc-available($inputFilename))">
-                        <p:error code="yatcs:error">
-                            <p:with-input>
-                                <p:inline content-type="text/plain" xml:space="preserve">Input document for build not found or not well-formed: &quot;{$inputFilename}&quot;</p:inline>
-                            </p:with-input>
-                        </p:error>
-                    </p:if>
-                </p:if>
-            </p:group>
+        <p:input port="source" primary="true" sequence="false" content-types="xml">
+            <!-- The <yatcp:application> element that holds the action to process. -->
+        </p:input>
+        <p:output port="result" sequence="false" content-types="xml" pipe="source@process-action-by-name"/>
 
-            <!-\- Create the basic map with the stylesheet parameters. All these parameters are string values. -\->
-            <p:xslt depends="preamble">
-                <p:with-input pipe="current@built-documents"/>
-                <p:with-input port="stylesheet" href="xsl-ada-2-fhir-r4/get-ada-2-fhir-r4-build-stylesheet-parameters.xsl"/>
-                <p:with-option name="parameters" select="map{
-                    'application': $application, 
-                    'version': $version, 
-                    'sourceProjectName': $sourceProjectName,
-                    'buildName': $buildName,
-                    'baseDirectory': $storageBaseDirectory
-                }"/>
-            </p:xslt>
-            <p:variable name="buildStylesheetParameters" as="map(*)" select="."/>
+        <p:option name="actionName" as="xs:string" required="true"/>
+        <p:option name="parameters" as="map(xs:string, xs:string*)" required="true"/>
+        <p:option name="dependencyParentActionName" as="xs:string?" required="false" select="()"/>
+        <p:option name="previousDependencyActions" as="xs:string*" required="false" select="()"/>
 
-            <!-\- Apply the stylesheet: -\->
-            <p:xslt name="apply-build-stylesheet">
-                <p:with-input href="{$inputFilename}"/>
-                <p:with-input port="stylesheet" href="{$hrefBuildStylesheet}"/>
-                <p:with-option name="parameters" select="$buildStylesheetParameters"/>
-            </p:xslt>
+        <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
-            <!-\- The output of this stylesheet is supposed to be a *text* WIKI document. Store it as such: -\->
-            <!-\- The encoding for the WIKI text files was originally UTF-16BE. UTF-8 probably makes more sense. 
-                 The actual encoding used is in parameter ada2wikiTextEncoding. -\->
-            <p:variable name="textEncoding" select="($parameters($yatcp:parnameAda2wikiTextEncoding)[.], 'UTF-8')[1]"/>
-            <p:store href="{$outputFilename}" serialization="map{'method': 'text', 'encoding': $textEncoding}"/>
+        <!-- Check if this action exists at all: -->
+        <p:if test="empty(/*/yatcp:action[@name eq $actionName])">
+            <p:error code="yatcs:error">
+                <p:with-input>
+                    <p:inline content-type="text/plain" xml:space="preserve">Undefined action: "{$actionName}"</p:inline>
+                </p:with-input>
+            </p:error>
+        </p:if>
+        
+        <!-- Check for circular actions: -->
+        <p:if test="$actionName = $previousDependencyActions">
+            <p:error code="yatcs:error">
+                <p:with-input>
+                    <p:inline content-type="text/plain" xml:space="preserve">Circular action dependency: "{$actionName}"</p:inline>
+                </p:with-input>
+            </p:error>
+        </p:if>
 
-            <!-\- There might be secondary (<xsl:result-document …>) outputs (usually debug files). Store these too: 
-                 Sometimes these are html files. We don't specify a serialization here, so it uses the serialization set 
-                 by the stylesheet.
-            -\->
+        <!-- Process the action: -->
+        <p:for-each name="process-action">
+            <p:with-input select="/*/yatcp:action[@name eq $actionName][1]"/>
+
+            <!-- Take care of the dependencies (if any): -->
+            <p:variable name="dependencies" as="xs:string*" select="tokenize(string(/*/@depends-on), '\s+')[.]"/>
             <p:for-each>
-                <p:with-input pipe="secondary@apply-build-stylesheet"/>
-                <p:store href="{base-uri(/)}"/>
+                <p:with-input select="$dependencies">
+                    <null/>
+                </p:with-input>
+                <p:variable name="mainActionName" as="xs:string" select="$actionName">
+                    <!-- Remark: This copying of the action name shouldn't be necessary, but it works around a hard to trace bug... :( -->
+                </p:variable>
+                <p:variable name="dependentActionName" as="xs:string" select="."/>
+                <local:process-action-by-name>
+                    <p:with-input pipe="source@process-action-by-name"/>
+                    <p:with-option name="actionName" select="$dependentActionName"/>
+                    <p:with-option name="dependencyParentActionName" select="$mainActionName"/>
+                    <p:with-option name="previousDependencyActions" select="($previousDependencyActions, $mainActionName)"/>
+                    <p:with-option name="parameters" select="$parameters"/>
+                </local:process-action-by-name>
             </p:for-each>
 
-        </p:for-each>-->
+            <!-- Go for this action: -->
+            <p:identity>
+                <p:with-input pipe="current@process-action"/>
+            </p:identity>
+            <p:identity message="  * Action: {string-join((/*/@name, /*/@description), ' - ')} {if (exists($dependencyParentActionName)) then ('(dependency of ' || $dependencyParentActionName || ')') else ()}"/>
+
+            <!-- Output any action specific messages: -->
+            <yatcs:process-application-messages>
+                <p:with-option name="messagePrefix" select="'    * '"/>
+            </yatcs:process-application-messages>
+
+            <!-- TBD AND HERE ALL THE BUILD STUFF! -->
+        </p:for-each>
+
 
     </p:declare-step>
 
@@ -217,6 +261,8 @@
         <p:try use-when="not($ada-2-fhir-r4-debug)">
             <local:ada-2-fhir-r4-for-application>
                 <p:with-option name="parameters" select="$parameters"/>
+                <p:with-option name="setup" select="$setup"/>
+                <p:with-option name="actions" select="$actions"/>
             </local:ada-2-fhir-r4-for-application>
             <p:catch name="get-production-error-catch">
                 <!-- Some error occurred during processing. Report this, but try to keep calm and carry on: -->
@@ -231,6 +277,8 @@
         </p:try>
         <local:ada-2-fhir-r4-for-application p:use-when="$ada-2-fhir-r4-debug">
             <p:with-option name="parameters" select="$parameters"/>
+            <p:with-option name="setup" select="$setup"/>
+            <p:with-option name="actions" select="$actions"/>
         </local:ada-2-fhir-r4-for-application>
 
     </p:for-each>

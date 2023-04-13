@@ -45,4 +45,35 @@
     <!-- Directory references in @directory attributes must exist: -->
     <include href="../../../YATC-shared/schmod/directory-id-reference.mod.sch"/>
     
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+    
+    <!-- Action names must be unique within an application: -->
+    <pattern>
+        <rule context="yatcp:action/@name">
+            <let name="name" value="string(.)"/>
+            <assert test="count(ancestor::*:application//descendant-or-self::yatcp:action/@name[. eq $name]) eq 1">Action name "<value-of select="$name"/>" not unique</assert>
+        </rule>
+    </pattern>
+    
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+    
+    <!-- There can only be one (or none) default action for an application: -->
+    <pattern>
+        <rule context="yatcp:application">
+            <assert test="count(yatcp:action[xs:boolean((@default, false())[1])]) le 1">Multiple default actions found</assert>
+        </rule>
+    </pattern>    
+    
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+    
+    <!-- Action @depends-on targets must exist and not reference itself: -->
+    <pattern>
+        <rule context="yatcp:action[normalize-space(@depends-on) ne '']">
+            <let name="actionName" value="string(@name)"/>
+            <let name="dependencies" value="tokenize(string(@depends-on), '\s+')[.]"/>
+            <assert test="every $d in $dependencies satisfies ($d ne $actionName)">An action cannot depend on itself</assert>
+            <assert test="every $d in $dependencies satisfies exists(../yatcp:action[@name eq $d])">One or more dependent actions not found</assert>
+        </rule>
+    </pattern>
+    
 </schema>

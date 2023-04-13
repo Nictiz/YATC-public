@@ -44,6 +44,37 @@ Can also be used as root element for XIncluded documents.</xs:documentation>
             <xs:choice maxOccurs="unbounded" minOccurs="0">
                 <xs:group ref="yatcp:g-setup"/>
                 <xs:group ref="yatcp:g-message"/>
+                <xs:element name="action">
+                    <xs:annotation>
+                        <xs:documentation>An action to be performed (consisting of build steps)</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:group ref="yatcp:g-action-build-steps"/>
+                        <xs:attribute name="name" type="yatcp:t-action-name">
+                            <xs:annotation>
+                                <xs:documentation>The name of this action</xs:documentation>
+                            </xs:annotation>
+                        </xs:attribute>
+                        <xs:attribute default="false" name="default" type="xs:boolean">
+                            <xs:annotation>
+                                <xs:documentation>Whether this is the default action to be performed when none was specified.</xs:documentation>
+                            </xs:annotation>
+                        </xs:attribute>
+                        <xs:attribute name="depends-on">
+                            <xs:annotation>
+                                <xs:documentation>Whitespace separated list of action names to be performed *before* this action can start. </xs:documentation>
+                            </xs:annotation>
+                            <xs:simpleType>
+                                <xs:list itemType="yatcp:t-action-name"/>
+                            </xs:simpleType>
+                        </xs:attribute>
+                        <xs:attribute name="description" type="yatcp:t-non-zero-length-string">
+                            <xs:annotation>
+                                <xs:documentation>Optional short description for this action.</xs:documentation>
+                            </xs:annotation>
+                        </xs:attribute>
+                    </xs:complexType>
+                </xs:element>
             </xs:choice>
             <xs:attributeGroup ref="yatcp:ag-application-name-version"/>
             <xs:attributeGroup ref="yatcp:ag-source-project-name"/>
@@ -55,4 +86,17 @@ Can also be used as root element for XIncluded documents.</xs:documentation>
             <xs:attribute ref="xml:base"/>
         </xs:complexType>
     </xs:element>
+    <xs:group name="g-action-build-steps">
+        <xs:annotation>
+            <xs:documentation>Definition of the elements that make up an action.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:choice maxOccurs="unbounded" minOccurs="0">
+                <xs:group ref="yatcp:g-message"/>
+            </xs:choice>
+        </xs:sequence>
+    </xs:group>
+    <xs:simpleType name="t-action-name">
+        <xs:restriction base="xs:NCName"/>
+    </xs:simpleType>
 </xs:schema>

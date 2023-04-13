@@ -46,13 +46,18 @@
     <p:variable name="startDateTime" as="xs:dateTime" select="current-dateTime()"/>
 
     <!-- The possible command flags: -->
-    <p:variable name="commandFlagsAll" as="xs:string+" select="($yatcs:commandFlagHelp, $yatcs:commandFlagList, $yatcs:commandFlagProcess)"/>
+    <p:variable name="commandFlagsAll" as="xs:string+" select="($yatcs:commandFlagHelp, $yatcs:commandFlagList, $yatcs:commandFlagSetup, $yatcs:commandFlagAction, $yatcs:commandFlagActionList)"/>
 
     <!-- Unravel the command: -->
     <p:variable name="commandParts" as="xs:string*" select="tokenize($commandLine, '\s+')[.]"/>
     <p:variable name="commandFlags" as="xs:string*" select="$commandParts[starts-with(., '-')]"/>
+    <p:variable name="commandFlagsNoArguments" as="xs:string*" select="$commandFlags ! replace(., '^(.+?)(:.+)?$', '$1')"/>
     <p:variable name="commandArguments" as="xs:string*" select="$commandParts[not(starts-with(., '-'))]"/>
-    <p:variable name="invalidCommandFlagsPresent" as="xs:boolean" select="some $cf in $commandFlags satisfies not($cf = $commandFlagsAll)"/>
+    <p:variable name="invalidCommandFlagsPresent" as="xs:boolean" select="some $cf in $commandFlagsNoArguments satisfies not($cf = $commandFlagsAll)"/>
+
+    <!-- Create a list of actions (separated by +). For instance -action:a+b means action a followed by action b. -->
+    <p:variable name="actionsRaw" as="xs:string" select="$commandFlags[starts-with(., $yatcs:commandFlagAction)][1] => substring-after($yatcs:commandFlagAction || ':')"/>
+    <p:variable name="actions" as="xs:string*" select="tokenize($actionsRaw, '\+')[.] => distinct-values()"/>
 
     <!-- Interpret the command: -->
     <p:choose>
@@ -100,7 +105,26 @@
                     <p:text-join separator="&#10;"/>
                 </p:when>
 
-                <!-- No flags (or -process, which we don't have to check implicitly) means: do ada-2-fhir-r4: -->
+                <!-- List the available actions: -->
+                <p:when test="$yatcs:commandFlagActionList = $commandFlags" >
+                    <p:for-each>
+                        <p:with-input select="$ada2fhirr4Data/*/yatcp:application">
+                            <null/>
+                        </p:with-input>
+                        <p:variable name="applicationPrompt" select="string(/*/@name) || '/' || string(/*/@version)"/>
+                        <p:for-each>
+                            <p:with-input select="/*/yatcp:action"/>
+                            <p:identity>
+                                <p:with-input>
+                                    <p:inline content-type="text/plain" xml:space="preserve">{$applicationPrompt} {/*/@name} {/*/@description}</p:inline>
+                                </p:with-input>
+                            </p:identity>
+                        </p:for-each>
+                    </p:for-each>
+                    <p:text-join separator="&#10;"/>
+                </p:when>
+
+                <!-- Do something: -->
                 <p:when test="count($commandArguments) eq 2">
                     <p:output content-types="any" sequence="true"/>
 
@@ -109,6 +133,8 @@
                         <p:with-option name="ada2fhirr4Data" select="$ada2fhirr4Data"/>
                         <p:with-option name="application" select="$application"/>
                         <p:with-option name="version" select="$version"/>
+                        <p:with-option name="setup" select="$yatcs:commandFlagSetup = $commandFlags"/>
+                        <p:with-option name="actions" select="$actions"/>
                     </yatcp:process-ada-2-fhir-r4>
 
                     <!-- Report the duration and output nothing: -->

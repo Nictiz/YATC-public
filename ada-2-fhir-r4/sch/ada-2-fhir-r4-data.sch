@@ -42,14 +42,7 @@
     
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
     
-    <!-- Build directory references must exist (@directory="@..." or "^..."): -->
-    <!-- TBD NOT YET DEFINED -->
-    <!--<pattern>
-        <rule context="yatci:build//@directory[starts-with(., '@') or starts-with(., '^')]">
-            <let name="id" value="replace(., '^[@\^](\c+).*$', '$1')"/>
-            <let name="setup-elements" value="ancestor::yatci:application/yatci:setup"/>
-            <assert test="exists($setup-elements/descendant-or-self::*[@directory-id eq $id])">Directory identifier "<value-of select="$id"/>" not found <value-of select="count($setup-elements)"/></assert>
-        </rule>
-    </pattern>-->
+    <!-- Directory references in @directory attributes must exist: -->
+    <include href="../../../YATC-shared/schmod/directory-id-reference.mod.sch"/>
     
 </schema>

@@ -1,3 +1,0 @@
-# DOC TBD
-
-Text

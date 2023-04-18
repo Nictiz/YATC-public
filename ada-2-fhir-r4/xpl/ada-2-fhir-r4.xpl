@@ -173,7 +173,7 @@
                 </p:with-input>
             </p:error>
         </p:if>
-        
+
         <!-- Check for circular actions: -->
         <p:if test="$actionName = $previousDependencyActions">
             <p:error code="yatcs:error">
@@ -183,11 +183,17 @@
             </p:error>
         </p:if>
 
-        <!-- Process the action: -->
+        <!-- Extract and gather some basic application-level things for this action/builds: -->
+        <p:variable name="application" as="xs:string" select="xs:string(/*/@name)"/>
+        <p:variable name="version" as="xs:string" select="xs:string(/*/@version)"/>
+        <p:variable name="storageBaseDirectory" as="xs:string" select="xs:string(/*/@_target-dir)"/>
+        <p:variable name="sourceProjectName" as="xs:string" select="xs:string((/*/@source-project-name, $application)[1])"/>
+
+        <!-- Process the requested action: -->
         <p:for-each name="process-action">
             <p:with-input select="/*/yatcp:action[@name eq $actionName][1]"/>
 
-            <!-- Take care of the dependencies (if any): -->
+            <!-- First, take care of the dependencies (if any): -->
             <p:variable name="dependencies" as="xs:string*" select="tokenize(string(/*/@depends-on), '\s+')[.]"/>
             <p:for-each>
                 <p:with-input select="$dependencies">
@@ -206,20 +212,223 @@
                 </local:process-action-by-name>
             </p:for-each>
 
-            <!-- Go for this action: -->
+            <!-- Now go for this specific action: -->
             <p:identity>
                 <p:with-input pipe="current@process-action"/>
             </p:identity>
-            <p:identity message="  * Action: {string-join((/*/@name, /*/@description), ' - ')} {if (exists($dependencyParentActionName)) then ('(dependency of ' || $dependencyParentActionName || ')') else ()}"/>
+            <p:identity message="  * Action {string-join((/*/@name, /*/@description), ' - ')} {if (exists($dependencyParentActionName)) then ('(dependency of ' || $dependencyParentActionName || ')') else ()} for {$application}/{$version}"/>
 
-            <!-- Output any action specific messages: -->
+            <!-- Output any action specific messages up-front: -->
             <yatcs:process-application-messages>
                 <p:with-option name="messagePrefix" select="'    * '"/>
             </yatcs:process-application-messages>
 
-            <!-- TBD AND HERE ALL THE BUILD STUFF! -->
+            <!-- Do the builds: -->
+            <local:process-action-builds>
+                <p:with-option name="parameters" select="$parameters"/>
+                <p:with-option name="application" select="$application"/>
+                <p:with-option name="version" select="$version"/>
+                <p:with-option name="storageBaseDirectory" select="$storageBaseDirectory"/>
+                <p:with-option name="sourceProjectName" select="$sourceProjectName"/>
+                <p:with-option name="actionName" select="$actionName"/>
+            </local:process-action-builds>
+
         </p:for-each>
 
+    </p:declare-step>
+
+    <!-- ======================================================================= -->
+
+    <p:declare-step type="local:process-action-builds" name="process-action-builds">
+        <!-- TBD identity step -->
+        <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+        <p:input port="source" primary="true" sequence="false" content-types="xml">
+            <!-- The <yatcp:action> element that holds the builds to process. -->
+        </p:input>
+        <p:output port="result" sequence="false" content-types="xml" pipe="source@process-action-builds"/>
+
+        <p:option name="parameters" as="map(xs:string, xs:string*)" required="true"/>
+        <p:option name="application" as="xs:string" required="true"/>
+        <p:option name="version" as="xs:string" required="true"/>
+        <p:option name="storageBaseDirectory" as="xs:string" required="true"/>
+        <p:option name="sourceProjectName" as="xs:string" required="true"/>
+        <p:option name="actionName" as="xs:string" required="true"/>
+
+        <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+        <!-- Perform the builds: -->
+        <p:for-each name="build-documents">
+            <p:with-input select="/*/yatcp:build"/>
+
+            <p:variable name="buildName" as="xs:string" select="string((/*/@name, ('Build ' || p:iteration-position() || '/' || p:iteration-size()))[1])"/>
+            <p:variable name="hrefBuildStylesheet" as="xs:string" select="string(/*/yatcp:stylesheet/@href)"/>
+
+            <!-- Identify the stylesheet to be used and check its availability:: -->
+            <p:identity message="    * Ada-2-fhir-r4 build &quot;{$buildName}&quot; for {$application}/{$version}"/>
+            <p:identity message="      * Stylesheet: &quot;{$hrefBuildStylesheet}&quot;"/>
+            <p:if test="not(doc-available($hrefBuildStylesheet))">
+                <p:error code="yatcs:error">
+                    <p:with-input>
+                        <p:inline content-type="text/plain" xml:space="preserve">Build stylesheet not found or not well-formed: &quot;{$hrefBuildStylesheet}&quot;</p:inline>
+                    </p:with-input>
+                </p:error>
+            </p:if>
+
+            <!-- Find out up-front what we have to do with the direct output of the stylesheet: -->
+            <p:variable name="discardOutput" as="xs:boolean" select="exists(/*/yatcp:discard-output)"/>
+            <p:variable name="multipleOutputs" select="not($discardOutput) and exists(/*/yatcp:output-documents)"/>
+            <p:variable name="outputSpecification" as="xs:string?" select="
+                if ($discardOutput) then () 
+                else if ($multipleOutputs) then string(/*/yatcp:output-documents/@directory)
+                else string-join((/*/yatcp:output-document/@directory, /*/yatcp:output-document/@name), '/')
+             "/>
+
+            <!-- Create the basic map with the stylesheet parameters. All these parameters are string values. -->
+            <p:xslt>
+                <p:with-input pipe="current@build-documents"/>
+                <p:with-input port="stylesheet" href="xsl-ada-2-fhir-r4/get-ada-2-fhir-r4-build-stylesheet-parameters.xsl"/>
+                <p:with-option name="parameters" select="map{
+                    'application': $application, 
+                    'version': $version, 
+                    'sourceProjectName': $sourceProjectName,
+                    'buildName': $buildName,
+                    'baseDirectory': $storageBaseDirectory
+                }"/>
+            </p:xslt>
+            <p:variable name="buildStylesheetParameters" as="map(*)" select="."/>
+
+            <!-- Now based on the type of input we have, run the stylesheet: -->
+            <p:identity>
+                <p:with-input pipe="current@build-documents"/>
+            </p:identity>
+            <p:choose name="apply-build-stylesheet">
+
+                <!-- No input document: -->
+                <p:when test="exists(/*/yatcp:no-input)">
+                    <p:output port="result" primary="true" sequence="true"/>
+                    <p:output port="secondary" primary="false" sequence="true" pipe="secondary@apply-build-stylesheet-no-input"/>
+                    <p:xslt name="apply-build-stylesheet-no-input" message="      * No input document">
+                        <p:with-input>
+                            <dummy/>
+                        </p:with-input>
+                        <p:with-input port="stylesheet" href="{$hrefBuildStylesheet}"/>
+                        <p:with-option name="parameters" select="$buildStylesheetParameters"/>
+                    </p:xslt>
+                    <!-- Set the correct base-uri for the direct output document (if not discarded): -->
+                    <p:if test="not($discardOutput)">
+                        <p:choose>
+                            <p:when test="$multipleOutputs">
+                                <p:set-properties properties="map{'base-uri': string-join(($outputSpecification, 'no-input.xml'), '/')}"/>
+                            </p:when>
+                            <p:otherwise>
+                                <p:set-properties properties="map{'base-uri': $outputSpecification}"/>
+                            </p:otherwise>
+                        </p:choose>
+                    </p:if>
+                </p:when>
+
+                <!-- A specific input document: -->
+                <p:when test="exists(/*/yatcp:input-document)">
+                    <p:output port="result" primary="true" sequence="true"/>
+                    <p:output port="secondary" primary="false" sequence="true" pipe="secondary@apply-build-stylesheet-input-document"/>
+                    <p:variable name="inputFilename" select="string(/*/yatcp:input-document[1]/@name)"/>
+                    <p:variable name="inputUri" as="xs:string" select="string-join((/*/yatcp:input-document[1]/@directory, $inputFilename), '/')"/>
+                    <p:if test="not(doc-available($inputUri))">
+                        <p:error code="yatcs:error">
+                            <p:with-input>
+                                <p:inline content-type="text/plain" xml:space="preserve">Input document for build not found or not well-formed: &quot;{$inputFilename}&quot;</p:inline>
+                            </p:with-input>
+                        </p:error>
+                    </p:if>
+                    <p:xslt name="apply-build-stylesheet-input-document" message="      * Input document &quot;{$inputFilename}&quot;">
+                        <p:with-input href="{$inputUri}"/>
+                        <p:with-input port="stylesheet" href="{$hrefBuildStylesheet}"/>
+                        <p:with-option name="parameters" select="$buildStylesheetParameters"/>
+                    </p:xslt>
+                    <!-- Set the correct base-uri for the direct output document (if not discarded): -->
+                    <p:if test="not($discardOutput)">
+                        <p:choose>
+                            <p:when test="$multipleOutputs">
+                                <p:set-properties properties="map{'base-uri': string-join(($outputSpecification, $inputFilename), '/')}"/>
+                            </p:when>
+                            <p:otherwise>
+                                <p:set-properties properties="map{'base-uri': $outputSpecification}"/>
+                            </p:otherwise>
+                        </p:choose>
+                    </p:if>
+                </p:when>
+
+                <!-- Multiple input documents -->
+                <p:when test="exists(/*/yatcp:input-documents)">
+                    <p:output port="result" primary="true" sequence="true" pipe="result@apply-build-stylesheet-input-documents"/>
+                    <p:output port="secondary" primary="false" sequence="true" pipe="secondary@apply-build-stylesheet-input-documents"/>
+                    <p:variable name="inputDocumentsElement" as="element(yatcp:input-documents)" select="/*/yatcp:input-documents[1]"/>
+                    <p:variable name="inputDirectory" as="xs:string" select="string($inputDocumentsElement/@directory)"/>
+                    <p:variable name="acceptEmpty" as="xs:boolean" select="xs:boolean(($inputDocumentsElement/@accept-empty, false())[1])"/>
+                    <!-- Load the documents: -->
+                    <yatcs:load-documents-from-disk-from-patterns p:message="      * Input directory: &quot;{$inputDirectory}&quot;">
+                        <p:with-option name="copyPatternsElement" select="$inputDocumentsElement"/>
+                        <p:with-option name="hrefSource" select="$inputDirectory"/>
+                    </yatcs:load-documents-from-disk-from-patterns>
+                    <!-- Check for an empty set: -->
+                    <p:variable name="inputDocumentsCount" as="xs:integer" select="count(collection())" collection="true"/>
+                    <p:if test="not($acceptEmpty) and ($inputDocumentsCount le 0)">
+                        <p:error code="yatcs:error">
+                            <p:with-input>
+                                <p:inline content-type="text/plain" xml:space="preserve">No documents selected for build "{$buildName}"</p:inline>
+                            </p:with-input>
+                        </p:error>
+                    </p:if>
+                    <p:identity message="      * Processing {$inputDocumentsCount} documents"/>
+                    <!-- Do the transforms: -->
+                    <p:for-each name="apply-build-stylesheet-input-documents">
+                        <p:output port="result" primary="true" sequence="true"/>
+                        <p:output port="secondary" primary="false" sequence="true" pipe="secondary@apply-build-stylesheet"/>
+                        <p:variable name="inputFilename" as="xs:string" select="replace(base-uri(/), '.*[/\\]([^/\\]+)$', '$1')"/>
+                        <p:xslt name="apply-build-stylesheet">
+                            <p:with-input port="stylesheet" href="{$hrefBuildStylesheet}"/>
+                            <p:with-option name="parameters" select="$buildStylesheetParameters"/>
+                        </p:xslt>
+                        <!-- Set the correct base-uri for the direct output document (if not discarded): -->
+                        <p:if test="not($discardOutput)">
+                            <p:set-properties properties="map{'base-uri': string-join(($outputSpecification, $inputFilename), '/')}"/>
+                        </p:if>
+                    </p:for-each>
+
+                </p:when>
+
+                <!-- Unrecognized: -->
+                <p:otherwise>
+                    <p:output port="result" primary="true" sequence="true"/>
+                    <p:output port="secondary" primary="false" sequence="true">
+                        <p:empty/>
+                    </p:output>
+                    <p:error code="yatcs:error">
+                        <p:with-input>
+                            <p:inline content-type="text/plain" xml:space="preserve">Invalid or missing input specification for build &quot;{$buildName}&quot;</p:inline>
+                        </p:with-input>
+                    </p:error>
+                </p:otherwise>
+
+            </p:choose>
+
+            <!-- The primary output of the p:choose above is the direct document produced by the stylesheet. 
+                 See if we have to store this: -->
+            <p:if test="not($discardOutput)">
+                <p:for-each>
+                    <p:store href="{base-uri(/)}" serialization="$yatcs:standardXmlSerialization" message="      * Storing direct build result: &quot;{base-uri(/)}&quot;"/>
+                </p:for-each>
+            </p:if>
+
+            <!-- Check for secondary outputs (from <xsl:result-document> instructions): -->
+            <!-- Take care to set the correct serialization *in* the stylesheet! -->
+            <p:for-each>
+                <p:with-input pipe="secondary@apply-build-stylesheet"/>
+                <p:store href="{base-uri(/)}" message="      * Storing secondary build result: &quot;{base-uri(/)}&quot;"/>
+            </p:for-each>
+
+        </p:for-each>
 
     </p:declare-step>
 

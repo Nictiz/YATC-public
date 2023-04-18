@@ -3,9 +3,9 @@
     <!-- ======================================================================= -->
     <!-- 
        This step compares the produced results against the results produced by the original Ant scripts of 
-       ada-2-fhir-r4 in the HL&-mappings repo.
+       ada-2-fhir-r4 in the HL7-mappings repo.
        
-       It was meant to be used from the command line only.
+       It is meant to be used from the command line only.
        
        It outputs an XML document reporting everything that was done. Differences found are marked with a 
        differences="true" attribute.
@@ -82,18 +82,18 @@
             </yatcs:get-combined-parameters-map>
             <p:variable name="parameters" as="map(xs:string, xs:string*)" select="."/>
 
-            <!-- Get the ada-2-wiki data: -->
+            <!-- Get the ada-2-fhir-r4 data: -->
             <p:variable name="application" as="xs:string" select="string($commandParameters[1])"/>
             <p:variable name="version" as="xs:string" select="string($commandParameters[2])"/>
-            <yatcp:get-ada-2-wiki-data>
+            <yatcp:get-ada-2-fhir-r4-data>
                 <p:with-option name="parameters" select="$parameters"/>
                 <p:with-option name="application" select="$application"/>
                 <p:with-option name="version" select="$version"/>
-            </yatcp:get-ada-2-wiki-data>
+            </yatcp:get-ada-2-fhir-r4-data>
 
             <!-- Create a list of directories and files to compare and go: -->
             <p:xslt message="* Creating directory compare list">
-                <p:with-input port="stylesheet" href="xsl-compare-ada-2-wiki/create-directory-compare-list.xsl"/>
+                <p:with-input port="stylesheet" href="xsl-compare-ada-2-fhir-r4/create-directory-compare-list.xsl"/>
             </p:xslt>
             <yatcs:do-compares>
                 <p:with-option name="noDirectoryCompares" select="$commandFlagNoDirectoryCompares = $commandFlags"/>

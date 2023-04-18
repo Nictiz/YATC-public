@@ -13,34 +13,24 @@
 
     <application name="lab" version="3.0.0" source-adarefs2ada="true" source-project-name="lab">
 
-        <message>*** MAIN MESSAGE</message>
-        
         <setup usecase="sturen_laboratoriumresultaten" directory-id="labsr">
             <copy-data source-subdir="ada_instance" directory-id="labsr-instance">
                 <include glob="*.xml"/>
             </copy-data>
-            <copy-project-schemas >
+            <copy-project-schemas>
                 <include glob="*$USECASE.xsd"/>
             </copy-project-schemas>
         </setup>
 
-        <action name="test" default="true" >
-            <message>*** TEST ACTION MESSAGE</message>
-        </action>
+        <setup usecase="beschikbaarstellen_laboratoriumresultaten" directory-id="labbr">
+            <copy-data source-subdir="ada_instance" directory-id="labbr-instance">
+                <include glob="*.xml"/>
+            </copy-data>
+            <copy-project-schemas>
+                <include glob="*$USECASE.xsd"/>
+            </copy-project-schemas>
+        </setup>
         
-        
-        <action name="test2" description="Test 2 action" depends-on="test3">
-            <message>*** TEST 2 ACTION MESSAGE</message>
-        </action>
-        
-        <action name="test3" description="Test 3 action" depends-on="test">
-            <message>*** TEST 3 ACTION MESSAGE</message>
-        </action>
-        
-        <action name="test4" description="Test 4 action" depends-on="test">
-            <message>*** TEST 4 ACTION MESSAGE</message>
-        </action>
-
     </application>
 
 </ada-2-fhir-r4-data>

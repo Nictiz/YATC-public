@@ -76,4 +76,13 @@
         </rule>
     </pattern>
     
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+    
+    <!-- A build that processes multiple input documents cannot have a specific output document specified: -->
+    <pattern>
+        <rule context="yatcp:build/yatcp:input-documents">
+            <assert test="exists(../yatcp:discard-output) or exists(../yatcp:output-documents)">When using multiple input documents, you cannot specify a single output document (use either &lt;output-document directory="…"&gt; or &lt;yatcp:discard-output/&gt;)</assert>
+        </rule>
+    </pattern>
+    
 </schema>

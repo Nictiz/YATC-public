@@ -41,7 +41,7 @@
     <!-- ======================================================================= -->
     <!-- STATIC OPTIONS: -->
 
-    <p:option static="true" name="ada-2-fhir-r4-debug" as="xs:boolean" select="true()">
+    <p:option static="true" name="ada-2-fhir-r4-debug" as="xs:boolean" select="false()">
         <!-- Set this to true to get some additional output/behavior for debugging purposes -->
     </p:option>
 

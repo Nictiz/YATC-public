@@ -13,7 +13,7 @@
 
     <application name="lab" version="3.0.0" source-adarefs2ada="true" source-project-name="lab">
 
-        <!--<setup usecase="sturen_laboratoriumresultaten" directory-id="labsr">
+        <setup usecase="sturen_laboratoriumresultaten" directory-id="labsr">
             <copy-data source-subdir="ada_instance" directory-id="labsr-instance">
                 <include glob="*.xml"/>
             </copy-data>
@@ -21,7 +21,7 @@
                 <include glob="*$USECASE.xsd"/>
             </copy-project-schemas>
             <empty-directory target-subdir="fhir_instance" directory-id="labsr-fhir-instance"/>
-        </setup>-->
+        </setup>
 
         <setup usecase="beschikbaarstellen_laboratoriumresultaten" directory-id="labbr">
             <copy-data source-subdir="ada_instance" directory-id="labbr-instance">
@@ -35,13 +35,13 @@
         
         <action name="convert" default="true">
             
-            <!--<build>
+            <build>
                 <stylesheet href="../xsl/lab/3.0.0/sturen_laboratoriumresultaten/payload/sturen_laboratoriumresultaten.xsl"/>
                 <input-documents directory="@labsr-instance"></input-documents>
                 <output-documents directory="@labsr-fhir-instance"/>                
                 <parameter name="writeOutputToDisk" value="false"/>
                 <parameter name="dirOutputToDisk" directory="@labsr-fhir-instance"/>
-            </build>-->
+            </build>
             
             <build>
                 <stylesheet href="../xsl/lab/3.0.0/beschikbaarstellen_laboratoriumresultaten/payload/beschikbaarstellen_laboratoriumresultaten.xsl"/>

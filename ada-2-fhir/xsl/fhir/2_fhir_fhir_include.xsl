@@ -23,13 +23,13 @@
     <!-- import because we want to be able to override the param for macAddress -->
     <!-- pass an appropriate macAddress to ensure uniqueness of the UUID -->
     <!-- 02-00-00-00-00-00 may not be used in a production situation -->
-    
+
     <xsl:import href="../../../../YATC-shared/xsl/util/uuid.xsl"/>
     <xsl:import href="../../../../YATC-shared/xsl/util/datetime.xsl"/>
     <xsl:import href="../../../../YATC-shared/xsl/util/units.xsl"/>
     <xsl:import href="../../../../YATC-shared/xsl/util/constants.xsl"/>
     <xsl:import href="../../../../YATC-shared/xsl/util/NarrativeGenerator.xsl"/>
-    
+
     <xsl:output method="xml" indent="yes" exclude-result-prefixes="#all"/>
 
     <xsl:strip-space elements="*"/>
@@ -160,8 +160,9 @@
         <xsl:param name="in" as="element()?" select=".">
             <!-- the ada string element, may have any name but should have ada datatype string -->
         </xsl:param>
-        <xsl:param name="inAttributeName" as="xs:string">
-            <!-- name of the attribute to use as input (as string), optional, defaults to 'value' --> value</xsl:param>
+        <xsl:param name="inAttributeName" as="xs:string" select="'value'">
+            <!-- name of the attribute to use as input (as string), optional, defaults to 'value' -->
+        </xsl:param>
 
         <xsl:variable name="inNoLeadTrailSpace" select="replace($in/@*[local-name() = $inAttributeName], '(^\s+)|(\s+$)', '')"/>
 
@@ -176,7 +177,7 @@
             </xsl:when>
             <xsl:otherwise>
                 <!-- value attribute may not be empty in FHIR, but it really is empty, let's stick a nbsp in it ;-) -->
-                <xsl:attribute name="value" select="' '"/>
+                <xsl:attribute name="value" select="'&#160;'"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>

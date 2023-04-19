@@ -108,7 +108,7 @@
         <xsl:choose>
             <xsl:when test="$writeOutputToDisk">
                 
-               <!-- <OUT timestamp="{current-dateTime()}">
+                <!--<OUT timestamp="{current-dateTime()}">
                     <xsl:copy-of select="$resources"/>
                 </OUT>-->
                 

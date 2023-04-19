@@ -45,17 +45,13 @@
 
                 <xsl:for-each select="organisatie_locatie/locatie_naam">
                     <name>
-                        <xsl:attribute name="value">
-                            <xsl:call-template name="string-to-string"/>
-                        </xsl:attribute>
+                        <xsl:call-template name="string-to-string"/>
                     </name>
                 </xsl:for-each>
 
                 <xsl:for-each select="organisatie_locatie/locatie_nummer">
                     <name>
-                        <xsl:attribute name="value">
-                            <xsl:call-template name="string-to-string"/>
-                        </xsl:attribute>
+                        <xsl:call-template name="string-to-string"/>
                     </name>
                 </xsl:for-each>
 
@@ -110,9 +106,7 @@
 
                 <xsl:for-each select="organisatie_naam">
                     <name>
-                        <xsl:attribute name="value">
-                            <xsl:call-template name="string-to-string"/>
-                        </xsl:attribute>
+                        <xsl:call-template name="string-to-string"/>
                     </name>
                 </xsl:for-each>
 

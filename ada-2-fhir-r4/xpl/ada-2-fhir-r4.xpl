@@ -216,7 +216,7 @@
             <p:identity>
                 <p:with-input pipe="current@process-action"/>
             </p:identity>
-            <p:identity message="  * Action {string-join((/*/@name, /*/@description), ' - ')} {if (exists($dependencyParentActionName)) then ('(dependency of ' || $dependencyParentActionName || ')') else ()} for {$application}/{$version}"/>
+            <p:identity message="  * Action {string-join((/*/@name, /*/@description), ' - ')}{if (exists($dependencyParentActionName)) then (' (dependency of ' || $dependencyParentActionName || ')') else ()} for {$application}/{$version}"/>
 
             <!-- Output any action specific messages up-front: -->
             <yatcs:process-application-messages>
@@ -413,11 +413,16 @@
 
             </p:choose>
 
-            <!-- The primary output of the p:choose above is the direct document produced by the stylesheet. 
-                 See if we have to store this: -->
+            <!-- The primary output of the p:choose above are the direct document(s) produced by the stylesheet. 
+                 See if we have to store this. -->
             <p:if test="not($discardOutput)">
                 <p:for-each>
-                    <p:store href="{base-uri(/)}" serialization="$yatcs:standardXmlSerialization" message="      * Storing direct build result: &quot;{base-uri(/)}&quot;"/>
+                    <!-- Due to the way the stylesheets are made, it might happen that such a file is empty. Detect this,
+                         and only perform a store when there's something to store:-->
+                    <p:if test="exists(/*)">
+                        <p:identity message="      * Storing direct build result: &quot;{base-uri(/)}&quot;" use-when="$ada-2-fhir-r4-debug"/>
+                        <p:store href="{base-uri(/)}" serialization="$yatcs:standardXmlSerialization"/>
+                    </p:if>
                 </p:for-each>
             </p:if>
 
@@ -425,7 +430,8 @@
             <!-- Take care to set the correct serialization *in* the stylesheet! -->
             <p:for-each>
                 <p:with-input pipe="secondary@apply-build-stylesheet"/>
-                <p:store href="{base-uri(/)}" message="      * Storing secondary build result: &quot;{base-uri(/)}&quot;"/>
+                <p:identity message="      * Storing secondary build result: &quot;{base-uri(/)}&quot;" use-when="$ada-2-fhir-r4-debug"/>
+                <p:store href="{base-uri(/)}"/>
             </p:for-each>
 
         </p:for-each>

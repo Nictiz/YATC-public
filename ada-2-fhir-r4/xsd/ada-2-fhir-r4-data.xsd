@@ -50,7 +50,7 @@ Can also be used as root element for XIncluded documents.</xs:documentation>
                     </xs:annotation>
                     <xs:complexType>
                         <xs:group ref="yatcp:g-action-build-steps"/>
-                        <xs:attribute name="name" type="yatcp:t-action-name">
+                        <xs:attribute name="name" type="yatcp:t-action-name" use="required">
                             <xs:annotation>
                                 <xs:documentation>The name of this action</xs:documentation>
                             </xs:annotation>

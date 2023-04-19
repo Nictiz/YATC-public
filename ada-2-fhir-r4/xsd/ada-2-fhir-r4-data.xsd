@@ -95,7 +95,7 @@ Can also be used as root element for XIncluded documents.</xs:documentation>
                 <xs:group ref="yatcp:g-message"/>
                 <xs:element name="build">
                     <xs:annotation>
-                        <xs:documentation>Specifies a build step in this action. </xs:documentation>
+                        <xs:documentation>Specifies a build step (XSLT transformation) in this action. </xs:documentation>
                     </xs:annotation>
                     <xs:complexType>
                         <xs:sequence>
@@ -195,15 +195,81 @@ Can also be used as root element for XIncluded documents.</xs:documentation>
                         </xs:sequence>
                         <xs:attribute name="name" type="xs:string">
                             <xs:annotation>
-                                <xs:documentation>Name for this build (only for reporting/documentation purposes)</xs:documentation>
+                                <xs:documentation>Name for this action step (only for reporting/documentation purposes)</xs:documentation>
                             </xs:annotation>
                         </xs:attribute>
                     </xs:complexType>
                 </xs:element>
+                <xs:element name="validate-with-schema" type="yatcp:ct-validation-action-step"/>
+                <xs:element name="validate-with-schematron" type="yatcp:ct-validation-action-step"/>
             </xs:choice>
         </xs:sequence>
     </xs:group>
     <xs:simpleType name="t-action-name">
         <xs:restriction base="xs:NCName"/>
     </xs:simpleType>
+    <xs:complexType name="ct-validation-action-step">
+        <xs:sequence>
+            <xs:element name="schema">
+                <xs:annotation>
+                    <xs:documentation>The schema to use.
+</xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                    <xs:attributeGroup ref="yatcp:ag-href"/>
+                </xs:complexType>
+            </xs:element>
+            <xs:choice>
+                <xs:element name="input-documents">
+                    <xs:annotation>
+                        <xs:documentation>Specification of a set of input documents to validate.</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:complexContent>
+                            <xs:extension base="yatcp:ct-copy-patterns">
+                                <xs:attributeGroup ref="yatcp:ag-directory"/>
+                                <xs:attribute default="false" name="accept-empty" type="xs:boolean">
+                                    <xs:annotation>
+                                        <xs:documentation>Whether to accept an empty input set without error</xs:documentation>
+                                    </xs:annotation>
+                                </xs:attribute>
+                            </xs:extension>
+                        </xs:complexContent>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="input-document">
+                    <xs:annotation>
+                        <xs:documentation>Specifies a specific input document to validate.</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:attributeGroup ref="yatcp:ag-directory"/>
+                        <xs:attribute name="name" type="yatcp:t-non-zero-length-string" use="required">
+                            <xs:annotation>
+                                <xs:documentation>The name of the input XML document</xs:documentation>
+                            </xs:annotation>
+                        </xs:attribute>
+                    </xs:complexType>
+                </xs:element>
+            </xs:choice>
+            <xs:element name="output-report" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Specifies a specific output directory and filename for the XVRL report of the validation(s).</xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                    <xs:attributeGroup ref="yatcp:ag-directory"/>
+                    <xs:attribute name="name" type="yatcp:t-non-zero-length-string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>The name of the output document.</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute default="true" name="prune-valid" type="xs:boolean"/>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string">
+            <xs:annotation>
+                <xs:documentation>Name for this action step (only for reporting/documentation purposes)</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
 </xs:schema>

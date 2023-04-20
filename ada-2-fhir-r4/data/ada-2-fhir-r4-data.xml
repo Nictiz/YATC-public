@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="../sch/ada-2-fhir-r4-data.sch" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<ada-2-fhir-r4-data xmlns="https://nictiz.nl/ns/YATC-public" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://nictiz.nl/ns/YATC-public ../xsd/ada-2-fhir-r4-data.xsd">
+    <!-- ================================================================== -->
+    <!--
+        This is the production data for the ada-2-fhir-r4 processing.
+        
+        Information about the format of this document in its schema ../xsd/ada-2-fhir-r4-data.xsd
+        Information about how this file is used in the documentation in the ../doc/ subdirectory.
+    -->
+    <!-- ================================================================== -->
+    <!-- lab -->
+
+    <application name="lab" version="3.0.0" source-adarefs2ada="true" source-project-name="lab">
+
+        <setup usecase="sturen_laboratoriumresultaten" directory-id="labsr">
+            <copy-data source-subdir="ada_instance" directory-id="labsr-instance">
+                <include glob="*.xml"/>
+            </copy-data>
+            <copy-project-schemas>
+                <include glob="*$USECASE.xsd"/>
+            </copy-project-schemas>
+            <empty-directory target-subdir="fhir_instance" directory-id="labsr-fhir-instance"/>
+            <empty-directory target-subdir="fhir-validation-results" directory-id="labsr-fhir-validation-results" compare="false"/>
+        </setup>
+
+        <setup usecase="beschikbaarstellen_laboratoriumresultaten" directory-id="labbr">
+            <copy-data source-subdir="ada_instance" directory-id="labbr-instance">
+                <include glob="*.xml"/>
+            </copy-data>
+            <copy-project-schemas>
+                <include glob="*$USECASE.xsd"/>
+            </copy-project-schemas>
+            <empty-directory target-subdir="fhir_instance" directory-id="labbr-fhir-instance"/>
+            <empty-directory target-subdir="fhir-validation-results" directory-id="labbr-fhir-validation-results" compare="false"/>
+        </setup>
+
+        <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+        <action name="convert" default="true">
+
+            <build name="convert-sturen_laboratoriumresultaten">
+                <stylesheet href="../xsl/lab/3.0.0/sturen_laboratoriumresultaten/payload/sturen_laboratoriumresultaten.xsl"/>
+                <input-documents directory="@labsr-instance"/>
+                <output-documents directory="@labsr-fhir-instance"/>
+                <parameter name="writeOutputToDisk" value="false"/>
+                <parameter name="dirOutputToDisk" directory="@labsr-fhir-instance"/>
+            </build>
+
+            <build name="convert-beschikbaarstellen_laboratoriumresultaten">
+                <stylesheet href="../xsl/lab/3.0.0/beschikbaarstellen_laboratoriumresultaten/payload/beschikbaarstellen_laboratoriumresultaten.xsl"/>
+                <input-documents directory="@labbr-instance"/>
+                <output-documents directory="@labbr-fhir-instance"/>
+                <parameter name="writeOutputToDisk" value="true"/>
+                <parameter name="dirOutputToDisk" directory="@labbr-fhir-instance"/>
+            </build>
+
+        </action>
+
+        <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+        <action name="validate-with-schema">
+
+            <validate-with-schema name="schema-validate-sturen_laboratoriumresultaten">
+                <schema href="../xsd/fhir-schemas/fhir-single.xsd"/>
+                <input-documents directory="@labsr-fhir-instance"/>
+                <output-report directory="@labsr-fhir-validation-results" name="schema-validation-results-sturen_laboratoriumresultaten.xml"/>
+            </validate-with-schema>
+
+            <validate-with-schema name="schema-validate-beschikbaarstellen_laboratoriumresultaten">
+                <schema href="../xsd/fhir-schemas/fhir-single.xsd"/>
+                <input-documents directory="@labbr-fhir-instance"/>
+                <output-report directory="@labbr-fhir-validation-results" name="schema-validation-results-beschikbaarstellen_laboratoriumresultaten.xml"/>
+            </validate-with-schema>
+
+        </action>
+
+        <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+        <action name="validate-with-schematron">
+
+            <validate-with-schematron name="schematron-validate-sturen_laboratoriumresultaten">
+                <schema href="../xsd/fhir-schemas/fhir-invariants.sch"/>
+                <input-documents directory="@labsr-fhir-instance"/>
+                <output-report directory="@labsr-fhir-validation-results" name="schematron-validation-results-sturen_laboratoriumresultaten.xml"/>
+            </validate-with-schematron>
+
+            <validate-with-schematron name="schematron-validate-beschikbaarstellen_laboratoriumresultaten">
+                <schema href="../xsd/fhir-schemas/fhir-invariants.sch"/>
+                <input-documents directory="@labbr-fhir-instance"/>
+                <output-report directory="@labbr-fhir-validation-results" name="schematron-validation-results-beschikbaarstellen_laboratoriumresultaten.xml"/>
+            </validate-with-schematron>
+
+        </action>
+
+        <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+        <action name="validate" depends-on="validate-with-schema validate-with-schematron" description="All validation actions"/>
+
+        <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+        <action name="all" depends-on="convert validate" description="Convert and validate"/>
+
+    </application>
+
+    <!-- ======================================================================= -->
+
+    <application name="mp" version="9.2.0" source-adarefs2ada="true" source-project-name="mp-mp92">
+
+        <!-- beschikbaarstellen_medicatiegegevens -->
+        <setup usecase="beschikbaarstellen_medicatiegegevens" directory-id="mg">
+            <copy-data source-subdir="../raadplegen_medicatiegegevens/ada_instance_response" directory-id="mg-instance">
+                <include glob="*.xml"/>
+            </copy-data>
+            <copy-project-schemas>
+                <include glob="*$USECASE.xsd"/>
+            </copy-project-schemas>
+            <!--<empty-directory target-subdir="fhir_instance" directory-id="mg-fhir-instance"/>-->
+        </setup>
+        <!-- TBD: This needs additional work "preprocess for Touchstone" - see Ant script line 48 -->
+
+        <!-- sturen_medicatiegegevens  -->
+        <setup usecase="sturen_medicatiegegevens" directory-id="mg.st">
+            <copy-data source-subdir="ada_instance" directory-id="mg.st-instance">
+                <include glob="mg-*.xml"/>
+            </copy-data>
+            <copy-data target-subdir="ada_instance_sets" directory-id="mg.st-instance-sets">
+                <include glob="mgsets-*.xml"/>
+            </copy-data>
+            <copy-project-schemas>
+                <include glob="*$USECASE.xsd"/>
+            </copy-project-schemas>
+        </setup>
+
+        <!-- sturen_medicatievoorschrift -->
+        <setup usecase="sturen_medicatievoorschrift" directory-id="mv">
+            <copy-data source-subdir="ada_instance" directory-id="mv-instance">
+                <include glob="*.xml"/>
+            </copy-data>
+            <copy-project-schemas>
+                <include glob="*$USECASE.xsd"/>
+            </copy-project-schemas>
+        </setup>
+
+
+        <!-- sturen_afhandeling_medicatievoorschrift -->
+        <setup usecase="sturen_afhandeling_medicatievoorschrift" directory-id="amv">
+            <copy-data source-subdir="ada_instance" directory-id="amv-instance">
+                <include glob="*.xml"/>
+            </copy-data>
+            <copy-project-schemas>
+                <include glob="*$USECASE.xsd"/>
+            </copy-project-schemas>
+        </setup>
+        
+        <!-- sturen_voorstel_medicatieafspraak -->
+        <setup usecase="sturen_voorstel_medicatieafspraak" directory-id="vma">
+            <copy-data source-subdir="ada_instance" directory-id="vma-instance">
+                <include glob="*.xml"/>
+            </copy-data>
+            <copy-project-schemas>
+                <include glob="*$USECASE.xsd"/>
+            </copy-project-schemas>
+        </setup>
+        
+        <!-- sturen_antwoord_voorstel_medicatieafspraak -->
+        <setup usecase="sturen_antwoord_voorstel_medicatieafspraak" directory-id="avma">
+            <copy-data source-subdir="ada_instance" directory-id="avma-instance">
+                <include glob="*.xml"/>
+            </copy-data>
+            <copy-project-schemas>
+                <include glob="*$USECASE.xsd"/>
+            </copy-project-schemas>
+        </setup>
+        
+        <!-- sturen_voorstel_verstrekkingsverzoek -->
+        <setup usecase="sturen_voorstel_verstrekkingsverzoek" directory-id="vvv">
+            <copy-data source-subdir="ada_instance" directory-id="vvv-instance">
+                <include glob="*.xml"/>
+            </copy-data>
+            <copy-project-schemas>
+                <include glob="*$USECASE.xsd"/>
+            </copy-project-schemas>
+        </setup>
+        
+        <!-- sturen_antwoord_voorstel_verstrekkingsverzoek -->
+        <setup usecase="sturen_antwoord_voorstel_verstrekkingsverzoek" directory-id="avvv">
+            <copy-data source-subdir="ada_instance" directory-id="avvv-instance">
+                <include glob="*.xml"/>
+            </copy-data>
+            <copy-project-schemas>
+                <include glob="*$USECASE.xsd"/>
+            </copy-project-schemas>
+        </setup>
+        
+        <!-- xml-voorbeelden -->
+        <setup usecase="xml-voorbeelden" directory-id="xmlv">
+            <copy-data source-subdir="ada_instance" directory-id="xmlv-instance">
+                <include glob="*.xml"/>
+            </copy-data>
+        </setup>
+        
+        <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+        
+        <action name="finalize-setup" description="Preprocess for Touchstone beschikbaarstellen_medicatiegegevens" default="true">
+            
+            <build>
+                <stylesheet href="../xsl/mp/9.2.0/fhir_fixtures4Touchstone/preprocess_ada_4_Touchstone.xsl"/>
+                <input-documents directory="@mg-instance">
+                    <include glob="*Scenarioset0*.xml"/>
+                    <include glob="mg-mgrp-999900389-ALL.xml"/>
+                </input-documents>
+                <output-documents directory="@mg-instance"/>
+            </build>
+            
+        </action>     
+        
+    </application>
+
+</ada-2-fhir-r4-data>

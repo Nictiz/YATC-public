@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<text-document xmlns="https://nictiz.nl/ns/YATC-shared/text-document" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://nictiz.nl/ns/YATC-shared/text-document ../../../../YATC-shared/xsd/text-document.xsd" xmlns:xi="http://www.w3.org/2001/XInclude">
+    <!-- ======================================================================= -->
+    <!-- 
+        Reference text document for the ada-2-fhir-r4 application data format.
+    -->
+    <!-- ======================================================================= -->
+    <!--
+        Copyright © Nictiz
+        
+        This program is free software; you can redistribute it and/or modify it under the terms of the
+        GNU Lesser General Public License as published by the Free Software Foundation; either version
+        2.1 of the License, or (at your option) any later version.
+        
+        This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+        without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+        See the GNU Lesser General Public License for more details.
+        
+        The full text of the license is available at http://www.gnu.org/copyleft/lesser.html
+    -->
+    <!-- ======================================================================= -->
+
+    <title>Application ada-2-fhir-r4 format reference</title>
+
+    <para>This documents the XML format for the public YATC ada-2-fhir-r4 component's data file in <code>YATC-public/ada-2-fhir-r4/data/ada-2-fhir-r4-data.xml</code>, as used by the <code>ada-2-fhir-r4</code> command.</para>
+
+    <para>General remarks:</para>
+    <unorderedlist>
+        <entry>
+            <para>There are two schemas for this document. For full validation both should be applied:</para>
+            <unorderedlist>
+                <entry>
+                    <para><code>YATC-public/ada-2-fhir-r4/xsd/ada-2-fhir-r4-data.xsd</code></para>
+                </entry>
+                <entry>
+                    <para><code>YATC-public/ada-2-fhir-r4/sch/ada-2-fhir-r4-data.sch</code></para>
+                </entry>
+            </unorderedlist>
+        </entry>
+        <entry>
+            <para>All elements <emph>must</emph> be in the <code>https://nictiz.nl/ns/YATC-public</code> namespace.</para>
+        </entry>
+        <entry>
+            <para>In some places XInclude processing is allowed, using <elm>xi:include</elm> elements. The resulting document (after all XIncludes are dereferenced) must be valid.</para>
+        </entry>
+        <entry>
+            <para>References to YATC parameters, in text or attribute values (using either <code>${parname}</code> or <code>{$parname}</code>), will expand. A referenced parameter must exist.</para>
+        </entry>
+    </unorderedlist>
+
+    <!-- ======================================================================= -->
+
+    <section>
+        <title>Root <elm>ada-2-fhir-r4-data</elm> element</title>
+
+        <element name="ada-2-fhir-r4-data">
+            <children>
+                <choice occurrences="*">
+                    <element name="xi:include" pseudo-attributes="href">
+                        <para>Reference to a file to include.</para>
+                    </element>
+                    <element name="application" attributes-indicator="true">
+                        <para>Definition for a single application.</para>
+                    </element>
+                </choice>
+            </children>
+        </element>
+
+    </section>
+
+    <!-- ======================================================================= -->
+
+    <section>
+        <title>The <elm>application</elm> element</title>
+
+        <para>The <elm>application</elm> element defines the processing to be performed for a single application/version combination.</para>
+
+        <para>The copied and processed/created documents will be stored underneath <code>{$ada2wikiBaseStorageDirectory}/{@name}/{@version}</code> (parameter defined in <code>YATC-public/ada-2-fhir-r4/data/parameters.xml</code>).</para>
+
+        <element name="application">
+            <attributes>
+                <attribute name="name" type="xs:string" required="true">
+                    <para>The name of the application. For instance: <code>lab</code>.</para>
+                </attribute>
+                <attribute name="version" type="xs:string" required="true">
+                    <para>The version of the application. For instance: <code>4.0.0</code>.</para>
+                </attribute>
+                <attribute name="source-project-name" type="xs:string" default="application/@name">
+                    <para>The name of the project (directory) to be used.</para>
+                </attribute>
+                <attribute name="source-adarefs2ada" type="xs:boolean" default="false">
+                    <para>Whether the source documents for setup come from adarefs2ada computations or straight from the ART-DECOR data. See below.</para>
+                </attribute>
+            </attributes>
+            <children>
+                <choice occurrences="*">
+                    <element name="message">
+                        <para>Message which will be output on the console during processing for this application.</para>
+                    </element>
+                    <element name="setup" attributes-indicator="true">
+                        <para>Any setup (data copying) to be done.</para>
+                    </element>
+                    <element name="action" attributes-indicator="true">
+                        <para>Definition of the builds to be performed for a specific action</para>
+                    </element>
+                </choice>
+            </children>
+        </element>
+
+        <para>Some applications take their input source from data directly retrieved from ART-DECOR and some from adarefs2ada post-processing (all done by the <code>YATC-shared/get-production-ada-instances</code> component). The <code>@source-adarefs2ada</code> attribute takes care of this:</para>
+        <unorderedlist>
+            <entry>
+                <para><code>source-adarefs2ada="false"</code>: The source documents are supposed to come straight from ART-DECOR. They're taken from <code>{$productionAdaInstancesBaseStorageDirectory}/{@name}/{@version}/{$productionAdaInstancesDataSubdir}</code> (parameters defined in <code>YATC-shared/data/parameters.xml</code>).</para>
+            </entry>
+            <entry>
+                <para><code>source-adarefs2ada="true"</code>: The source documents are supposed to come from adarefs2ada post-processing. They're taken from the appropriate subdirectories of <code>{$adarefs2adaBaseStorageDirectory}/{@name}/{@version}/{@usecase}</code> (parameter defined in <code>YATC-shared/data/parameters.xml</code>).</para>
+            </entry>
+        </unorderedlist>
+
+        <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+        <xi:include href="../../../../YATC-shared/srcmod/setup-element.mod.xml"/>
+
+        <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+        <section>
+            <title><anchor name="action-element"/>The <elm>action</elm> element</title>
+
+            <para>The <elm>action</elm> element defines all the build steps to be performed for a single action, usually based upon the documents copied in the <elm>setup</elm> element(s).</para>
+
+            <element name="action">
+                <attributes>
+                    <attribute name="name" type="identifier" required="true">
+                        <para>The name of this action</para>
+                    </attribute>
+                    <attribute name="description" type="xs:string">
+                        <para>A`n optional short description for this action. Used in reporting/messaging.</para>
+                    </attribute>
+                    <attribute name="default" type="xs:boolean" default="false">
+                        <para>Whether this is the default action for this application/version. Only one action can be designated as default.</para>
+                    </attribute>
+                    <attribute name="depends-on" type="list of identifier">
+                        <para>An optional whitespace separated list of identifiers of the actions this action depends on. All actions listed here will be performed before this one.</para>
+                    </attribute>
+                </attributes>
+                <children>
+                    <choice occurrences="*">
+                        <element name="message">
+                            <para>Message which will be output on the console during processing for this application.</para>
+                        </element>
+                        <element name="build" attributes-indicator="true">
+                            <para>Specification of a build step.</para>
+                        </element>
+                    </choice>
+                </children>
+            </element>
+
+            <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+            <section>
+                <title>The <elm>build</elm> element</title>
+
+                <para>The <elm>build</elm> defines a single build step to be performed as part of an action. A build step is an XSLT transformation performed on one or more input documents.</para>
+
+                <element name="build">
+                    <attributes>
+                        <attribute name="name" type="xs:string">
+                            <para>The name of this build (used for reporting). If nothing is specified, some unique name will be used.</para>
+                        </attribute>
+                    </attributes>
+                    <children>
+                        <element name="stylesheet" occurrences="1" pseudo-attributes="href">
+                            <para>Defines, with a <code>@href</code> attribute (see <link href="#common-attributes">common attributes</link>) the XSLT stylesheet that will be run over the specified input document(s).</para>
+                        </element>
+                        <choice occurrences="1">
+                            <element name="input-document" pseudo-attributes="directory name">
+                                <para>Specifies a single input document for this build.<br/>Has a required <code>@directory</code> (see <link href="#common-attributes">common attributes</link>) and <code>@name</code>attribute.</para>
+                            </element>
+                            <element name="input-documents" pseudo-attributes="directory accept-empty">
+                                <para>Specifies a set of input documents.<br/>Has a required <code>@directory</code> attribute (see <link href="#common-attributes">common attributes</link>) and can have child <elm>include</elm> and/or <elm>exclude</elm> elements (see <link href="#include-exclude">include/exclude elements</link>) to further narrow down the set of documents to process.<br/>Set <code>accept-empty="true"</code> if you want empty input sets handled without raising an error.<br/>You cannot specify a single output (<elm>output-document</elm> element) when specifying multiple input documents, use either <elm>output-documents</elm> or <elm>discard-output</elm>.</para>
+                            </element>
+                            <element name="no-input">
+                                <para>Specifies that the stylesheet needs no input document (a small dummy document will be provided).</para>
+                            </element>
+                        </choice>
+                        <choice occurrences="1">
+                            <element name="output-document" pseudo-attributes="directory name">
+                                <para>Specifies where the direct output of the stylesheet must be written to. This will always be done using XML serialization.<br/>Has a required <code>@directory</code> (see <link href="#common-attributes">common attributes</link>) and <code>@name</code>attribute.</para>
+                            </element>
+                            <element name="output-documents" pseudo-attributes="directory">
+                                <para>Specifies that all direct outputs of the stylesheet must be written to this location, using the same filename as the input document. Usually used in conjunction with the <elm>input-documents</elm> element.<br/>Has a required <code>@directory</code> (see <link href="#common-attributes">common attributes</link>).</para>
+                            </element>
+                            <element name="discard-output">
+                                <para>Specifies that the direct output of the stylesheet must be discarded.</para>
+                            </element>
+                        </choice>
+                        <element name="parameter" occurrences="*" attributes-indicator="true">
+                            <para>Defines an additional parameter to be passed to the stylesheet. See <link href="#parameter-element">below</link>.</para>
+                        </element>
+                    </children>
+
+                </element>
+
+                <para>Besides direct output, a stylesheet can also produce secondary output(s) using the <elm>xsl:result-document</elm> instruction. These outputs will be written to disk, using the serialization options as specified on the <elm>xsl:result-document</elm> element.</para>
+
+                <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+                <xi:include href="../../../../YATC-shared/srcmod/parameter-element.mod.xml"/>
+
+            </section>
+
+            <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+            <section>
+                <title>The <elm>validate-with-schema</elm> and <elm>validate-with-schematron</elm> element</title>
+
+                <para>The <elm>validate-with-schema</elm> and <elm>validate-with-schematron</elm> element implement validation of the documents produced, using W3C XML Schemas or Schematron schemas. The description below is about the <elm>validate-with-schema</elm> element. The <elm>validate-with-schematron</elm> element has the same definition.</para>
+
+                <element name="validate-with-schema">
+                    <attributes>
+                        <attribute name="name" type="xs:string">
+                            <para>The name of this validation (used for reporting). If nothing is specified, some unique name will be used.</para>
+                        </attribute>
+                    </attributes>
+                    <children>
+                        <element name="schema" occurrences="1" pseudo-attributes="href">
+                            <para>Defines, with a <code>@href</code> attribute (see <link href="#common-attributes">common attributes</link>) the schema to be used.</para>
+                        </element>
+                        <choice occurrences="1">
+                            <element name="input-document" pseudo-attributes="directory name">
+                                <para>Specifies a single input document for this validation.<br/>Has a required <code>@directory</code> (see <link href="#common-attributes">common attributes</link>) and <code>@name</code>attribute.</para>
+                            </element>
+                            <element name="input-documents" pseudo-attributes="directory accept-empty">
+                                <para>Specifies a set of input documents to validate.<br/>Has a required <code>@directory</code> attribute (see <link href="#common-attributes">common attributes</link>) and can have child <elm>include</elm> and/or <elm>exclude</elm> elements (see <link href="#include-exclude">include/exclude elements</link>) to further narrow down the set of documents to process.<br/>Set <code>accept-empty="true"</code> if you want empty input sets handled without raising an error.</para>
+                            </element>
+                        </choice>
+                        <element name="output-report" occurrences="?" pseudo-attributes="directory name prune-valid">
+                            <para>If present, the individual validation reports are collected in an XML document, as specified by the <code>@directory</code> (see <link href="#common-attributes">common attributes</link>) and <code>@name</code> attributes. Validation results are reported in <link href="https://spec.xproc.org/master/head/xvrl/">XVRL</link>.<br/>By default, XVRL validation reports without errors or warnings are discarded. Specify <code>prune-valid="false"</code> if you want to see all reports (including the reports for the documents that are valid).</para>
+                        </element>
+                    </children>
+
+                </element>
+            </section>
+
+        </section>
+
+        <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+
+
+    </section>
+
+    <!-- ======================================================================= -->
+
+    <xi:include href="../../../../YATC-shared/srcmod/common-definitions.xml"/>
+
+</text-document>

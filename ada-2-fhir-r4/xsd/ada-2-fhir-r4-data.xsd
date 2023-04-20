@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="https://nictiz.nl/ns/YATC-public" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:yatcp="https://nictiz.nl/ns/YATC-public">
+    <!-- ======================================================================= -->
+    <!--
+    Copyright © Nictiz
+
+    This program is free software; you can redistribute it and/or modify it under the terms of the
+    GNU Lesser General Public License as published by the Free Software Foundation; either version
+    2.1 of the License, or (at your option) any later version.
+    
+    This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+    without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+    See the GNU Lesser General Public License for more details.
+    
+    The full text of the license is available at http://www.gnu.org/copyleft/lesser.html
+    -->
+    <!-- ======================================================================= -->
+
+    <xs:annotation>
+        <xs:documentation>Schema for ada-2-fhir-r4 processing document. This document defines what to do to perform ada-2-fhir-r4 processing for an application/version combination.</xs:documentation>
+    </xs:annotation>
+    <xs:import namespace="http://www.w3.org/2001/XInclude" schemaLocation="../../../YATC-shared/xsdmod/xinclude.mod.xsd"/>
+    <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="../../../YATC-shared/xsdmod/xml.mod.xsd"/>
+    <xs:include schemaLocation="../../../YATC-shared/xsdmod/general.mod.xsd"/>
+    <xs:include schemaLocation="../../../YATC-shared/xsdmod/application-data-file.mod.xsd"/>
+    <xs:element name="ada-2-fhir-r4-data">
+        <xs:complexType>
+            <xs:choice maxOccurs="unbounded" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>A list of applications, either directly defined or by XInclude.</xs:documentation>
+                </xs:annotation>
+                <xs:element ref="xi:include"/>
+                <xs:element ref="yatcp:application"/>
+            </xs:choice>
+            <xs:attribute ref="xml:base"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="application">
+        <xs:annotation>
+            <xs:documentation>The ada-2-wiki definitions for an application/version combination.
+Can also be used as root element for XIncluded documents.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:choice maxOccurs="unbounded" minOccurs="0">
+                <xs:group ref="yatcp:g-setup"/>
+                <xs:group ref="yatcp:g-message"/>
+                <xs:element name="action">
+                    <xs:annotation>
+                        <xs:documentation>An action to be performed (consisting of build steps)</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:group ref="yatcp:g-action-build-steps"/>
+                        <xs:attribute name="name" type="yatcp:t-action-name" use="required">
+                            <xs:annotation>
+                                <xs:documentation>The name of this action</xs:documentation>
+                            </xs:annotation>
+                        </xs:attribute>
+                        <xs:attribute default="false" name="default" type="xs:boolean">
+                            <xs:annotation>
+                                <xs:documentation>Whether this is the default action to be performed when none was specified.</xs:documentation>
+                            </xs:annotation>
+                        </xs:attribute>
+                        <xs:attribute name="depends-on">
+                            <xs:annotation>
+                                <xs:documentation>Whitespace separated list of action names to be performed *before* this action can start. </xs:documentation>
+                            </xs:annotation>
+                            <xs:simpleType>
+                                <xs:list itemType="yatcp:t-action-name"/>
+                            </xs:simpleType>
+                        </xs:attribute>
+                        <xs:attribute name="description" type="yatcp:t-non-zero-length-string">
+                            <xs:annotation>
+                                <xs:documentation>Optional short description for this action.</xs:documentation>
+                            </xs:annotation>
+                        </xs:attribute>
+                    </xs:complexType>
+                </xs:element>
+            </xs:choice>
+            <xs:attributeGroup ref="yatcp:ag-application-name-version"/>
+            <xs:attributeGroup ref="yatcp:ag-source-project-name"/>
+            <xs:attribute default="false" name="source-adarefs2ada" type="xs:boolean">
+                <xs:annotation>
+                    <xs:documentation>Whether the source comes from adarefs2ada computations or straight from the ART-DECOR data.</xs:documentation>
+                </xs:annotation>
+            </xs:attribute>
+            <xs:attribute ref="xml:base"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:group name="g-action-build-steps">
+        <xs:annotation>
+            <xs:documentation>Definition of the elements that make up an action.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:choice maxOccurs="unbounded" minOccurs="0">
+                <xs:group ref="yatcp:g-message"/>
+                <xs:element name="build">
+                    <xs:annotation>
+                        <xs:documentation>Specifies a build step (XSLT transformation) in this action. </xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="stylesheet">
+                                <xs:annotation>
+                                    <xs:documentation>The stylesheet to use for this build. 
+</xs:documentation>
+                                </xs:annotation>
+                                <xs:complexType>
+                                    <xs:attributeGroup ref="yatcp:ag-href"/>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:choice>
+                                <xs:element name="input-documents">
+                                    <xs:annotation>
+                                        <xs:documentation>Specification of a set of input documents for this build. The stylesheet will be run once for each of these documents.</xs:documentation>
+                                    </xs:annotation>
+                                    <xs:complexType>
+                                        <xs:complexContent>
+                                            <xs:extension base="yatcp:ct-copy-patterns">
+                                                <xs:attributeGroup ref="yatcp:ag-directory"/>
+                                                <xs:attribute default="false" name="accept-empty" type="xs:boolean">
+                                                    <xs:annotation>
+                                                        <xs:documentation>Whether to accept an empty input set without error</xs:documentation>
+                                                    </xs:annotation>
+                                                </xs:attribute>
+                                            </xs:extension>
+                                        </xs:complexContent>
+                                    </xs:complexType>
+                                </xs:element>
+                                <xs:element name="input-document">
+                                    <xs:annotation>
+                                        <xs:documentation>Specifies a specific input document for the build.</xs:documentation>
+                                    </xs:annotation>
+                                    <xs:complexType>
+                                        <xs:attributeGroup ref="yatcp:ag-directory"/>
+                                        <xs:attribute name="name" type="yatcp:t-non-zero-length-string" use="required">
+                                            <xs:annotation>
+                                                <xs:documentation>The name of the input XML document</xs:documentation>
+                                            </xs:annotation>
+                                        </xs:attribute>
+                                    </xs:complexType>
+                                </xs:element>
+                                <xs:element name="no-input" type="yatcp:ct-empty">
+                                    <xs:annotation>
+                                        <xs:documentation>The build doesn't need an input (a short dummy document is provided).</xs:documentation>
+                                    </xs:annotation>
+                                </xs:element>
+                            </xs:choice>
+                            <xs:choice>
+                                <xs:element name="output-document">
+                                    <xs:annotation>
+                                        <xs:documentation>Specifies a specific output directory and filename for the result of this build process.</xs:documentation>
+                                    </xs:annotation>
+                                    <xs:complexType>
+                                        <xs:attributeGroup ref="yatcp:ag-directory"/>
+                                        <xs:attribute name="name" type="yatcp:t-non-zero-length-string" use="required">
+                                            <xs:annotation>
+                                                <xs:documentation>The name of the output document.</xs:documentation>
+                                            </xs:annotation>
+                                        </xs:attribute>
+                                    </xs:complexType>
+                                </xs:element>
+                                <xs:element name="output-documents">
+                                    <xs:annotation>
+                                        <xs:documentation>Specifies a specific output directory. The output filenames will be the same as the input filename(s).</xs:documentation>
+                                    </xs:annotation>
+                                    <xs:complexType>
+                                        <xs:attributeGroup ref="yatcp:ag-directory"/>
+                                    </xs:complexType>
+                                </xs:element>
+                                <xs:element name="discard-output" type="yatcp:ct-empty">
+                                    <xs:annotation>
+                                        <xs:documentation>The (direct) output document(s) of this build will be discarded.</xs:documentation>
+                                    </xs:annotation>
+                                </xs:element>
+                            </xs:choice>
+                            <xs:element maxOccurs="unbounded" minOccurs="0" name="parameter">
+                                <xs:annotation>
+                                    <xs:documentation>Optional parameter for the build stylesheet. @value has precedence over @directory has precedence over @href.</xs:documentation>
+                                </xs:annotation>
+                                <xs:complexType>
+                                    <xs:attribute name="name" type="xs:NCName" use="required">
+                                        <xs:annotation>
+                                            <xs:documentation>The name of the parameter. Names must be unique. The names 'baseDirectory', 'outputDirectory', 'application' and 'version' can not be used. </xs:documentation>
+                                        </xs:annotation>
+                                    </xs:attribute>
+                                    <xs:attribute name="value" type="xs:string">
+                                        <xs:annotation>
+                                            <xs:documentation>Straight string value for the parameter. If both @value and @directory are present, @value is used as the name of a file and appended to @directory.</xs:documentation>
+                                        </xs:annotation>
+                                    </xs:attribute>
+                                    <xs:attributeGroup ref="yatcp:ag-href-optional"/>
+                                    <xs:attributeGroup ref="yatcp:ag-directory-optional"/>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                        <xs:attribute name="name" type="xs:string">
+                            <xs:annotation>
+                                <xs:documentation>Name for this action step (only for reporting/documentation purposes)</xs:documentation>
+                            </xs:annotation>
+                        </xs:attribute>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="validate-with-schema" type="yatcp:ct-validation-action-step"/>
+                <xs:element name="validate-with-schematron" type="yatcp:ct-validation-action-step"/>
+            </xs:choice>
+        </xs:sequence>
+    </xs:group>
+    <xs:simpleType name="t-action-name">
+        <xs:restriction base="xs:NCName"/>
+    </xs:simpleType>
+    <xs:complexType name="ct-validation-action-step">
+        <xs:sequence>
+            <xs:element name="schema">
+                <xs:annotation>
+                    <xs:documentation>The schema to use.
+</xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                    <xs:attributeGroup ref="yatcp:ag-href"/>
+                </xs:complexType>
+            </xs:element>
+            <xs:choice>
+                <xs:element name="input-documents">
+                    <xs:annotation>
+                        <xs:documentation>Specification of a set of input documents to validate.</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:complexContent>
+                            <xs:extension base="yatcp:ct-copy-patterns">
+                                <xs:attributeGroup ref="yatcp:ag-directory"/>
+                                <xs:attribute default="false" name="accept-empty" type="xs:boolean">
+                                    <xs:annotation>
+                                        <xs:documentation>Whether to accept an empty input set without error</xs:documentation>
+                                    </xs:annotation>
+                                </xs:attribute>
+                            </xs:extension>
+                        </xs:complexContent>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="input-document">
+                    <xs:annotation>
+                        <xs:documentation>Specifies a specific input document to validate.</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:attributeGroup ref="yatcp:ag-directory"/>
+                        <xs:attribute name="name" type="yatcp:t-non-zero-length-string" use="required">
+                            <xs:annotation>
+                                <xs:documentation>The name of the input XML document</xs:documentation>
+                            </xs:annotation>
+                        </xs:attribute>
+                    </xs:complexType>
+                </xs:element>
+            </xs:choice>
+            <xs:element name="output-report" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Specifies a specific output directory and filename for the XVRL report of the validation(s).</xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                    <xs:attributeGroup ref="yatcp:ag-directory"/>
+                    <xs:attribute name="name" type="yatcp:t-non-zero-length-string" use="required">
+                        <xs:annotation>
+                            <xs:documentation>The name of the output document.</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute default="true" name="prune-valid" type="xs:boolean"/>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string">
+            <xs:annotation>
+                <xs:documentation>Name for this action step (only for reporting/documentation purposes)</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+</xs:schema>

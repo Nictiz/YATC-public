@@ -1,0 +1,14 @@
+compare-ada-2-fhir-r4
+
+Compares the documents produced by the new ada-2-fhir-r4 with the ones
+produced by the original art_decor Ant scripts.
+
+Command line options:
+-help                           
+    Display this help text
+application version [-nodirs]
+    Actually compare the production documents for an application/version.
+    To get all versions/applications, use #all.
+    -nodirs disables full directory compares.
+
+See YATC-internal/ada-2-fhir-r4/doc/commands.md for more information.

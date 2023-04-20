@@ -538,18 +538,18 @@
         <!-- Do the validation and report about it:: -->
         <p:for-each>
             <p:output pipe="@do-validations"/>
-            
+
             <p:variable name="filename" select="replace(base-uri(/), '.*[/\\]([^/\\]+)$', '$1')"/>
             <p:choose name="do-validations" message="      * ({p:iteration-position()}/{p:iteration-size()}) {$filename}">
                 <p:when test="$validationType eq $validationTypeSchema">
                     <p:output pipe="report@do-schema-validation"/>
-                    <p:validate-with-xml-schema assert-valid="false" name="do-schema-validation" report-format="xvrl">
+                    <p:validate-with-xml-schema assert-valid="false" report-format="xvrl" name="do-schema-validation">
                         <p:with-input port="schema" href="{$hrefSchema}"/>
                     </p:validate-with-xml-schema>
                 </p:when>
                 <p:when test="$validationType eq $validationTypeSchematron">
                     <p:output pipe="report@do-schematron-validation"/>
-                    <p:validate-with-schematron assert-valid="false" name="do-schematron-validation" report-format="xvrl">
+                    <p:validate-with-schematron assert-valid="false" report-format="xvrl" name="do-schematron-validation">
                         <p:with-input port="schema" href="{$hrefSchema}"/>
                     </p:validate-with-schematron>
                 </p:when>

@@ -29,6 +29,7 @@ General remarks:
     * [The build element](#section-anchor-2-2-1)
       * [The parameter element](#section-anchor-2-2-1-1)
 
+    * [The validate-with-schema and validate-with-schematron element](#section-anchor-2-2-2)
 
 
 * [Common definitions](#section-anchor-3)
@@ -330,6 +331,30 @@ When multiple attributes are present, the processing is in this order:
 * When `@directory` is present, its absolute value will be used for the value of the parameter (after resolving of directory identifiers and relative path, see [common attributes](#common-attributes)).
 * When `@href` is present, its absolute value will be used for the value of the parameter (after resolving a relative path, see [common attributes](#common-attributes)).
 * When no attributes are present, the parameter's value will be the empty string.
+
+#### <a name="section-anchor-2-2-2"/>The `<validate-with-schema>` and `<validate-with-schematron>` element
+
+The `<validate-with-schema>` and `<validate-with-schematron>` element implement validation of the documents produced, using W3C XML Schemas or Schematron schemas. The description below is about the `<validate-with-schema>` element. The `<validate-with-schematron>` element has the same definition.
+
+```
+<validate-with-schema name? = xs:string >
+  <schema href="…">
+  ( <input-document directory="…" name="…"> |
+    <input-documents directory="…" accept-empty="…"> )
+  <output-report directory="…" name="…" prune-valid="…">?
+</validate-with-schema>
+```
+
+| Attribute | # | Type | Description | 
+| ----- | ----- | ----- | ----- | 
+| `name` | ? | `xs:string` | The name of this validation (used for reporting). If nothing is specified, some unique name will be used. | 
+
+| Child element | # | Description | 
+| ----- | ----- | ----- | 
+| `schema` | 1 | Defines, with a `@href` attribute (see [common attributes](#common-attributes)) the schema to be used. | 
+| `input-document` | 1 | Specifies a single input document for this validation.<br/>Has a required `@directory` (see [common attributes](#common-attributes)) and `@name`attribute. | 
+| `input-documents` | 1 | Specifies a set of input documents to validate.<br/>Has a required `@directory` attribute (see [common attributes](#common-attributes)) and can have child `<include>` and/or `<exclude>` elements (see [include/exclude elements](#include-exclude)) to further narrow down the set of documents to process.<br/>Set `accept-empty="true"` if you want empty input sets handled without raising an error. | 
+| `output-report` | ? | If present, the individual validation reports are collected in an XML document, as specified by the `@directory` (see [common attributes](#common-attributes)) and `@name` attributes. Validation results are reported in [XVRL](https://spec.xproc.org/master/head/xvrl/).<br/>By default, XVRL validation reports without errors or warnings are discarded. Specify `prune-valid="false"` if you want to see all reports (including the reports for the documents that are valid). | 
 
 -----
 

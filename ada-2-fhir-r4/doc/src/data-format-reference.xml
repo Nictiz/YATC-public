@@ -209,10 +209,40 @@
 
             </section>
 
+            <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
+            <section>
+                <title>The <elm>validate-with-schema</elm> and <elm>validate-with-schematron</elm> element</title>
+
+                <para>The <elm>validate-with-schema</elm> and <elm>validate-with-schematron</elm> element implement validation of the documents produced, using W3C XML Schemas or Schematron schemas. The description below is about the <elm>validate-with-schema</elm> element. The <elm>validate-with-schematron</elm> element has the same definition.</para>
+
+                <element name="validate-with-schema">
+                    <attributes>
+                        <attribute name="name" type="xs:string">
+                            <para>The name of this validation (used for reporting). If nothing is specified, some unique name will be used.</para>
+                        </attribute>
+                    </attributes>
+                    <children>
+                        <element name="schema" occurrences="1" pseudo-attributes="href">
+                            <para>Defines, with a <code>@href</code> attribute (see <link href="#common-attributes">common attributes</link>) the schema to be used.</para>
+                        </element>
+                        <choice occurrences="1">
+                            <element name="input-document" pseudo-attributes="directory name">
+                                <para>Specifies a single input document for this validation.<br/>Has a required <code>@directory</code> (see <link href="#common-attributes">common attributes</link>) and <code>@name</code>attribute.</para>
+                            </element>
+                            <element name="input-documents" pseudo-attributes="directory accept-empty">
+                                <para>Specifies a set of input documents to validate.<br/>Has a required <code>@directory</code> attribute (see <link href="#common-attributes">common attributes</link>) and can have child <elm>include</elm> and/or <elm>exclude</elm> elements (see <link href="#include-exclude">include/exclude elements</link>) to further narrow down the set of documents to process.<br/>Set <code>accept-empty="true"</code> if you want empty input sets handled without raising an error.</para>
+                            </element>
+                        </choice>
+                        <element name="output-report" occurrences="?" pseudo-attributes="directory name prune-valid">
+                            <para>If present, the individual validation reports are collected in an XML document, as specified by the <code>@directory</code> (see <link href="#common-attributes">common attributes</link>) and <code>@name</code> attributes. Validation results are reported in <link href="https://spec.xproc.org/master/head/xvrl/">XVRL</link>.<br/>By default, XVRL validation reports without errors or warnings are discarded. Specify <code>prune-valid="false"</code> if you want to see all reports (including the reports for the documents that are valid).</para>
+                        </element>
+                    </children>
+
+                </element>
+            </section>
 
         </section>
-
 
         <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 

@@ -22,9 +22,15 @@ The repository contains the following components:
 
 | Component | Description |
 | ----- | ----- | 
-| `ada-2-fhir-r4` | TBD |
+| `ada-2-fhir-r4` | Conversion from ADA documents to FHIR resources. |
 
 ---
 
 ## Version/release history
+
+* **v0.1 - 2023-04-20**<br/>First release. Contains a partial implementation of `ada-2-fhir-r4` and is still work in progress.
+  * Engine is working, documented and probably complete. 
+  * `lab/3.0.0` completely implemented. 
+  * `mp/9.2.0` partially implemented, work in progress. 
+  * Some documentation is still missing.
 

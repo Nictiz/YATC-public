@@ -146,7 +146,7 @@ The `<copy-data>` element defines which files must be copied, and to where.
 | Attribute | # | Type | Description | 
 | ----- | ----- | ----- | ----- | 
 | `target-subdir` | ? | `xs:string` | Default: `ada_instance`<br/>The name of the sub-directory to copy the data to. | 
-| `source-subdir` | ? | `xs:string` | The name of the source sub-directory. Base directory and default depends on the component it is used in. Usually unspecified. | 
+| `source-subdir` | ? | `xs:string` | The name of the source sub-directory. Base directory and default depends on the component it is used in. | 
 | `directory-id` | ? | `identifier` | Defines the identifier for the sub-directories. See [common attributes](#common-attributes) for a usage example. | 
 | `compare` | ? | `xs:boolean` | Default: `true`<br/>Whether this directory should be included in a comparison (with results from the original code). | 
 

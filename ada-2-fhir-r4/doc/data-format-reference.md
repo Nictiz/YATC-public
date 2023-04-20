@@ -123,6 +123,11 @@ The string `$USECASE` will be substituted with the name of the usecase in the `@
 | `copy-directory` | 1 | Copies a directory, optionally with subdirectories, to an application/version specific sub-directory. | 
 | `retrieve` | 1 | Retrieves a single XML document from a REST URL and stores this in an application/version specific sub-directory. | 
 
+Additional remarks:
+
+* Although not strictly necessary (non-existent directories are created by the build steps as well), it is advised that the setup creates *all* directories, empty or not. This ensures that, during the setup process, these directories are emptied. It also allows referring to these directories using the directory identifier mechanism.
+* Some components have commands that allow developers to compare the XML results created here against the XML results of the original (Ant based) system. By default, all directories that are created are compared. You can stop this comparison by adding a `compare="false"` attribute. This allows you to add (usually empty) directories for documents that are not created in the original code, like reports. Directories created with `<copy-directory>` are never compared (because this was meant for copying fixed resources).
+
 #### <a name="section-anchor-2-1-1"/>The `<copy-data>` element
 
 The `<copy-data>` element defines which files must be copied, and to where.
@@ -130,7 +135,8 @@ The `<copy-data>` element defines which files must be copied, and to where.
 ```
 <copy-data target-subdir? = xs:string
            source-subdir? = xs:string
-           directory-id? = identifier >
+           directory-id? = identifier
+           compare? = xs:boolean >
   ( <include> |
     <exclude> )*
 </copy-data>
@@ -141,6 +147,7 @@ The `<copy-data>` element defines which files must be copied, and to where.
 | `target-subdir` | ? | `xs:string` | Default: `ada_instance`<br/>The name of the sub-directory to copy the data to. | 
 | `source-subdir` | ? | `xs:string` | The name of the source sub-directory. Base directory and default depends on the component it is used in. Usually unspecified. | 
 | `directory-id` | ? | `identifier` | Defines the identifier for the sub-directories. See [common attributes](#common-attributes) for a usage example. | 
+| `compare` | ? | `xs:boolean` | Default: `true`<br/>Whether this directory should be included in a comparison (with results from the original code). | 
 
 | Child element | # | Description | 
 | ----- | ----- | ----- | 
@@ -155,7 +162,8 @@ The `<copy-project-schemas>` element defines which schemas (from a project defin
 <copy-project-schemas target-subdir? = xs:string
                       copy-ada-meta? = xs:boolean
                       source-project-name? = xs:string
-                      directory-id? = identifier >
+                      directory-id? = identifier
+                      compare? = xs:boolean >
   ( <include> |
     <exclude> )*
 </copy-project-schemas>
@@ -167,6 +175,7 @@ The `<copy-project-schemas>` element defines which schemas (from a project defin
 | `copy-ada-meta` | ? | `xs:boolean` | Default: `true`<br/>Whether to copy the default `ada_meta.xsd` schema also. | 
 | `source-project-name` | ? | `xs:string` | Default: `application/@name`<br/>The name of the project (directory) to be used. Overrides a value for this defined on a parent element. | 
 | `directory-id` | ? | `identifier` | Defines the identifier for the sub-directories. See [common attributes](#common-attributes) for a usage example. | 
+| `compare` | ? | `xs:boolean` | Default: `true`<br/>Whether this directory should be included in a comparison (with results from the original code). | 
 
 | Child element | # | Description | 
 | ----- | ----- | ----- | 
@@ -179,13 +188,15 @@ The `<empty-directory>` element creates an empty directory (underneath the setup
 
 ```
 <empty-directory target-subdir = xs:string
-                 directory-id? = identifier />
+                 directory-id? = identifier
+                 compare? = xs:boolean />
 ```
 
 | Attribute | # | Type | Description | 
 | ----- | ----- | ----- | ----- | 
 | `target-subdir` | 1 | `xs:string` | The name of the sub-directory to create. | 
 | `directory-id` | ? | `identifier` | Defines the identifier for the sub-directories. See [common attributes](#common-attributes) for a usage example. | 
+| `compare` | ? | `xs:boolean` | Default: `true`<br/>Whether this directory should be included in a comparison (with results from the original code). | 
 
 #### <a name="section-anchor-2-1-4"/>The `<copy-directory>` element
 

@@ -403,13 +403,12 @@
                         </p:with-input>
                     </p:error>
                 </p:if>
-                <p:identity message="      * Processing {$inputDocumentsCount} documents"/>
                 <!-- Do the transforms: -->
                 <p:for-each name="apply-build-stylesheet-input-documents">
                     <p:output port="result" primary="true" sequence="true"/>
                     <p:output port="secondary" primary="false" sequence="true" pipe="secondary@apply-build-stylesheet"/>
                     <p:variable name="inputFilename" as="xs:string" select="replace(base-uri(/), '.*[/\\]([^/\\]+)$', '$1')"/>
-                    <p:xslt name="apply-build-stylesheet">
+                    <p:xslt name="apply-build-stylesheet" message="      * ({p:iteration-position()}/{p:iteration-size()}) {$inputFilename}">
                         <p:with-input port="stylesheet" href="{$hrefBuildStylesheet}"/>
                         <p:with-option name="parameters" select="$buildStylesheetParameters"/>
                     </p:xslt>
@@ -526,7 +525,6 @@
                         </p:with-input>
                     </p:error>
                 </p:if>
-                <p:identity message="      * Validating {$inputDocumentsCount} documents"/>
             </p:when>
             <p:otherwise>
                 <p:error code="yatcs:error">
@@ -539,7 +537,10 @@
 
         <!-- Do the validation and report about it:: -->
         <p:for-each>
-            <p:choose>
+            <p:output pipe="@do-validations"/>
+            
+            <p:variable name="filename" select="replace(base-uri(/), '.*[/\\]([^/\\]+)$', '$1')"/>
+            <p:choose name="do-validations" message="      * ({p:iteration-position()}/{p:iteration-size()}) {$filename}">
                 <p:when test="$validationType eq $validationTypeSchema">
                     <p:output pipe="report@do-schema-validation"/>
                     <p:validate-with-xml-schema assert-valid="false" name="do-schema-validation" report-format="xvrl">
@@ -560,9 +561,9 @@
                     </p:error>
                 </p:otherwise>
             </p:choose>
+
             <!-- Inspect the XVRL report and see if we have to report anything: -->
             <p:if test="exists(/*/xvrl:detection)">
-                <p:identity message="      * Schema validation error(s) in &quot;{/*/xvrl:metadata/xvrl:document/@href}&quot;"/>
                 <p:for-each>
                     <p:with-input select="/*/xvrl:detection"/>
                     <p:identity message="        * {/*/@severity}: {/*/xvrl:message}"/>
@@ -572,11 +573,12 @@
 
         <!-- Store results, if requested: -->
         <p:if test="$doOutputReport">
-            <p:wrap-sequence wrapper="xvrl:validation-results"/>
+            <p:wrap-sequence wrapper="validation-results"/>
+            <p:add-attribute attribute-name="timestamp" attribute-value="{current-dateTime()}"/>
             <p:if test="$reportPruneValid">
                 <p:delete match="xvrl:report[empty(xvrl:detection)]"/>
             </p:if>
-            <p:identity message="      * XVRL rpeort written to &quot;{$reportUri}&quot;"/>
+            <p:identity message="      * XVRL report written to &quot;{$reportUri}&quot;"/>
             <p:store href="{$reportUri}" serialization="$yatcs:standardXmlSerialization"/>
         </p:if>
 

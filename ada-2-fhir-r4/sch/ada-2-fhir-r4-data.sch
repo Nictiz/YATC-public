@@ -68,7 +68,7 @@
     
     <!-- Action @depends-on targets must exist and not reference itself: -->
     <pattern>
-        <rule context="yatcp:action[normalize-space(@depends-on) ne '']">
+        <rule context="yatcp:action[normalize-space(string(@depends-on)) ne '']">
             <let name="actionName" value="string(@name)"/>
             <let name="dependencies" value="tokenize(string(@depends-on), '\s+')[.]"/>
             <assert test="every $d in $dependencies satisfies ($d ne $actionName)">An action cannot depend on itself</assert>

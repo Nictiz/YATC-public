@@ -106,7 +106,7 @@
                 </p:when>
 
                 <!-- List the available actions: -->
-                <p:when test="$yatcs:commandFlagActionList = $commandFlags" >
+                <p:when test="$yatcs:commandFlagActionList = $commandFlags">
                     <p:for-each>
                         <p:with-input select="$ada2fhirr4Data/*/yatcp:application">
                             <null/>
@@ -114,9 +114,10 @@
                         <p:variable name="applicationPrompt" select="string(/*/@name) || '/' || string(/*/@version)"/>
                         <p:for-each>
                             <p:with-input select="/*/yatcp:action"/>
+                            <p:variable name="description" select="if (normalize-space(/*/@description) ne '') then (' (' || /*/@description || ')') else ()"/>
                             <p:identity>
                                 <p:with-input>
-                                    <p:inline content-type="text/plain" xml:space="preserve">{$applicationPrompt} {/*/@name} {/*/@description}</p:inline>
+                                    <p:inline content-type="text/plain" xml:space="preserve">{$applicationPrompt} {/*/@name}{$description}</p:inline>
                                 </p:with-input>
                             </p:identity>
                         </p:for-each>

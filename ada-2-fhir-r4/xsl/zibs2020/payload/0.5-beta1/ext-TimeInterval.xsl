@@ -84,7 +84,7 @@
 
                         <!-- Write out the element, if we have any input, or if only a duration or criterium is known -->
                         <xsl:if test="$start or $end or tijds_duur[@value | @unit] or criterium[@value]">
-                            <xsl:element name="{$wrapIn}">
+                            <xsl:element name="{$wrapIn}" namespace="http://hl7.org/fhir">
                                 <!-- output the extension for tijds_duur -->
                                 <xsl:call-template name="ext-TimeInterval.Duration"/>
                                 <!-- Converts ADA gebruiksperiode/criterium to FHIR extension for MP9 2.0 -->
@@ -131,7 +131,7 @@
                 <xsl:choose>
                     <!-- If no wrapIn is given, write out the extension element and iteratively call this template. -->
                     <xsl:when test="$wrapIn != ''">
-                        <xsl:element name="{$wrapIn}">
+                        <xsl:element name="{$wrapIn}" namespace="http://hl7.org/fhir">
                             <xsl:call-template name="hoeveelheid-to-Duration">
                                 <xsl:with-param name="in" select="tijds_duur"/>
                             </xsl:call-template>

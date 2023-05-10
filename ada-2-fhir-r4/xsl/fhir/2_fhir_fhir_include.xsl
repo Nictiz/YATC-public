@@ -131,7 +131,7 @@
     <xsl:variable name="zib2020Oid" select="'2.16.840.1.113883.2.4.3.11.60.40.1'"/>
     <xsl:param name="fhirVersion" select="'R4'"/>
 
-    <xsl:param name="patientTokensXml" select="document('../../ada_2_fhir/fhir/QualificationTokens.xml')"/>
+    <xsl:param name="patientTokensXml" select="document('../../../ada-2-fhir/xsl/fhir/QualificationTokens.xml')"/>
 
     <xsl:param name="fhirMetadata" as="element()*">
         <xsl:call-template name="buildFhirMetadata">
@@ -609,7 +609,7 @@
         </xsl:param>
 
         <xsl:variable name="uuidIn" as="element()?">
-            <xsl:element name="{$in/local-name()}">
+            <xsl:element name="{$in/local-name()}" namespace="http://hl7.org/fhir">
                 <xsl:copy-of select="$in/@*"/>
                 <xsl:attribute name="profile" select="$profile"/>
                 <xsl:copy-of select="$in/node()"/>

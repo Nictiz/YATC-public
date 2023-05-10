@@ -22,7 +22,8 @@
 
     <xsl:import href="../../../fhir/2_fhir_fhir_include.xsl"/>
 
-    <!-- If a file imported here exists in a different folder (meaning a different 'package'), this means the profile and therefore its ada2fhir mapping is the same in the current and the imported package version (and all versions in between). 
+    <!-- If a file imported here exists in a different folder (meaning a different 'package'), this means the profile and 
+        therefore its ada2fhir mapping is the same in the current and the imported package version (and all versions in between). 
         If a bug is found and fixed, this fix should apply to the mapping in all versions of the package that use this mapping.
         If a profile is edited in a non-backwards compatible way, a new version of the ada2fhir mapping should be made for that profile. -->
     <xsl:import href="nl-core-AddressInformation.xsl"/>

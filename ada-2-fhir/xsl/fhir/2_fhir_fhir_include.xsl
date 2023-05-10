@@ -797,6 +797,7 @@
 
     <xsl:function name="nf:get-uuid" as="xs:string">
         <!-- Returns a UUID -->
+       
         <xsl:param name="in" as="element()">
             <!-- xml element to be used to generate uuid -->
         </xsl:param>

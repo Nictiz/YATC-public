@@ -149,7 +149,16 @@
                             <para>Message which will be output on the console during processing for this application.</para>
                         </element>
                         <element name="build" attributes-indicator="true">
-                            <para>Specification of a build step.</para>
+                            <para>Specification of a <link href="#build-step">build</link> step (XSLT transformation).</para>
+                        </element>
+                        <element name="validate-with-schema">
+                            <para>Specification of a <link href="#validation-build-steps">validation step</link> using a W3C XML Schema</para>
+                        </element>
+                        <element name="validate-with-schematron">
+                            <para>Specification of a <link href="#validation-build-steps">validation step</link> using a Schematron Schema</para>
+                        </element>
+                        <element name="copy">
+                            <para>Specification of a straight <link href="#copy-step">copy</link>.</para>
                         </element>
                     </choice>
                 </children>
@@ -158,7 +167,7 @@
             <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
             <section>
-                <title>The <elm>build</elm> element</title>
+                <title><anchor name="build-step"/>The <elm>build</elm> element</title>
 
                 <para>The <elm>build</elm> defines a single build step to be performed as part of an action. A build step is an XSLT transformation performed on one or more input documents.</para>
 
@@ -212,7 +221,7 @@
             <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
             <section>
-                <title>The <elm>validate-with-schema</elm> and <elm>validate-with-schematron</elm> element</title>
+                <title><anchor name="validation-build-steps"/>The <elm>validate-with-schema</elm> and <elm>validate-with-schematron</elm> element</title>
 
                 <para>The <elm>validate-with-schema</elm> and <elm>validate-with-schematron</elm> element implement validation of the documents produced, using W3C XML Schemas or Schematron schemas. The description below is about the <elm>validate-with-schema</elm> element. The <elm>validate-with-schematron</elm> element has the same definition.</para>
 
@@ -246,7 +255,30 @@
 
         <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
+        <section>
+            <title><anchor name="copy-step"/>The <elm>copy</elm> element</title>
 
+            <para>The <elm>copy</elm> element implements a straight file copy from files in one directory to another. It does <emph>not</emph> copy subdirectories.</para>
+
+            <element name="copy">
+                <attributes>
+                    <attribute name="name" type="xs:string">
+                        <para>The name of this copy step (used for reporting). If nothing is specified, some unique name will be used.</para>
+                    </attribute>
+                    <attribute name="recurse" type="xs:boolean" default="false">
+                        <para>Whether to copy subdirectories as well.</para>
+                    </attribute>
+                </attributes>
+                <children>
+                    <element name="source" pseudo-attributes="directory accept-empty">
+                        <para>Specifies the set of source files to copy.<br/>Has a required <code>@directory</code> attribute (see <link href="#common-attributes">common attributes</link>) and can have child <elm>include</elm> and/or <elm>exclude</elm> elements (see <link href="#include-exclude">include/exclude elements</link>) to further narrow down the set of files to process.<br/>Set <code>accept-empty="true"</code> if you want empty input sets handled without raising an error.</para>
+                    </element>
+                    <element name="target" pseudo-attributes="directory">
+                        <para>Specifies the target directory to copy the files to.<br/>Has a required <code>@directory</code> attribute (see <link href="#common-attributes">common attributes</link>).</para>
+                    </element>
+                </children>
+            </element>
+        </section>
 
     </section>
 

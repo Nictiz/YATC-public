@@ -134,6 +134,7 @@
         <xsl:param name="outputDir" select="'.'">
             <!-- The outputDir for the resource, defaults to 'current dir'. -->
         </xsl:param>
+        
         <xsl:result-document href="{$outputDir}/{f:id/@value}.xml">
             <xsl:copy-of select="."/>
         </xsl:result-document>

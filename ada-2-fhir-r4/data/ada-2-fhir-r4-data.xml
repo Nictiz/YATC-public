@@ -294,7 +294,7 @@
             <!-- Push bundles for Touchstone for sturen_medicatiegegevens -->
             <build name="Bundles for Touchstone for sturen_medicatiegegevens">
                 <stylesheet href="../xsl/mp/9.2.0/fhir_fixtures4Touchstone/payload/sturen_medicatiegegevens_2_fhir.xsl"/>
-                <input-documents directory="@mg-instance">
+                <input-documents directory="@mg.st-instance">
                     <include glob="mg-mp-*.xml"/>
                 </input-documents>
                 <discard-output/>
@@ -305,7 +305,7 @@
 
             <build name="Sets sturen_medicatiegegevens">
                 <stylesheet href="../xsl/mp/9.2.0/fhir_fixtures4Touchstone/payload/sturen_medicatiegegevens_2_fhir.xsl"/>
-                <input-documents directory="@mg-instance">
+                <input-documents directory="@mg.st-instance-sets">
                     <include glob="*.xml"/>
                 </input-documents>
                 <discard-output/>

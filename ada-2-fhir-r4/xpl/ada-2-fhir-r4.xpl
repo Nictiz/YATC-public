@@ -179,7 +179,10 @@
         </p:if>
 
         <!-- Check for circular actions: -->
-        <p:if test="string($actionName) = $previousDependencyActions">
+        <!-- REMARK: The whole complicated "convert action names into strings" in the test expression below is completely 
+             superfluous and should not be there. It is a workaround for a weird bug in the 1.1.4 version of Morgana. 
+             It was reported and promises were made it will be fixed. -->
+        <p:if test="string($actionName) = ($previousDependencyActions ! string(.))">
             <p:error code="yatcs:error">
                 <p:with-input>
                     <p:inline content-type="text/plain" xml:space="preserve">Circular action dependency: "{$actionName}"</p:inline>
@@ -542,7 +545,7 @@
         </p:choose>
 
         <!-- Do the validation and report about it:: -->
-        <p:for-each>
+        <p:for-each name="validation-loop">
             <p:output pipe="@do-validations"/>
 
             <p:variable name="filename" select="replace(base-uri(/), '.*[/\\]([^/\\]+)$', '$1')"/>

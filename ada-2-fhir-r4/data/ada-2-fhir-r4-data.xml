@@ -64,13 +64,13 @@
             <validate-with-schema name="schema-validate-sturen_laboratoriumresultaten">
                 <schema href="../xsd/fhir-schemas/fhir-single.xsd"/>
                 <input-documents directory="@labsr-fhir-instance"/>
-                <output-report directory="@labsr-fhir-validation-results" name="schema-validation-results-sturen_laboratoriumresultaten.xml"/>
+                <output-report directory="@labsr-fhir-validation-results" name="schema-validation-results.xml"/>
             </validate-with-schema>
 
             <validate-with-schema name="schema-validate-beschikbaarstellen_laboratoriumresultaten">
                 <schema href="../xsd/fhir-schemas/fhir-single.xsd"/>
                 <input-documents directory="@labbr-fhir-instance"/>
-                <output-report directory="@labbr-fhir-validation-results" name="schema-validation-results-beschikbaarstellen_laboratoriumresultaten.xml"/>
+                <output-report directory="@labbr-fhir-validation-results" name="schema-validation-results.xml"/>
             </validate-with-schema>
 
         </action>
@@ -80,15 +80,15 @@
         <action name="validate-with-schematron">
 
             <validate-with-schematron name="schematron-validate-sturen_laboratoriumresultaten">
-                <schema href="../xsd/fhir-schemas/fhir-invariants.sch"/>
+                <schema href="../sch/fhir-schematrons/fhir-invariants.sch"/>
                 <input-documents directory="@labsr-fhir-instance"/>
-                <output-report directory="@labsr-fhir-validation-results" name="schematron-validation-results-sturen_laboratoriumresultaten.xml"/>
+                <output-report directory="@labsr-fhir-validation-results" name="schematron-validation-results.xml"/>
             </validate-with-schematron>
 
             <validate-with-schematron name="schematron-validate-beschikbaarstellen_laboratoriumresultaten">
-                <schema href="../xsd/fhir-schemas/fhir-invariants.sch"/>
+                <schema href="../sch/fhir-schematrons/fhir-invariants.sch"/>
                 <input-documents directory="@labbr-fhir-instance"/>
-                <output-report directory="@labbr-fhir-validation-results" name="schematron-validation-results-beschikbaarstellen_laboratoriumresultaten.xml"/>
+                <output-report directory="@labbr-fhir-validation-results" name="schematron-validation-results.xml"/>
             </validate-with-schematron>
 
         </action>
@@ -117,6 +117,7 @@
             </copy-project-schemas>
             <empty-directory target-subdir="fhir_instance" directory-id="mg-fhir-instance"/>
             <empty-directory target-subdir="fhir_instance_medmij" directory-id="mg-fhir-medmij"/>
+            <empty-directory target-subdir="fhir-validation-results" directory-id="mg-fhir-validation-results" compare="false"/>
         </setup>
 
         <!-- sturen_medicatiegegevens  -->
@@ -132,6 +133,7 @@
             </copy-project-schemas>
             <empty-directory target-subdir="fhir_instance" directory-id="mg.st-fhir-instance"/>
             <empty-directory target-subdir="fhir_instance_sets" directory-id="mg.st-fhir-sets"/>
+            <empty-directory target-subdir="fhir-validation-results" directory-id="mg.st-fhir-validation-results" compare="false"/>
         </setup>
 
         <!-- sturen_medicatievoorschrift -->
@@ -143,6 +145,7 @@
                 <include glob="*$USECASE.xsd"/>
             </copy-project-schemas>
             <empty-directory target-subdir="fhir_instance" directory-id="mv-fhir-instance"/>
+            <empty-directory target-subdir="fhir-validation-results" directory-id="mv-fhir-validation-results" compare="false"/>
         </setup>
 
 
@@ -155,6 +158,7 @@
                 <include glob="*$USECASE.xsd"/>
             </copy-project-schemas>
             <empty-directory target-subdir="fhir_instance" directory-id="amv-fhir-instance"/>
+            <empty-directory target-subdir="fhir-validation-results" directory-id="amv-fhir-validation-results" compare="false"/>
         </setup>
 
         <!-- sturen_voorstel_medicatieafspraak -->
@@ -166,6 +170,7 @@
                 <include glob="*$USECASE.xsd"/>
             </copy-project-schemas>
             <empty-directory target-subdir="fhir_instance" directory-id="vma-fhir-instance"/>
+            <empty-directory target-subdir="fhir-validation-results" directory-id="vma-fhir-validation-results" compare="false"/>
         </setup>
 
         <!-- sturen_antwoord_voorstel_medicatieafspraak -->
@@ -177,6 +182,7 @@
                 <include glob="*$USECASE.xsd"/>
             </copy-project-schemas>
             <empty-directory target-subdir="fhir_instance" directory-id="avma-fhir-instance"/>
+            <empty-directory target-subdir="fhir-validation-results" directory-id="avma-fhir-validation-results" compare="false"/>
         </setup>
 
         <!-- sturen_voorstel_verstrekkingsverzoek -->
@@ -188,6 +194,7 @@
                 <include glob="*$USECASE.xsd"/>
             </copy-project-schemas>
             <empty-directory target-subdir="fhir_instance" directory-id="vvv-fhir-instance"/>
+            <empty-directory target-subdir="fhir-validation-results" directory-id="vvv-fhir-validation-results" compare="false"/>
         </setup>
 
         <!-- sturen_antwoord_voorstel_verstrekkingsverzoek -->
@@ -199,6 +206,7 @@
                 <include glob="*$USECASE.xsd"/>
             </copy-project-schemas>
             <empty-directory target-subdir="fhir_instance" directory-id="avvv-fhir-instance"/>
+            <empty-directory target-subdir="fhir-validation-results" directory-id="avvv-fhir-validation-results" compare="false"/>
         </setup>
 
         <!-- xml-voorbeelden -->
@@ -212,9 +220,10 @@
         <setup usecase="nictiz_test" directory-id="ntest">
             <empty-directory target-subdir="ada_instance" directory-id="ntest-instance"/>
             <empty-directory target-subdir="fhir_instance" directory-id="ntest-fhir-instance"/>
+            <empty-directory target-subdir="fhir-validation-results" directory-id="ntest-fhir-validation-results" compare="false"/>
         </setup>
 
-        <setup usecase="4TouchstoneMP" >
+        <setup usecase="4TouchstoneMP">
             <empty-directory target-subdir="." directory-id="tsmp"/>
         </setup>
 
@@ -477,6 +486,173 @@
 
         </action>
 
+        <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+        <action name="validate-with-schema">
+            <!-- Remark: For some reason we have to flatten the bundle.xsd before it is useable in XProc. 
+                 No idea why, but it works. See also YATC-public/ada-2-fhir-r4/xsd/fhir-schemas/README.md -->
+
+            <validate-with-schema>
+                <!-- For beschikbaarstellen_medicatiegegevens, we only validate the mg-*.xml files. -->
+                <schema href="../xsd/fhir-schemas/FLATTENED/bundle.xsd"/>
+                <input-documents directory="@mg-fhir-instance">
+                    <include glob="mg-*.xml"/>
+                </input-documents>
+                <output-report directory="@mg-fhir-validation-results" name="schema-validation-results.xml"/>
+            </validate-with-schema>
+
+            <validate-with-schema>
+                <schema href="../xsd/fhir-schemas/FLATTENED/bundle.xsd"/>
+                <input-documents directory="@mg.st-fhir-instance">
+                    <include glob="*.xml"/>
+                </input-documents>
+                <output-report directory="@mg.st-fhir-validation-results" name="schema-validation-results.xml"/>
+            </validate-with-schema>
+
+            <validate-with-schema>
+                <schema href="../xsd/fhir-schemas/FLATTENED/bundle.xsd"/>
+                <input-documents directory="@mv-fhir-instance">
+                    <include glob="*.xml"/>
+                </input-documents>
+                <output-report directory="@mv-fhir-validation-results" name="schema-validation-results.xml"/>
+            </validate-with-schema>
+
+            <validate-with-schema>
+                <schema href="../xsd/fhir-schemas/FLATTENED/bundle.xsd"/>
+                <input-documents directory="@amv-fhir-instance">
+                    <include glob="*.xml"/>
+                </input-documents>
+                <output-report directory="@amv-fhir-validation-results" name="schema-validation-results.xml"/>
+            </validate-with-schema>
+
+            <validate-with-schema>
+                <schema href="../xsd/fhir-schemas/FLATTENED/bundle.xsd"/>
+                <input-documents directory="@vma-fhir-instance">
+                    <include glob="*.xml"/>
+                </input-documents>
+                <output-report directory="@vma-fhir-validation-results" name="schema-validation-results.xml"/>
+            </validate-with-schema>
+
+            <validate-with-schema>
+                <schema href="../xsd/fhir-schemas/FLATTENED/bundle.xsd"/>
+                <input-documents directory="@avma-fhir-instance">
+                    <include glob="*.xml"/>
+                </input-documents>
+                <output-report directory="@avma-fhir-validation-results" name="schema-validation-results.xml"/>
+            </validate-with-schema>
+
+            <validate-with-schema>
+                <schema href="../xsd/fhir-schemas/FLATTENED/bundle.xsd"/>
+                <input-documents directory="@vvv-fhir-instance">
+                    <include glob="*.xml"/>
+                </input-documents>
+                <output-report directory="@vvv-fhir-validation-results" name="schema-validation-results.xml"/>
+            </validate-with-schema>
+            
+            <validate-with-schema>
+                <schema href="../xsd/fhir-schemas/FLATTENED/bundle.xsd"/>
+                <input-documents directory="@avvv-fhir-instance">
+                    <include glob="*.xml"/>
+                </input-documents>
+                <output-report directory="@avvv-fhir-validation-results" name="schema-validation-results.xml"/>
+            </validate-with-schema>
+            
+            <validate-with-schema>
+                <schema href="../xsd/fhir-schemas/FLATTENED/bundle.xsd"/>
+                <input-documents directory="@ntest-fhir-instance">
+                    <include glob="*.xml"/>
+                </input-documents>
+                <output-report directory="@ntest-fhir-validation-results" name="schema-validation-results.xml"/>
+            </validate-with-schema>
+            
+        </action>
+        
+        <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+        
+        <action name="validate-with-schematron">
+            
+            <validate-with-schematron>
+                <schema href="../sch/fhir-schematrons/bundle.sch"/>
+                <input-documents directory="@mg-fhir-instance">
+                    <include glob="*.xml"/>
+                </input-documents>
+                <output-report directory="@mg-fhir-validation-results" name="schematron-validation-results.xml"/>
+            </validate-with-schematron>
+            
+            <validate-with-schematron>
+                <schema href="../sch/fhir-schematrons/bundle.sch"/>
+                <input-documents directory="@mg.st-fhir-instance">
+                    <include glob="*.xml"/>
+                </input-documents>
+                <output-report directory="@mg.st-fhir-validation-results" name="schematron-validation-results.xml"/>
+            </validate-with-schematron>
+            
+            <validate-with-schematron>
+                <schema href="../sch/fhir-schematrons/bundle.sch"/>
+                <input-documents directory="@mv-fhir-instance">
+                    <include glob="*.xml"/>
+                </input-documents>
+                <output-report directory="@mv-fhir-validation-results" name="schematron-validation-results.xml"/>
+            </validate-with-schematron>
+            
+            <validate-with-schematron>
+                <schema href="../sch/fhir-schematrons/bundle.sch"/>
+                <input-documents directory="@amv-fhir-instance">
+                    <include glob="*.xml"/>
+                </input-documents>
+                <output-report directory="@amv-fhir-validation-results" name="schematron-validation-results.xml"/>
+            </validate-with-schematron>
+            
+            <validate-with-schematron>
+                <schema href="../sch/fhir-schematrons/bundle.sch"/>
+                <input-documents directory="@vma-fhir-instance">
+                    <include glob="*.xml"/>
+                </input-documents>
+                <output-report directory="@vma-fhir-validation-results" name="schematron-validation-results.xml"/>
+            </validate-with-schematron>
+            
+            <validate-with-schematron>
+                <schema href="../sch/fhir-schematrons/bundle.sch"/>
+                <input-documents directory="@avma-fhir-instance">
+                    <include glob="*.xml"/>
+                </input-documents>
+                <output-report directory="@avma-fhir-validation-results" name="schematron-validation-results.xml"/>
+            </validate-with-schematron>
+            
+            <validate-with-schematron>
+                <schema href="../sch/fhir-schematrons/bundle.sch"/>
+                <input-documents directory="@vvv-fhir-instance">
+                    <include glob="*.xml"/>
+                </input-documents>
+                <output-report directory="@vvv-fhir-validation-results" name="schematron-validation-results.xml"/>
+            </validate-with-schematron>
+            
+            <validate-with-schematron>
+                <schema href="../sch/fhir-schematrons/bundle.sch"/>
+                <input-documents directory="@avvv-fhir-instance">
+                    <include glob="*.xml"/>
+                </input-documents>
+                <output-report directory="@avvv-fhir-validation-results" name="schematron-validation-results.xml"/>
+            </validate-with-schematron>
+            
+            <validate-with-schematron>
+                <schema href="../sch/fhir-schematrons/bundle.sch"/>
+                <input-documents directory="@ntest-fhir-instance">
+                    <include glob="*.xml"/>
+                </input-documents>
+                <output-report directory="@ntest-fhir-validation-results" name="schematron-validation-results.xml"/>
+            </validate-with-schematron>
+            
+        </action>
+        
+        <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+        
+        <action name="validate" depends-on="validate-with-schema validate-with-schematron" description="All validation actions"/>
+        
+        <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+        
+        <action name="all" depends-on="convert validate" description="Convert and validate"/>
+        
     </application>
 
 </ada-2-fhir-r4-data>

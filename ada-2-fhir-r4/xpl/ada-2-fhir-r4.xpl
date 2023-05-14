@@ -179,7 +179,10 @@
         </p:if>
 
         <!-- Check for circular actions: -->
-        <p:if test="$actionName = $previousDependencyActions">
+        <!-- REMARK: The whole complicated "convert action names into strings" in the test expression below is completely 
+             superfluous and should not be there. It is a workaround for a weird bug in the 1.1.4 version of Morgana. 
+             It was reported and promises were made it will be fixed. -->
+        <p:if test="string($actionName) = ($previousDependencyActions ! string(.))">
             <p:error code="yatcs:error">
                 <p:with-input>
                     <p:inline content-type="text/plain" xml:space="preserve">Circular action dependency: "{$actionName}"</p:inline>
@@ -247,6 +250,12 @@
                         <local:process-action-validate>
                             <p:with-option name="parameters" select="$parameters"/>
                         </local:process-action-validate>
+                    </p:when>
+
+                    <p:when test="exists(/*/self::yatcp:copy)">
+                        <local:process-action-copy>
+                            <p:with-option name="parameters" select="$parameters"/>
+                        </local:process-action-copy>
                     </p:when>
 
                     <!-- Unrecognized: -->
@@ -536,7 +545,7 @@
         </p:choose>
 
         <!-- Do the validation and report about it:: -->
-        <p:for-each>
+        <p:for-each name="validation-loop">
             <p:output pipe="@do-validations"/>
 
             <p:variable name="filename" select="replace(base-uri(/), '.*[/\\]([^/\\]+)$', '$1')"/>
@@ -581,6 +590,47 @@
             <p:identity message="      * XVRL report written to &quot;{$reportUri}&quot;"/>
             <p:store href="{$reportUri}" serialization="$yatcs:standardXmlSerialization"/>
         </p:if>
+
+    </p:declare-step>
+
+    <!-- ======================================================================= -->
+
+    <p:declare-step type="local:process-action-copy" name="process-action-copy">
+        <!-- TBD identity step for <copy> -->
+        <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+        <p:input port="source" primary="true" sequence="false" content-types="xml">
+            <!-- The <yatcp:copy> element to process. -->
+        </p:input>
+        <p:output port="result" sequence="false" content-types="xml" pipe="source@process-action-copy"/>
+
+        <p:option name="parameters" as="map(xs:string, xs:string*)" required="true"/>
+
+        <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+        <p:variable name="buildName" as="xs:string" select="string((/*/@name, (local-name(/*) || ' ' || p:iteration-position() || '/' || p:iteration-size()))[1])"/>
+        <p:variable name="sourceElement" as="element(yatcp:source)" select="/*/yatcp:source"/>
+        <p:variable name="hrefSource" as="xs:string" select="string($sourceElement/@directory)"/>
+        <p:variable name="hrefTarget" as="xs:string" select="string(/*/yatcp:target/@directory)"/>
+        <p:variable name="recurse" as="xs:boolean" select="xs:boolean((/*/@recurse, false())[1])"/>
+
+        <!-- Identify the schema to be used and check its availability:: -->
+        <p:identity message="    * Copy &quot;{$buildName}&quot;"/>
+        <p:identity message="      * Source: &quot;{$hrefSource}&quot;"/>
+        <p:identity message="      * Target: &quot;{$hrefTarget}&quot;"/>
+
+        <yatcs:copy-dir-from-patterns>
+            <p:with-option name="copyPatternsElement" select="$sourceElement"/>
+            <p:with-option name="hrefSource" select="$hrefSource"/>
+            <p:with-option name="hrefTarget" select="$hrefTarget"/>
+            <p:with-option name="recurse" select="$recurse"/>
+            <p:with-option name="reportCount" select="true()"/>
+            <p:with-option name="clearTarget" select="false()"/>
+        </yatcs:copy-dir-from-patterns>
+
+        <yatcs:report-count>
+            <p:with-option name="prompt" select="'      * Files copied: '"/>
+        </yatcs:report-count>
 
     </p:declare-step>
 

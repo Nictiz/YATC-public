@@ -114,10 +114,11 @@
                         <p:variable name="applicationPrompt" select="string(/*/@name) || '/' || string(/*/@version)"/>
                         <p:for-each>
                             <p:with-input select="/*/yatcp:action"/>
-                            <p:variable name="description" select="if (normalize-space(/*/@description) ne '') then (' (' || /*/@description || ')') else ()"/>
+                            <p:variable name="description" as="xs:string" select="if (normalize-space(/*/@description) ne '') then (' (' || /*/@description || ')') else ''"/>
+                            <p:variable name="defaultMarker" as="xs:string" select="if (xs:boolean((/*/@default, false())[1])) then '*' else ''"/>
                             <p:identity>
                                 <p:with-input>
-                                    <p:inline content-type="text/plain" xml:space="preserve">{$applicationPrompt} {/*/@name}{$description}</p:inline>
+                                    <p:inline content-type="text/plain" xml:space="preserve">{$applicationPrompt} {$defaultMarker}{/*/@name}{$description}</p:inline>
                                 </p:with-input>
                             </p:identity>
                         </p:for-each>

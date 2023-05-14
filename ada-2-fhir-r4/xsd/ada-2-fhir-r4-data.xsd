@@ -202,6 +202,47 @@ Can also be used as root element for XIncluded documents.</xs:documentation>
                 </xs:element>
                 <xs:element name="validate-with-schema" type="yatcp:ct-validation-action-step"/>
                 <xs:element name="validate-with-schematron" type="yatcp:ct-validation-action-step"/>
+                <xs:element name="copy">
+                    <xs:annotation>
+                        <xs:documentation>Straight copy of files</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="source">
+                                <xs:annotation>
+                                    <xs:documentation>Specification of a set of input documents to validate.</xs:documentation>
+                                </xs:annotation>
+                                <xs:complexType>
+                                    <xs:complexContent>
+                                        <xs:extension base="yatcp:ct-copy-patterns">
+                                            <xs:attributeGroup ref="yatcp:ag-directory"/>
+                                            <xs:attribute default="false" name="accept-empty" type="xs:boolean">
+                                                <xs:annotation>
+                                                    <xs:documentation>Whether to accept an empty input set without error</xs:documentation>
+                                                </xs:annotation>
+                                            </xs:attribute>
+                                        </xs:extension>
+                                    </xs:complexContent>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="target">
+                                <xs:complexType>
+                                    <xs:attributeGroup ref="yatcp:ag-directory"/>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                        <xs:attribute name="name" type="xs:string">
+                            <xs:annotation>
+                                <xs:documentation>Name for this action step (only for reporting/documentation purposes)</xs:documentation>
+                            </xs:annotation>
+                        </xs:attribute>
+                        <xs:attribute default="false" name="recurse" type="xs:boolean">
+                            <xs:annotation>
+                                <xs:documentation>Whether to copy subdirectories as well.</xs:documentation>
+                            </xs:annotation>
+                        </xs:attribute>
+                    </xs:complexType>
+                </xs:element>
             </xs:choice>
         </xs:sequence>
     </xs:group>

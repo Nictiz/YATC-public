@@ -64,13 +64,13 @@
             <validate-with-schema name="schema-validate-sturen_laboratoriumresultaten">
                 <schema href="../xsd/fhir-schemas/fhir-single.xsd"/>
                 <input-documents directory="@labsr-fhir-instance"/>
-                <output-report directory="@labsr-fhir-validation-results" name="schema-validation-results-sturen_laboratoriumresultaten.xml"/>
+                <output-report directory="@labsr-fhir-validation-results" name="schema-validation-results.xml"/>
             </validate-with-schema>
 
             <validate-with-schema name="schema-validate-beschikbaarstellen_laboratoriumresultaten">
                 <schema href="../xsd/fhir-schemas/fhir-single.xsd"/>
                 <input-documents directory="@labbr-fhir-instance"/>
-                <output-report directory="@labbr-fhir-validation-results" name="schema-validation-results-beschikbaarstellen_laboratoriumresultaten.xml"/>
+                <output-report directory="@labbr-fhir-validation-results" name="schema-validation-results.xml"/>
             </validate-with-schema>
 
         </action>
@@ -80,15 +80,15 @@
         <action name="validate-with-schematron">
 
             <validate-with-schematron name="schematron-validate-sturen_laboratoriumresultaten">
-                <schema href="../xsd/fhir-schemas/fhir-invariants.sch"/>
+                <schema href="../sch/fhir-schematrons/fhir-invariants.sch"/>
                 <input-documents directory="@labsr-fhir-instance"/>
-                <output-report directory="@labsr-fhir-validation-results" name="schematron-validation-results-sturen_laboratoriumresultaten.xml"/>
+                <output-report directory="@labsr-fhir-validation-results" name="schematron-validation-results.xml"/>
             </validate-with-schematron>
 
             <validate-with-schematron name="schematron-validate-beschikbaarstellen_laboratoriumresultaten">
-                <schema href="../xsd/fhir-schemas/fhir-invariants.sch"/>
+                <schema href="../sch/fhir-schematrons/fhir-invariants.sch"/>
                 <input-documents directory="@labbr-fhir-instance"/>
-                <output-report directory="@labbr-fhir-validation-results" name="schematron-validation-results-beschikbaarstellen_laboratoriumresultaten.xml"/>
+                <output-report directory="@labbr-fhir-validation-results" name="schematron-validation-results.xml"/>
             </validate-with-schematron>
 
         </action>
@@ -115,9 +115,10 @@
             <copy-project-schemas>
                 <include glob="*$USECASE.xsd"/>
             </copy-project-schemas>
-            <!--<empty-directory target-subdir="fhir_instance" directory-id="mg-fhir-instance"/>-->
+            <empty-directory target-subdir="fhir_instance" directory-id="mg-fhir-instance"/>
+            <empty-directory target-subdir="fhir_instance_medmij" directory-id="mg-fhir-medmij"/>
+            <empty-directory target-subdir="fhir-validation-results" directory-id="mg-fhir-validation-results" compare="false"/>
         </setup>
-        <!-- TBD: This needs additional work "preprocess for Touchstone" - see Ant script line 48 -->
 
         <!-- sturen_medicatiegegevens  -->
         <setup usecase="sturen_medicatiegegevens" directory-id="mg.st">
@@ -130,6 +131,9 @@
             <copy-project-schemas>
                 <include glob="*$USECASE.xsd"/>
             </copy-project-schemas>
+            <empty-directory target-subdir="fhir_instance" directory-id="mg.st-fhir-instance"/>
+            <empty-directory target-subdir="fhir_instance_sets" directory-id="mg.st-fhir-sets"/>
+            <empty-directory target-subdir="fhir-validation-results" directory-id="mg.st-fhir-validation-results" compare="false"/>
         </setup>
 
         <!-- sturen_medicatievoorschrift -->
@@ -140,6 +144,8 @@
             <copy-project-schemas>
                 <include glob="*$USECASE.xsd"/>
             </copy-project-schemas>
+            <empty-directory target-subdir="fhir_instance" directory-id="mv-fhir-instance"/>
+            <empty-directory target-subdir="fhir-validation-results" directory-id="mv-fhir-validation-results" compare="false"/>
         </setup>
 
 
@@ -151,8 +157,10 @@
             <copy-project-schemas>
                 <include glob="*$USECASE.xsd"/>
             </copy-project-schemas>
+            <empty-directory target-subdir="fhir_instance" directory-id="amv-fhir-instance"/>
+            <empty-directory target-subdir="fhir-validation-results" directory-id="amv-fhir-validation-results" compare="false"/>
         </setup>
-        
+
         <!-- sturen_voorstel_medicatieafspraak -->
         <setup usecase="sturen_voorstel_medicatieafspraak" directory-id="vma">
             <copy-data source-subdir="ada_instance" directory-id="vma-instance">
@@ -161,8 +169,10 @@
             <copy-project-schemas>
                 <include glob="*$USECASE.xsd"/>
             </copy-project-schemas>
+            <empty-directory target-subdir="fhir_instance" directory-id="vma-fhir-instance"/>
+            <empty-directory target-subdir="fhir-validation-results" directory-id="vma-fhir-validation-results" compare="false"/>
         </setup>
-        
+
         <!-- sturen_antwoord_voorstel_medicatieafspraak -->
         <setup usecase="sturen_antwoord_voorstel_medicatieafspraak" directory-id="avma">
             <copy-data source-subdir="ada_instance" directory-id="avma-instance">
@@ -171,8 +181,10 @@
             <copy-project-schemas>
                 <include glob="*$USECASE.xsd"/>
             </copy-project-schemas>
+            <empty-directory target-subdir="fhir_instance" directory-id="avma-fhir-instance"/>
+            <empty-directory target-subdir="fhir-validation-results" directory-id="avma-fhir-validation-results" compare="false"/>
         </setup>
-        
+
         <!-- sturen_voorstel_verstrekkingsverzoek -->
         <setup usecase="sturen_voorstel_verstrekkingsverzoek" directory-id="vvv">
             <copy-data source-subdir="ada_instance" directory-id="vvv-instance">
@@ -181,8 +193,10 @@
             <copy-project-schemas>
                 <include glob="*$USECASE.xsd"/>
             </copy-project-schemas>
+            <empty-directory target-subdir="fhir_instance" directory-id="vvv-fhir-instance"/>
+            <empty-directory target-subdir="fhir-validation-results" directory-id="vvv-fhir-validation-results" compare="false"/>
         </setup>
-        
+
         <!-- sturen_antwoord_voorstel_verstrekkingsverzoek -->
         <setup usecase="sturen_antwoord_voorstel_verstrekkingsverzoek" directory-id="avvv">
             <copy-data source-subdir="ada_instance" directory-id="avvv-instance">
@@ -191,29 +205,453 @@
             <copy-project-schemas>
                 <include glob="*$USECASE.xsd"/>
             </copy-project-schemas>
+            <empty-directory target-subdir="fhir_instance" directory-id="avvv-fhir-instance"/>
+            <empty-directory target-subdir="fhir-validation-results" directory-id="avvv-fhir-validation-results" compare="false"/>
         </setup>
-        
+
         <!-- xml-voorbeelden -->
         <setup usecase="xml-voorbeelden" directory-id="xmlv">
             <copy-data source-subdir="ada_instance" directory-id="xmlv-instance">
                 <include glob="*.xml"/>
             </copy-data>
         </setup>
-        
+
+        <!-- nictiz_test -->
+        <setup usecase="nictiz_test" directory-id="ntest">
+            <empty-directory target-subdir="ada_instance" directory-id="ntest-instance"/>
+            <empty-directory target-subdir="fhir_instance" directory-id="ntest-fhir-instance"/>
+            <empty-directory target-subdir="fhir-validation-results" directory-id="ntest-fhir-validation-results" compare="false"/>
+        </setup>
+
+        <setup usecase="4TouchstoneMP">
+            <empty-directory target-subdir="." directory-id="tsmp"/>
+        </setup>
+
+        <setup usecase="4TouchstoneMPMedMij" directory-id="tsmpmm">
+            <empty-directory target-subdir="."/>
+        </setup>
+
         <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-        
-        <action name="finalize-setup" description="Preprocess for Touchstone beschikbaarstellen_medicatiegegevens" default="true">
-            
+
+        <action name="finalize-setup" description="Preprocess for Touchstone beschikbaarstellen_medicatiegegevens">
+
             <build>
-                <stylesheet href="../xsl/mp/9.2.0/fhir_fixtures4Touchstone/preprocess_ada_4_Touchstone.xsl"/>
+                <stylesheet href="../xsl/mp/9.2.0/fhir_fixtures4Touchstone/payload/preprocess_ada_4_Touchstone.xsl"/>
                 <input-documents directory="@mg-instance">
                     <include glob="*Scenarioset0*.xml"/>
                     <include glob="mg-mgrp-999900389-ALL.xml"/>
                 </input-documents>
                 <output-documents directory="@mg-instance"/>
             </build>
+
+        </action>
+
+        <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+        <action name="convert" default="true" depends-on="finalize-setup">
+
+            <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+            <!-- beschikbaarstellen_medicatiegegevens -->
+
+            <!-- resources for Touchstone for beschikbaarstellen_medicatiegegevens -->
+            <build name="Resources beschikbaarstellen_medicatiegegevens for Touchstone">
+                <stylesheet href="../xsl/mp/9.2.0/fhir_fixtures4Touchstone/payload/beschikbaarstellen_medicatiegegevens_2_fhir_resources.xsl"/>
+                <input-documents directory="@mg-instance">
+                    <include glob="mg-mp-*.xml"/>
+                </input-documents>
+                <discard-output/>
+                <parameter name="outputDir" directory="@mg-fhir-instance"/>
+                <parameter name="generateInstructionText" value="true"/>
+                <parameter name="mask-ids" value=""/>
+            </build>
+
+            <!--  bundles for beschikbaarstellen_medicatiegegevens -->
+            <build name="Bundles beschikbaarstellen_medicatiegegevens">
+                <stylesheet href="../xsl/mp/9.2.0/fhir_fixtures4Touchstone/payload/beschikbaarstellen_medicatiegegevens_2_fhir.xsl"/>
+                <input-documents directory="@mg-instance">
+                    <include glob="*.xml"/>
+                </input-documents>
+                <discard-output/>
+                <parameter name="outputDir" directory="@mg-fhir-instance"/>
+                <parameter name="generateInstructionText" value="true"/>
+                <parameter name="mask-ids" value=""/>
+            </build>
+
+            <build name="Resources beschikbaarstellen_medicatiegegevens for MedMij">
+                <stylesheet href="../xsl/mp/9.2.0/fhir_fixtures4Touchstone/payload/beschikbaarstellen_medicatiegegevens_2_fhir_resources.xsl"/>
+                <input-documents directory="@mg-instance">
+                    <include glob="mg-mp-*.xml"/>
+                </input-documents>
+                <discard-output/>
+                <parameter name="outputDir" directory="@mg-fhir-medmij"/>
+                <parameter name="generateInstructionText" value="true"/>
+                <parameter name="mask-ids" value="2.16.840.1.113883.2.4.6.3"/>
+            </build>
+
+            <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+            <!-- sturen_medicatiegegevens -->
+
+            <!-- Push bundles for Touchstone for sturen_medicatiegegevens -->
+            <build name="Bundles for Touchstone for sturen_medicatiegegevens">
+                <stylesheet href="../xsl/mp/9.2.0/fhir_fixtures4Touchstone/payload/sturen_medicatiegegevens_2_fhir.xsl"/>
+                <input-documents directory="@mg.st-instance">
+                    <include glob="mg-mp-*.xml"/>
+                </input-documents>
+                <discard-output/>
+                <parameter name="outputDir" directory="@mg.st-fhir-instance"/>
+                <parameter name="generateInstructionText" value="true"/>
+                <parameter name="mask-ids" value=""/>
+            </build>
+
+            <build name="Sets sturen_medicatiegegevens">
+                <stylesheet href="../xsl/mp/9.2.0/fhir_fixtures4Touchstone/payload/sturen_medicatiegegevens_2_fhir.xsl"/>
+                <input-documents directory="@mg.st-instance-sets">
+                    <include glob="*.xml"/>
+                </input-documents>
+                <discard-output/>
+                <parameter name="outputDir" directory="@mg.st-fhir-sets"/>
+                <parameter name="generateInstructionText" value="true"/>
+                <parameter name="mask-ids" value=""/>
+            </build>
+
+            <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+            <!-- sturen_medicatievoorschrift -->
+
+            <build name="Bundles sturen_medicatievoorschrift">
+                <stylesheet href="../xsl/mp/9.2.0/fhir_fixtures4Touchstone/payload/sturen_medicatievoorschrift_2_fhir.xsl"/>
+                <input-documents directory="@mv-instance">
+                    <include glob="*.xml"/>
+                </input-documents>
+                <discard-output/>
+                <parameter name="outputDir" directory="@mv-fhir-instance"/>
+                <parameter name="generateInstructionText" value="true"/>
+                <parameter name="mask-ids" value=""/>
+            </build>
+
+            <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+            <!-- sturen_afhandeling_medicatievoorschrift -->
+
+            <build name="Bundles sturen_afhandeling_medicatievoorschrift">
+                <stylesheet href="../xsl/mp/9.2.0/fhir_fixtures4Touchstone/payload/sturen_afhandeling_medicatievoorschrift_2_fhir.xsl"/>
+                <input-documents directory="@amv-instance">
+                    <include glob="*.xml"/>
+                </input-documents>
+                <discard-output/>
+                <parameter name="outputDir" directory="@amv-fhir-instance"/>
+                <parameter name="generateInstructionText" value="true"/>
+                <parameter name="mask-ids" value=""/>
+            </build>
+
+            <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+            <!-- sturen_voorstel_medicatieafspraak -->
+
+            <build name="Bundles sturen_voorstel_medicatieafspraak">
+                <stylesheet href="../xsl/mp/9.2.0/fhir_fixtures4Touchstone/payload/sturen_voorstel_medicatieafspraak_2_fhir.xsl"/>
+                <input-documents directory="@vma-instance">
+                    <include glob="*.xml"/>
+                </input-documents>
+                <discard-output/>
+                <parameter name="outputDir" directory="@vma-fhir-instance"/>
+                <parameter name="generateInstructionText" value="true"/>
+                <parameter name="mask-ids" value=""/>
+            </build>
+
+            <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+            <!-- sturen_antwoord_voorstel_medicatieafspraak -->
+
+            <build name="Bundles sturen_antwoord_voorstel_medicatieafspraak">
+                <stylesheet href="../xsl/mp/9.2.0/fhir_fixtures4Touchstone/payload/sturen_antwoord_voorstel_medicatieafspraak_2_fhir.xsl"/>
+                <input-documents directory="@avma-instance">
+                    <include glob="*.xml"/>
+                </input-documents>
+                <discard-output/>
+                <parameter name="outputDir" directory="@avma-fhir-instance"/>
+                <parameter name="generateInstructionText" value="true"/>
+                <parameter name="mask-ids" value=""/>
+            </build>
+
+            <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+            <!-- sturen_voorstel_verstrekkingsverzoek -->
+
+            <build name="Bundles sturen_voorstel_verstrekkingsverzoek">
+                <stylesheet href="../xsl/mp/9.2.0/fhir_fixtures4Touchstone/payload/sturen_voorstel_verstrekkingsverzoek_2_fhir.xsl"/>
+                <input-documents directory="@vvv-instance">
+                    <include glob="*.xml"/>
+                </input-documents>
+                <discard-output/>
+                <parameter name="outputDir" directory="@vvv-fhir-instance"/>
+                <parameter name="generateInstructionText" value="true"/>
+                <parameter name="mask-ids" value=""/>
+            </build>
+
+            <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+            <!-- sturen_antwoord_voorstel_verstrekkingsverzoek -->
+
+            <build name="Bundles sturen_antwoord_voorstel_verstrekkingsverzoek">
+                <stylesheet href="../xsl/mp/9.2.0/fhir_fixtures4Touchstone/payload/sturen_antwoord_voorstel_verstrekkingsverzoek_2_fhir.xsl"/>
+                <input-documents directory="@avvv-instance">
+                    <include glob="*.xml"/>
+                </input-documents>
+                <discard-output/>
+                <parameter name="outputDir" directory="@avvv-fhir-instance"/>
+                <parameter name="generateInstructionText" value="true"/>
+                <parameter name="mask-ids" value=""/>
+            </build>
+
+            <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+            <!-- nictiz_test -->
+
+            <copy>
+                <source directory="#mp/9.2.0/nictiz_test/ada_instance/">
+                    <include glob="*.xml"/>
+                </source>
+                <target directory="@ntest-instance"/>
+            </copy>
+
+            <build name="Bundles beschikbaarstellen_medicatiegegevens">
+                <stylesheet href="../xsl/mp/9.2.0/fhir_fixtures4Touchstone/payload/beschikbaarstellen_medicatiegegevens_2_fhir.xsl"/>
+                <input-documents directory="@ntest-instance">
+                    <include glob="*.xml"/>
+                </input-documents>
+                <discard-output/>
+                <parameter name="outputDir" directory="@ntest-fhir-instance"/>
+                <parameter name="generateInstructionText" value="true"/>
+                <parameter name="mask-ids" value=""/>
+            </build>
+
+            <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+            <!-- Additional copying: -->
+
+            <!-- Copy the appropriate fhir instances for Touchstone to a separate folder, to ease upload to Touchstone -->
+            <copy>
+                <source directory="@mg-fhir-instance">
+                    <include glob="*.xml"/>
+                    <!-- the resources and scenarioset bundles are needed on Touchstone / WildFHIR, exclude the ALL bundles -->
+                    <exclude glob="mg-*ALL.xml"/>
+                </source>
+                <target directory="@tsmp"/>
+            </copy>
+            <copy>
+                <source directory="@mg.st-fhir-sets">
+                    <include glob="*.xml"/>
+                </source>
+                <target directory="@tsmp"/>
+            </copy>
+            <copy>
+                <source directory="@mv-fhir-instance">
+                    <include glob="*.xml"/>
+                </source>
+                <target directory="@tsmp"/>
+            </copy>
+            <copy>
+                <source directory="@amv-fhir-instance">
+                    <include glob="*.xml"/>
+                </source>
+                <target directory="@tsmp"/>
+            </copy>
+            <copy>
+                <source directory="@vma-fhir-instance">
+                    <include glob="*.xml"/>
+                </source>
+                <target directory="@tsmp"/>
+            </copy>
+            <copy>
+                <source directory="@avma-fhir-instance">
+                    <include glob="*.xml"/>
+                </source>
+                <target directory="@tsmp"/>
+            </copy>
+            <copy>
+                <source directory="@vvv-fhir-instance">
+                    <include glob="*.xml"/>
+                </source>
+                <target directory="@tsmp"/>
+            </copy>
+            <copy>
+                <source directory="@avvv-fhir-instance">
+                    <include glob="*.xml"/>
+                </source>
+                <target directory="@tsmp"/>
+            </copy>
+
+            <!-- copy the appropriate fhir instances for Touchstone MedMij to a separate folder, to ease upload to Touchstone -->
+            <copy>
+                <source directory="@mg-fhir-medmij">
+                    <include glob="*.xml"/>
+                    <!-- the resources and scenarioset bundles are needed on Touchstone / WildFHIR, exclude the ALL bundles -->
+                    <exclude glob="mg-*ALL.xml"/>
+                </source>
+                <target directory="@tsmpmm"/>
+            </copy>
+
+        </action>
+
+        <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+        <action name="validate-with-schema">
+            <!-- Remark: For some reason we have to flatten the bundle.xsd before it is useable in XProc. 
+                 No idea why, but it works. See also YATC-public/ada-2-fhir-r4/xsd/fhir-schemas/README.md -->
+
+            <validate-with-schema>
+                <!-- For beschikbaarstellen_medicatiegegevens, we only validate the mg-*.xml files. -->
+                <schema href="../xsd/fhir-schemas/FLATTENED/bundle.xsd"/>
+                <input-documents directory="@mg-fhir-instance">
+                    <include glob="mg-*.xml"/>
+                </input-documents>
+                <output-report directory="@mg-fhir-validation-results" name="schema-validation-results.xml"/>
+            </validate-with-schema>
+
+            <validate-with-schema>
+                <schema href="../xsd/fhir-schemas/FLATTENED/bundle.xsd"/>
+                <input-documents directory="@mg.st-fhir-instance">
+                    <include glob="*.xml"/>
+                </input-documents>
+                <output-report directory="@mg.st-fhir-validation-results" name="schema-validation-results.xml"/>
+            </validate-with-schema>
+
+            <validate-with-schema>
+                <schema href="../xsd/fhir-schemas/FLATTENED/bundle.xsd"/>
+                <input-documents directory="@mv-fhir-instance">
+                    <include glob="*.xml"/>
+                </input-documents>
+                <output-report directory="@mv-fhir-validation-results" name="schema-validation-results.xml"/>
+            </validate-with-schema>
+
+            <validate-with-schema>
+                <schema href="../xsd/fhir-schemas/FLATTENED/bundle.xsd"/>
+                <input-documents directory="@amv-fhir-instance">
+                    <include glob="*.xml"/>
+                </input-documents>
+                <output-report directory="@amv-fhir-validation-results" name="schema-validation-results.xml"/>
+            </validate-with-schema>
+
+            <validate-with-schema>
+                <schema href="../xsd/fhir-schemas/FLATTENED/bundle.xsd"/>
+                <input-documents directory="@vma-fhir-instance">
+                    <include glob="*.xml"/>
+                </input-documents>
+                <output-report directory="@vma-fhir-validation-results" name="schema-validation-results.xml"/>
+            </validate-with-schema>
+
+            <validate-with-schema>
+                <schema href="../xsd/fhir-schemas/FLATTENED/bundle.xsd"/>
+                <input-documents directory="@avma-fhir-instance">
+                    <include glob="*.xml"/>
+                </input-documents>
+                <output-report directory="@avma-fhir-validation-results" name="schema-validation-results.xml"/>
+            </validate-with-schema>
+
+            <validate-with-schema>
+                <schema href="../xsd/fhir-schemas/FLATTENED/bundle.xsd"/>
+                <input-documents directory="@vvv-fhir-instance">
+                    <include glob="*.xml"/>
+                </input-documents>
+                <output-report directory="@vvv-fhir-validation-results" name="schema-validation-results.xml"/>
+            </validate-with-schema>
             
-        </action>     
+            <validate-with-schema>
+                <schema href="../xsd/fhir-schemas/FLATTENED/bundle.xsd"/>
+                <input-documents directory="@avvv-fhir-instance">
+                    <include glob="*.xml"/>
+                </input-documents>
+                <output-report directory="@avvv-fhir-validation-results" name="schema-validation-results.xml"/>
+            </validate-with-schema>
+            
+            <validate-with-schema>
+                <schema href="../xsd/fhir-schemas/FLATTENED/bundle.xsd"/>
+                <input-documents directory="@ntest-fhir-instance">
+                    <include glob="*.xml"/>
+                </input-documents>
+                <output-report directory="@ntest-fhir-validation-results" name="schema-validation-results.xml"/>
+            </validate-with-schema>
+            
+        </action>
+        
+        <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+        
+        <action name="validate-with-schematron">
+            
+            <validate-with-schematron>
+                <schema href="../sch/fhir-schematrons/bundle.sch"/>
+                <input-documents directory="@mg-fhir-instance">
+                    <include glob="*.xml"/>
+                </input-documents>
+                <output-report directory="@mg-fhir-validation-results" name="schematron-validation-results.xml"/>
+            </validate-with-schematron>
+            
+            <validate-with-schematron>
+                <schema href="../sch/fhir-schematrons/bundle.sch"/>
+                <input-documents directory="@mg.st-fhir-instance">
+                    <include glob="*.xml"/>
+                </input-documents>
+                <output-report directory="@mg.st-fhir-validation-results" name="schematron-validation-results.xml"/>
+            </validate-with-schematron>
+            
+            <validate-with-schematron>
+                <schema href="../sch/fhir-schematrons/bundle.sch"/>
+                <input-documents directory="@mv-fhir-instance">
+                    <include glob="*.xml"/>
+                </input-documents>
+                <output-report directory="@mv-fhir-validation-results" name="schematron-validation-results.xml"/>
+            </validate-with-schematron>
+            
+            <validate-with-schematron>
+                <schema href="../sch/fhir-schematrons/bundle.sch"/>
+                <input-documents directory="@amv-fhir-instance">
+                    <include glob="*.xml"/>
+                </input-documents>
+                <output-report directory="@amv-fhir-validation-results" name="schematron-validation-results.xml"/>
+            </validate-with-schematron>
+            
+            <validate-with-schematron>
+                <schema href="../sch/fhir-schematrons/bundle.sch"/>
+                <input-documents directory="@vma-fhir-instance">
+                    <include glob="*.xml"/>
+                </input-documents>
+                <output-report directory="@vma-fhir-validation-results" name="schematron-validation-results.xml"/>
+            </validate-with-schematron>
+            
+            <validate-with-schematron>
+                <schema href="../sch/fhir-schematrons/bundle.sch"/>
+                <input-documents directory="@avma-fhir-instance">
+                    <include glob="*.xml"/>
+                </input-documents>
+                <output-report directory="@avma-fhir-validation-results" name="schematron-validation-results.xml"/>
+            </validate-with-schematron>
+            
+            <validate-with-schematron>
+                <schema href="../sch/fhir-schematrons/bundle.sch"/>
+                <input-documents directory="@vvv-fhir-instance">
+                    <include glob="*.xml"/>
+                </input-documents>
+                <output-report directory="@vvv-fhir-validation-results" name="schematron-validation-results.xml"/>
+            </validate-with-schematron>
+            
+            <validate-with-schematron>
+                <schema href="../sch/fhir-schematrons/bundle.sch"/>
+                <input-documents directory="@avvv-fhir-instance">
+                    <include glob="*.xml"/>
+                </input-documents>
+                <output-report directory="@avvv-fhir-validation-results" name="schematron-validation-results.xml"/>
+            </validate-with-schematron>
+            
+            <validate-with-schematron>
+                <schema href="../sch/fhir-schematrons/bundle.sch"/>
+                <input-documents directory="@ntest-fhir-instance">
+                    <include glob="*.xml"/>
+                </input-documents>
+                <output-report directory="@ntest-fhir-validation-results" name="schematron-validation-results.xml"/>
+            </validate-with-schematron>
+            
+        </action>
+        
+        <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+        
+        <action name="validate" depends-on="validate-with-schema validate-with-schematron" description="All validation actions"/>
+        
+        <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+        
+        <action name="all" depends-on="convert validate" description="Convert and validate"/>
         
     </application>
 

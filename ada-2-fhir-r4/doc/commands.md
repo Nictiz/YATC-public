@@ -19,8 +19,8 @@ Command line options:
 * **`-actionlist [application] [version]`**<br/>Lists all actions available for the specified appliction/version. To get the actions for all versions/applications, use either `#all` or leave the argument(s) empty.
 
 
-* **`[-setup] [-action:…] application version`**<br/>Perform `ada-2-fhir-r4` processing as specified.  To do this for all applications/versions, use `#all`.<br/>If no specific action is specified (no `-action:…` flag), the default action is performed (if any).
-  * `-setup` runs the setup phase of the processing (setting up directories by copying data) before any actions are done. 
+* **`[-nsetup] [-action:…] application version`**<br/>Perform `ada-2-fhir-r4` processing as specified.  To do this for all applications/versions, use `#all`.<br/>If no specific action is specified (no `-action:…` flag), the default action is performed (if any).
+  * `-nosetup` Do *not* run the setup phase of the processing (setting up directories by copying data). Useful probably while developing the actions and you already know the setup is OK. 
   * `-action:…` performs the specified action(s). To specify multiple actions, separate them with a `+` sign (for instance `-action:ac1+ac2`). 
 
 Examples:

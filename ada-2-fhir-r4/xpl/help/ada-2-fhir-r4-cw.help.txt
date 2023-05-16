@@ -13,10 +13,10 @@ Command line options:
     List all the actions available for an application/version.
     To get all versions/applications, use either #all or leave the 
     argument(s) empty.
-[-setup] [-action:...] application version
+[-nosetup] [-action:...] application version
     Perform the ada-2-fhir-r4 processing.
     To do all versions/applications, use #all.
-    -setup Perform the setup processing
+    -nosetup Do not perform any setup processing
     -action:... Perform the action(s) specified. If not specified,
         the action flagged as default is processed (if any). 
         Separate multiple actions with a + (e.g. -action:ac1+ac2).

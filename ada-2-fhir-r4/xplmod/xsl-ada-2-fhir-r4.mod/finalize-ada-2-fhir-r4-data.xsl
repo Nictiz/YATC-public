@@ -77,33 +77,5 @@
             <xsl:with-param name="defaultSourceSubdir" as="xs:string?" select="if ($sourceIsAdarefs2ada) then $yatcs:defaultCopyDataSourceSubdir else $parameters($yatcs:parnameProductionAdaInstancesDataSubdir)" tunnel="true"/>
         </xsl:next-match>
     </xsl:template>
-    
-    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-    
-    <!-- TBD USEFUL? -->
-    <!--<xsl:template match="yatcp:application/yatcp:build">
-        <!-\- We want to expand $BUILDNAME strings in @name and @value attributes, so pass it's value on: -\->
-        <xsl:next-match>
-            <xsl:with-param name="buildName" as="xs:string?" select="@name" tunnel="true"/>
-        </xsl:next-match>
-    </xsl:template>-->
-    
-    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-    
-    
-    <!--<xsl:template match="yatcp:application/yatcp:build//(@name | @value)">
-        <!-\- Replace $BUILDNAME with the build name in these attributes. -\->
-        <xsl:param name="buildName" as="xs:string?" required="true" tunnel="true"/>
-        
-        <xsl:variable name="value" as="xs:string" select="."/>
-        <xsl:choose>
-            <xsl:when test="normalize-space($buildName) ne ''">
-                <xsl:attribute name="{local-name(.)}" select="replace($value, '\$BUILDNAME', $buildName)"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:copy/>
-            </xsl:otherwise>  
-        </xsl:choose>
-    </xsl:template>-->
-    
+
 </xsl:stylesheet>

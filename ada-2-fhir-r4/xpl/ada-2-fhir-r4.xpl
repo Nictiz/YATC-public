@@ -154,7 +154,11 @@
     <!-- ======================================================================= -->
 
     <p:declare-step type="local:process-action-by-name" name="process-action-by-name">
-        <!-- TBD identity step -->
+        <!-- Performs all the processing for a single action. The action must be passed in by name.
+             If this action has any dependent actions (@depends-on), these will be executed first.
+             A check is made for circular action references.
+             The step itself acts as an identity step.
+        -->
         <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
         <p:input port="source" primary="true" sequence="false" content-types="xml">
@@ -164,8 +168,13 @@
 
         <p:option name="actionName" as="xs:string" required="true"/>
         <p:option name="parameters" as="map(xs:string, xs:string*)" required="true"/>
-        <p:option name="dependencyParentActionName" as="xs:string?" required="false" select="()"/>
-        <p:option name="previousDependencyActions" as="xs:string*" required="false" select="()"/>
+        <p:option name="dependencyParentActionName" as="xs:string?" required="false" select="()">
+            <!-- If this action is executed as a dependency of another action (part of its @depends-on attribute),
+                 pass the name of the parent action in this option. Used for reporting only. -->
+        </p:option>
+        <p:option name="previousDependencyActions" as="xs:string*" required="false" select="()">
+            <!-- List of actions already executed. -->
+        </p:option>
 
         <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
@@ -178,11 +187,11 @@
             </p:error>
         </p:if>
 
-        <!-- Check for circular actions: -->
+        <!-- Check for circular actions (whether this action was already executed): -->
         <p:if test="$actionName = $previousDependencyActions">
             <p:error code="yatcs:error">
                 <p:with-input>
-                    <p:inline content-type="text/plain" xml:space="preserve">Circular action dependency: "{$actionName}"</p:inline>
+                    <p:inline content-type="text/plain" xml:space="preserve">Circular action dependency: "{$actionName}" was already executed</p:inline>
                 </p:with-input>
             </p:error>
         </p:if>
@@ -274,7 +283,9 @@
     <!-- ======================================================================= -->
 
     <p:declare-step type="local:process-action-build" name="process-action-build">
-        <!-- TBD identity step for <build> -->
+        <!-- Processes a build step (<build> element) for an action.  
+             The step itself acts as an identity step.
+        -->
         <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
         <p:input port="source" primary="true" sequence="false" content-types="xml">
@@ -467,7 +478,10 @@
     <!-- ======================================================================= -->
 
     <p:declare-step type="local:process-action-validate" name="process-action-validate">
-        <!-- TBD identity step for <validate-with-schema> -->
+        <!-- Processes a validation step (<validate-with-schema> or <validate-with-schematron> element) for an action.  
+             The step itself acts as an identity step.
+        -->
+        
         <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
         <p:input port="source" primary="true" sequence="false" content-types="xml">
@@ -593,7 +607,10 @@
     <!-- ======================================================================= -->
 
     <p:declare-step type="local:process-action-copy" name="process-action-copy">
-        <!-- TBD identity step for <copy> -->
+        <!-- Processes a copy step (<copy> element) for an action.  
+             The step itself acts as an identity step.
+        -->
+        
         <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
         <p:input port="source" primary="true" sequence="false" content-types="xml">

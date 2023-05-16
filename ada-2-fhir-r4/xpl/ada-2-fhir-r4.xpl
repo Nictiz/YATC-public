@@ -179,10 +179,7 @@
         </p:if>
 
         <!-- Check for circular actions: -->
-        <!-- REMARK: The whole complicated "convert action names into strings" in the test expression below is completely 
-             superfluous and should not be there. It is a workaround for a weird bug in the 1.1.4 version of Morgana. 
-             It was reported and promises were made it will be fixed. -->
-        <p:if test="string($actionName) = ($previousDependencyActions ! string(.))">
+        <p:if test="$actionName = $previousDependencyActions">
             <p:error code="yatcs:error">
                 <p:with-input>
                     <p:inline content-type="text/plain" xml:space="preserve">Circular action dependency: "{$actionName}"</p:inline>

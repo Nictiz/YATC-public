@@ -112,7 +112,7 @@
         <yatcs:process-application-messages/>
 
         <!-- Perform the setup if requested: -->
-        <p:if test="$setup">
+        <p:if test="$setup" name="do-setups">
             <p:for-each name="setups">
                 <p:with-input select="/*/yatcp:setup"/>
                 <yatcs:process-setup-element reportCount="true" loadResults="false"/>
@@ -120,7 +120,7 @@
         </p:if>
 
         <!-- Process the actions: -->
-        <p:identity>
+        <p:identity depends="do-setups">
             <p:with-input pipe="source@ada-2-fhir-r4-for-application"/>
         </p:identity>
         <p:variable name="defaultActionName" as="xs:string?" select="(/*/yatcp:action[xs:boolean((@default, false())[1])][1])/@name"/>

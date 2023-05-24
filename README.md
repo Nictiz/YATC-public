@@ -28,10 +28,6 @@ The repository contains the following components:
 
 ## Version/release history
 
-* **v0.2 2023-05-14**<br/>Finished implementation of `mp/9.2.0` Some documentation still missing.
+* **v0.3 - 2023-05-24**<br/>Bug fixes and documentation updates.
+* **v0.2 - 2023-05-14**<br/>Finished implementation of `mp/9.2.0` Some documentation still missing.
 * **v0.1 - 2023-04-20**<br/>First release. Contains a partial implementation of `ada-2-fhir-r4` and is still work in progress.
-  * Engine is working, documented and probably complete. 
-  * `lab/3.0.0` completely implemented. 
-  * `mp/9.2.0` partially implemented, work in progress. 
-  * Some documentation is still missing.
-

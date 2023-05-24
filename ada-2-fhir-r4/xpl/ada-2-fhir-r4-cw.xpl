@@ -46,7 +46,7 @@
     <p:variable name="startDateTime" as="xs:dateTime" select="current-dateTime()"/>
 
     <!-- The possible command flags: -->
-    <p:variable name="commandFlagsAll" as="xs:string+" select="($yatcs:commandFlagHelp, $yatcs:commandFlagList, $yatcs:commandFlagSetup, $yatcs:commandFlagAction, $yatcs:commandFlagActionList)"/>
+    <p:variable name="commandFlagsAll" as="xs:string+" select="($yatcs:commandFlagHelp, $yatcs:commandFlagList, $yatcs:commandFlagNoSetup, $yatcs:commandFlagAction, $yatcs:commandFlagActionList)"/>
 
     <!-- Unravel the command: -->
     <p:variable name="commandParts" as="xs:string*" select="tokenize($commandLine, '\s+')[.]"/>
@@ -135,7 +135,7 @@
                         <p:with-option name="ada2fhirr4Data" select="$ada2fhirr4Data"/>
                         <p:with-option name="application" select="$application"/>
                         <p:with-option name="version" select="$version"/>
-                        <p:with-option name="setup" select="$yatcs:commandFlagSetup = $commandFlags"/>
+                        <p:with-option name="setup" select="not($yatcs:commandFlagNoSetup = $commandFlags)"/>
                         <p:with-option name="actions" select="$actions"/>
                     </yatcp:process-ada-2-fhir-r4>
 

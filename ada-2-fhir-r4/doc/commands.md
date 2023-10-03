@@ -14,12 +14,12 @@ Performs the specified `ada-2-fhir-r4` processing for the application(s) and ver
 
 Command line options:
 
-* **`-list [application] [version]`**<br/>Lists the application/version combinations available. To get all versions/applications, use either `#all`  or leave the argument(s) empty.
+* **`-list [application] [version]`**<br/>Lists the application/version combinations available. To get all versions/applications, use either `#all` or `%all`  or leave the argument(s) empty.
 
-* **`-actionlist [application] [version]`**<br/>Lists all actions available for the specified appliction/version. To get the actions for all versions/applications, use either `#all` or leave the argument(s) empty.
+* **`-actionlist [application] [version]`**<br/>Lists all actions available for the specified appliction/version. To get the actions for all versions/applications, use either `#all` or `%all` or leave the argument(s) empty.
 
 
-* **`[-nsetup] [-action:…] application version`**<br/>Perform `ada-2-fhir-r4` processing as specified.  To do this for all applications/versions, use `#all`.<br/>If no specific action is specified (no `-action:…` flag), the default action is performed.
+* **`[-nsetup] [-action:…] application version`**<br/>Perform `ada-2-fhir-r4` processing as specified.  To do this for all applications/versions, use `#all` or `%all`.<br/>If no specific action is specified (no `-action:…` flag), the default action is performed.
   * `-nosetup` Do *not* run the setup phase of the processing (setting up directories by copying data). Useful probably while developing the actions and you already know the setup is OK. 
   * `-action:…` performs the specified action(s). To specify multiple actions, separate them with a `+` sign (for instance `-action:ac1+ac2`). 
 
@@ -48,7 +48,7 @@ See [here](../../../YATC-shared/doc/parameters-system.md) for general informatio
 Compares the outcome of the `ada-2-fhir-r4` command with he ones produced by the original [HL7-mappings](https://github.com/Nictiz/HL7-mappings) repository Ant scripts.
 
 Command line options:
-* **`application version [-nodirs]`**<br/>Compare the production documents for an application/version. To get all versions/applications, use either `#all` or leave the argument empty.<br/>If you specify the `-nodirs` option, full directory compares are disabled (only compares any specifiedt documents). This can save time during development in some cases.<br/>Examples:
+* **`application version [-nodirs]`**<br/>Compare the production documents for an application/version. To get all versions/applications, use either `#all` or `%all` or leave the argument empty.<br/>If you specify the `-nodirs` option, full directory compares are disabled (only compares any specifiedt documents). This can save time during development in some cases.<br/>Examples:
     * `yatc compare-ada-2-fhir-r4 lab 3.0.0`<br/>Compares the results for the given application/version.
 
 ## How to use

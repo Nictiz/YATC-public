@@ -7,15 +7,15 @@ Command line options:
     Display this help text
 -list [application] [version]   
     List the application/version combinations available. 
-    To get all versions/applications, use either #all or leave the 
+    To get all versions/applications, use either #all or %all or leave the 
     argument(s) empty.
 -actionlist [application] [version]
     List all the actions available for an application/version.
-    To get all versions/applications, use either #all or leave the 
+    To get all versions/applications, use either #all or %all or leave the 
     argument(s) empty.
 [-nosetup] [-action:...] application version
     Perform the ada-2-fhir-r4 processing.
-    To do all versions/applications, use #all.
+    To do all versions/applications, use #all or %all.
     -nosetup Do not perform any setup processing
     -action:... Perform the action(s) specified. If not specified,
         the action flagged as default is processed (if any). 

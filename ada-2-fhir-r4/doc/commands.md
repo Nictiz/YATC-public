@@ -6,6 +6,8 @@ It is recommended that the `YATC-shared/bin` subdirectory is on the system's pat
 
 All commands have a `-help` flag that provides a brief explanation of the command.
 
+Remark: To specify all applications or versions, you can use either the `#all` or `%all` indicator. The `%all` indicator was added because in some systems (for instance Windows Powershell), the `#` character acts as the start of a comment.
+
 ----------
 
 ## Command `ada-2-fhir-r4`

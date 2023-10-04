@@ -29,9 +29,9 @@ General remarks:
     * [The build element](#section-anchor-2-2-1)
       * [The parameter element](#section-anchor-2-2-1-1)
 
-    * [The validate-with-schema and validate-with-schematron element](#section-anchor-2-2-2)
+    * [The validate-with-* element](#section-anchor-2-2-2)
+    * [The copy element](#section-anchor-2-2-3)
 
-  * [The copy element](#section-anchor-2-3)
 
 * [Common definitions](#section-anchor-3)
   * [Common attributes](#section-anchor-3-1)
@@ -266,7 +266,7 @@ The `<action>` element defines all the build steps to be performed for a single 
 | Attribute | # | Type | Description | 
 | ----- | ----- | ----- | ----- | 
 | `name` | 1 | `identifier` | The name of this action | 
-| `description` | ? | `xs:string` | A`n optional short description for this action. Used in reporting/messaging. | 
+| `description` | ? | `xs:string` | An optional short description for this action. Used in reporting/messaging. | 
 | `default` | ? | `xs:boolean` | Default: `false`<br/>Whether this is the default action for this application/version. Only one action can be designated as default. | 
 | `depends-on` | ? | `list of identifier` | An optional whitespace separated list of identifiers of the actions this action depends on. All actions listed here will be performed before this one. | 
 
@@ -274,9 +274,9 @@ The `<action>` element defines all the build steps to be performed for a single 
 | ----- | ----- | ----- | 
 | `message` | 1 | Message which will be output on the console during processing for this application. | 
 | `build` | 1 | Specification of a [build](#build-step) step (XSLT transformation). | 
-| `validate-with-schema` | 1 | Specification of a [validation step](#validation-build-steps) using a W3C XML Schema | 
-| `validate-with-schematron` | 1 | Specification of a [validation step](#validation-build-steps) using a Schematron Schema | 
-| `copy` | 1 | Specification of a straight [copy](#copy-step). | 
+| `validate-with-schema` | 1 | Specification of a [validation step](#validate-with-x-step) using a W3C XML Schema | 
+| `validate-with-schematron` | 1 | Specification of a [validation step](#validate-with-x-step) using a Schematron Schema | 
+| `copy` | 1 | Specification of a straight [file copy step](#copy-step). | 
 
 #### <a name="section-anchor-2-2-1"/><a name="build-step"/>The `<build>` element
 
@@ -297,7 +297,7 @@ The `<build>` defines a single build step to be performed as part of an action. 
 
 | Attribute | # | Type | Description | 
 | ----- | ----- | ----- | ----- | 
-| `name` | ? | `xs:string` | The name of this build (used for reporting). If nothing is specified, some unique name will be used. | 
+| `name` | ? | `xs:string` | The name of this build (used for reporting). If nothing is specified, some name will be used. | 
 
 | Child element | # | Description | 
 | ----- | ----- | ----- | 
@@ -339,33 +339,36 @@ When multiple attributes are present, the processing is in this order:
 * When `@href` is present, its absolute value will be used for the value of the parameter (after resolving a relative path, see [common attributes](#common-attributes)).
 * When no attributes are present, the parameter's value will be the empty string.
 
-#### <a name="section-anchor-2-2-2"/><a name="validation-build-steps"/>The `<validate-with-schema>` and `<validate-with-schematron>` element
+#### <a name="section-anchor-2-2-2"/><a name="validate-with-x-step"/>The `<validate-with-*>` element
 
-The `<validate-with-schema>` and `<validate-with-schematron>` element implement validation of the documents produced, using W3C XML Schemas or Schematron schemas. The description below is about the `<validate-with-schema>` element. The `<validate-with-schematron>` element has the same definition.
+The `<validate-with-*>` element implements validation of the documents produced, using several validation languages. Currently, the following languages are supported:
+
+* W3C XML Schema (`<validate-with-schema>`)
+* Schematron (`<validate-with-schematron>`)
 
 ```
-<validate-with-schema name? = xs:string >
+<validate-with-* name? = xs:string >
   <schema href="…">
   ( <input-document directory="…" name="…"> |
     <input-documents directory="…" accept-empty="…"> )
   <output-report directory="…" name="…" prune-valid="…">?
-</validate-with-schema>
+</validate-with-*>
 ```
 
 | Attribute | # | Type | Description | 
 | ----- | ----- | ----- | ----- | 
-| `name` | ? | `xs:string` | The name of this validation (used for reporting). If nothing is specified, some unique name will be used. | 
+| `name` | ? | `xs:string` | The name of this validation (used for reporting). If nothing is specified, some name will be used. | 
 
 | Child element | # | Description | 
 | ----- | ----- | ----- | 
-| `schema` | 1 | Defines, with a `@href` attribute (see [common attributes](#common-attributes)) the schema to be used. | 
+| `schema` | 1 | Defines, with a `@href` attribute (see [common attributes](#common-attributes)) the Schematron schema to be used. | 
 | `input-document` | 1 | Specifies a single input document for this validation.<br/>Has a required `@directory` (see [common attributes](#common-attributes)) and `@name`attribute. | 
 | `input-documents` | 1 | Specifies a set of input documents to validate.<br/>Has a required `@directory` attribute (see [common attributes](#common-attributes)) and can have child `<include>` and/or `<exclude>` elements (see [include/exclude elements](#include-exclude)) to further narrow down the set of documents to process.<br/>Set `accept-empty="true"` if you want empty input sets handled without raising an error. | 
 | `output-report` | ? | If present, the individual validation reports are collected in an XML document, as specified by the `@directory` (see [common attributes](#common-attributes)) and `@name` attributes. Validation results are reported in [XVRL](https://spec.xproc.org/master/head/xvrl/).<br/>By default, XVRL validation reports without errors or warnings are discarded. Specify `prune-valid="false"` if you want to see all reports (including the reports for the documents that are valid). | 
 
-### <a name="section-anchor-2-3"/><a name="copy-step"/>The `<copy>` element
+#### <a name="section-anchor-2-2-3"/><a name="copy-step"/>The `<copy>` element
 
-The `<copy>` element implements a straight file copy from files in one directory to another. It does *not* copy subdirectories.
+The `<copy>` element implements a straight copy of files from one directory to another.
 
 ```
 <copy name? = xs:string
@@ -377,7 +380,7 @@ The `<copy>` element implements a straight file copy from files in one directory
 
 | Attribute | # | Type | Description | 
 | ----- | ----- | ----- | ----- | 
-| `name` | ? | `xs:string` | The name of this copy step (used for reporting). If nothing is specified, some unique name will be used. | 
+| `name` | ? | `xs:string` | The name of this copy step (used for reporting). If nothing is specified, some name will be used. | 
 | `recurse` | ? | `xs:boolean` | Default: `false`<br/>Whether to copy subdirectories as well. | 
 
 | Child element | # | Description | 

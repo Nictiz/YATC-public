@@ -78,11 +78,7 @@ Can also be used as root element for XIncluded documents.</xs:documentation>
             </xs:choice>
             <xs:attributeGroup ref="yatcp:ag-application-name-version"/>
             <xs:attributeGroup ref="yatcp:ag-source-project-name"/>
-            <xs:attribute default="false" name="source-adarefs2ada" type="xs:boolean">
-                <xs:annotation>
-                    <xs:documentation>Whether the source comes from adarefs2ada computations or straight from the ART-DECOR data.</xs:documentation>
-                </xs:annotation>
-            </xs:attribute>
+            <xs:attributeGroup ref="yatcp:ag-source-adarefs2ada"/>
             <xs:attribute ref="xml:base"/>
         </xs:complexType>
     </xs:element>

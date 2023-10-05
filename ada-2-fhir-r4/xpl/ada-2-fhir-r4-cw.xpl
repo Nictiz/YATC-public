@@ -150,6 +150,7 @@
                 <p:otherwise>
                     <yatcs:get-cw-help commandStaticBaseUri="{static-base-uri()}"/>
                 </p:otherwise>
+                
             </p:choose>
 
         </p:otherwise>

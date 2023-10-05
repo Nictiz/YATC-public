@@ -20,7 +20,7 @@
     -->
     <!-- ================================================================== -->
 
-    <xsl:import href="../../../ada-2-fhir/xsl/fhir/2_fhir_fhir_include.xsl"/>
+    <xsl:import href="../../../../YATC-internal/ada-2-fhir/xsl/fhir/2_fhir_fhir_include.xsl"/>
 
     <xsl:param name="populateId" select="true()" as="xs:boolean"/>
 
@@ -131,7 +131,7 @@
     <xsl:variable name="zib2020Oid" select="'2.16.840.1.113883.2.4.3.11.60.40.1'"/>
     <xsl:param name="fhirVersion" select="'R4'"/>
 
-    <xsl:param name="patientTokensXml" select="document('../../../ada-2-fhir/xsl/fhir/QualificationTokens.xml')"/>
+    <xsl:param name="patientTokensXml" select="document('../../../../YATC-internal/ada-2-fhir/xsl/fhir/QualificationTokens.xml')"/>
 
     <xsl:param name="fhirMetadata" as="element()*">
         <xsl:call-template name="buildFhirMetadata">

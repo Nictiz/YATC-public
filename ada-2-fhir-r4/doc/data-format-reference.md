@@ -407,7 +407,7 @@ In resolving the value of the `@directory` attribute the following magic applies
 
 * An absolute path must start with `file://` (for instance `directory="file:///C:/some/dir/somefile.xml"`). Using this for production code is strongly discouraged, because several people use the system, all with different disk layouts.
 * A (straight) relative path is resolved against the base directory for the application/version we're working on (`…/{application-name}/{version}`) (for instance `directory="beschikbaarstellen_medicatiegegevens/wiki_instance"`).
-* When its value starts with `#`, it's value is resolved against the location of the data document it is in (for instance `directory="#mp/9.0.7/beschikbaarstellen_medicatiegegevens/html_kwal"`). This is (very rarely) used for referencing fixed/constant data files that reside in the code.
+* When its value starts with `#`, it's value is resolved against the location of the data document it is in (for instance `directory="#mp/9.0.7/beschikbaarstellen_medicatiegegevens/html_kwal"`). This is used for referencing fixed/constant data files that reside in the code.
 * When its value starts with either `@` or `^`, it is a reference to a *directory identifier* specified in one of the `<setup>` elements (or its children), for this application. This is done using the values of `@directory-id` attributes. The following rules apply (examples below):
   * When it starts with `@`, this is a reference to the *target* directory for the specified directory identifier.
   * When it starts with `^`, this is a reference to the *source* directory for the specified directory identifier. This is rarely used.

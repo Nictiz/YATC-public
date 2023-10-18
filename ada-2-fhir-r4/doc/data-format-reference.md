@@ -1,48 +1,51 @@
-# Application ada-2-fhir-r4 format reference
+# Component `YATC-public/ada-2-fhir-r4` data format reference
 
-This documents the XML format for the public YATC ada-2-fhir-r4 component's data file in `YATC-public/ada-2-fhir-r4/data/ada-2-fhir-r4-data.xml`, as used by the `ada-2-fhir-r4` command.
-
-General remarks:
-
-* There are two schemas for this document. For full validation both should be applied:
-  * `YATC-public/ada-2-fhir-r4/xsd/ada-2-fhir-r4-data.xsd`
-  * `YATC-public/ada-2-fhir-r4/sch/ada-2-fhir-r4-data.sch`
-
-* All elements *must* be in the `https://nictiz.nl/ns/YATC-public` namespace.
-* In some places XInclude processing is allowed, using `<xi:include>` elements. The resulting document (after all XIncludes are dereferenced) must be valid.
-* References to YATC parameters, in text or attribute values (using either `${parname}` or `{$parname}`), will expand. A referenced parameter must exist.
+This documents the XML format for the `YATC-public/ada-2-fhir-r4` component's data file in `YATC-public/ada-2-fhir-r4/data/ada-2-fhir-r4-data.xml`, as used by the `ada-2-fhir-r4` and related commands.
 
 -----
 
 ## Table of contents
 
-* [Root ada-2-fhir-r4-data element](#section-anchor-1)
-* [The application element](#section-anchor-2)
-  * [The setup element](#section-anchor-2-1)
-    * [The copy-data element](#section-anchor-2-1-1)
-    * [The copy-project-schemas element](#section-anchor-2-1-2)
-    * [The empty-directory element](#section-anchor-2-1-3)
-    * [The copy-directory element](#section-anchor-2-1-4)
-    * [The retrieve element](#section-anchor-2-1-5)
+* [General remarks](#section-anchor-1)
+* [Root ada-2-fhir-r4-data element](#section-anchor-2)
+* [The application element](#section-anchor-3)
+  * [The setup element](#section-anchor-3-1)
+    * [The copy-data element](#section-anchor-3-1-1)
+    * [The copy-project-schemas element](#section-anchor-3-1-2)
+    * [The empty-directory element](#section-anchor-3-1-3)
+    * [The copy-directory element](#section-anchor-3-1-4)
+    * [The retrieve element](#section-anchor-3-1-5)
 
-  * [The action element](#section-anchor-2-2)
-    * [The build element](#section-anchor-2-2-1)
-      * [The parameter element](#section-anchor-2-2-1-1)
+  * [The action element](#section-anchor-3-2)
+    * [The build element](#section-anchor-3-2-1)
+      * [The parameter element](#section-anchor-3-2-1-1)
 
-    * [The validate-with-* element](#section-anchor-2-2-2)
-    * [The copy element](#section-anchor-2-2-3)
+    * [The validate-with-* element](#section-anchor-3-2-2)
+    * [The copy element](#section-anchor-3-2-3)
 
 
-* [Common definitions](#section-anchor-3)
-  * [Common attributes](#section-anchor-3-1)
-    * [Resolving the @directory attribute](#section-anchor-3-1-1)
+* [Common definitions](#section-anchor-4)
+  * [Common attributes](#section-anchor-4-1)
+    * [Resolving the @directory attribute](#section-anchor-4-1-1)
 
-  * [The include and exclude elements](#section-anchor-3-2)
+  * [The include and exclude elements](#section-anchor-4-2)
 
 
 -----
 
-## <a name="section-anchor-1"/>Root `<ada-2-fhir-r4-data>` element
+## <a name="section-anchor-1"/><a name="general-remarks"/>General remarks
+
+* There are two schemas for this document. For full validation both should be applied:
+  * `YATC-public/ada-2-fhir-r4/xsd/ada-2-fhir-data.xsd`
+  * `YATC-public/ada-2-fhir-r4/sch/ada-2-fhir-data.sch`
+
+* All elements *must* be in the `https://nictiz.nl/ns/YATC-public` namespace.
+* In some places XInclude processing is allowed, using `<xi:include>` elements. The resulting document (after all XIncludes are dereferenced) must be valid.
+* References to YATC parameters in text or attribute values (using either `${parname}` or `{$parname}`) will expand. A referenced parameter must exist.
+
+-----
+
+## <a name="section-anchor-2"/>Root `<ada-2-fhir-r4-data>` element
 
 ```
 <ada-2-fhir-r4-data>
@@ -58,7 +61,7 @@ General remarks:
 
 -----
 
-## <a name="section-anchor-2"/>The `<application>` element
+## <a name="section-anchor-3"/>The `<application>` element
 
 The `<application>` element defines the processing to be performed for a single application/version combination.
 
@@ -93,7 +96,7 @@ Some applications take their input source from data directly retrieved from ART-
 * `source-adarefs2ada="false"`: The source documents are supposed to come straight from ART-DECOR. They're taken from `{$productionAdaInstancesBaseStorageDirectory}/{@name}/{@version}/{$productionAdaInstancesDataSubdir}` (parameters defined in `YATC-shared/data/parameters.xml`).
 * `source-adarefs2ada="true"`: The source documents are supposed to come from adarefs2ada post-processing. They're taken from the appropriate subdirectories of `{$adarefs2adaBaseStorageDirectory}/{@name}/{@version}/{@usecase}` (parameter defined in `YATC-shared/data/parameters.xml`).
 
-### <a name="section-anchor-2-1"/><a name="setup-element"/>The `<setup>` element
+### <a name="section-anchor-3-1"/><a name="setup-element"/>The `<setup>` element
 
 The `<setup>` element defines the data-copying operations to be performed.
 
@@ -130,7 +133,7 @@ Additional remarks:
 * Although not strictly necessary (non-existent directories are created by the build steps as well), it is advised that the setup creates *all* directories, empty or not. This ensures that, during the setup process, these directories are emptied. It also allows referring to these directories using the directory identifier mechanism.
 * Some components have commands that allow developers to compare the XML results created here against the XML results of the original (Ant based) system. By default, all directories that are created are compared. You can stop this comparison by adding a `compare="false"` attribute. This allows you to add (usually empty) directories for documents that are not created in the original code, like reports. Directories created with `<copy-directory>` are never compared (because this was meant for copying fixed resources).
 
-#### <a name="section-anchor-2-1-1"/>The `<copy-data>` element
+#### <a name="section-anchor-3-1-1"/>The `<copy-data>` element
 
 The `<copy-data>` element defines which files must be copied, and to where.
 
@@ -156,7 +159,7 @@ The `<copy-data>` element defines which files must be copied, and to where.
 | `include` | 1 | Definition of any files to include. See [include/exclude elements](#include-exclude) | 
 | `exclude` | 1 | Definition of any files to exclude. See [include/exclude elements](#include-exclude) | 
 
-#### <a name="section-anchor-2-1-2"/>The `<copy-project-schemas>` element
+#### <a name="section-anchor-3-1-2"/>The `<copy-project-schemas>` element
 
 The `<copy-project-schemas>` element defines which schemas (from a project definition) must be copied, and to where. The location for source project files is defined using parameter `projectsBaseStorageDirectory`.
 
@@ -184,7 +187,7 @@ The `<copy-project-schemas>` element defines which schemas (from a project defin
 | `include` | 1 | Definition of any files to include. See [include/exclude elements](#include-exclude) | 
 | `exclude` | 1 | Definition of any files to exclude. See [include/exclude elements](#include-exclude) | 
 
-#### <a name="section-anchor-2-1-3"/>The `<empty-directory>` element
+#### <a name="section-anchor-3-1-3"/>The `<empty-directory>` element
 
 The `<empty-directory>` element creates an empty directory (underneath the setup's main target directory). If such a directory already exists it will be emptied.
 
@@ -200,7 +203,7 @@ The `<empty-directory>` element creates an empty directory (underneath the setup
 | `directory-id` | ? | `identifier` | Defines the identifier for the sub-directories. See [common attributes](#common-attributes) for a usage example. | 
 | `compare` | ? | `xs:boolean` | Default: `true`<br/>Whether this directory should be included in a comparison (with results from the original code). | 
 
-#### <a name="section-anchor-2-1-4"/>The `<copy-directory>` element
+#### <a name="section-anchor-3-1-4"/>The `<copy-directory>` element
 
 The `<copy-directory>` element performs a straight copy from one directory to the other, including (optionally) subdirectories.
 
@@ -228,7 +231,7 @@ It was created for copying HTML assets to the result (but can of course also be 
 | `include` | 1 | Definition of any files to include. See [include/exclude elements](#include-exclude) | 
 | `exclude` | 1 | Definition of any files to exclude. See [include/exclude elements](#include-exclude) | 
 
-#### <a name="section-anchor-2-1-5"/>The `<retrieve>` element
+#### <a name="section-anchor-3-1-5"/>The `<retrieve>` element
 
 The `<retrieve>` element specifies a single XML document for download from a REST URL.
 
@@ -246,7 +249,7 @@ The `<retrieve>` element specifies a single XML document for download from a RES
 | `name` | 1 | `xs:string` | The filename for the retrieved XML document. | 
 | `directory-id` | ? | `identifier` | Defines the identifier for the target sub-directory. See [common attributes](#common-attributes) for a usage example. | 
 
-### <a name="section-anchor-2-2"/><a name="action-element"/>The `<action>` element
+### <a name="section-anchor-3-2"/><a name="action-element"/>The `<action>` element
 
 The `<action>` element defines all the build steps to be performed for a single action, usually based upon the documents copied in the `<setup>` element(s).
 
@@ -278,12 +281,13 @@ The `<action>` element defines all the build steps to be performed for a single 
 | `validate-with-schematron` | 1 | Specification of a [validation step](#validate-with-x-step) using a Schematron Schema | 
 | `copy` | 1 | Specification of a straight [file copy step](#copy-step). | 
 
-#### <a name="section-anchor-2-2-1"/><a name="build-step"/>The `<build>` element
+#### <a name="section-anchor-3-2-1"/><a name="build-step"/>The `<build>` element
 
 The `<build>` defines a single build step to be performed as part of an action. A build step is an XSLT transformation performed on one or more input documents.
 
 ```
-<build name? = xs:string >
+<build name? = xs:string
+       ignore-xslt-errors? = xs:string list >
   <stylesheet href="…">
   ( <input-document directory="…" name="…"> |
     <input-documents directory="…" accept-empty="…"> |
@@ -298,6 +302,7 @@ The `<build>` defines a single build step to be performed as part of an action. 
 | Attribute | # | Type | Description | 
 | ----- | ----- | ----- | ----- | 
 | `name` | ? | `xs:string` | The name of this build (used for reporting). If nothing is specified, some name will be used. | 
+| `ignore-xslt-errors` | ? | `xs:string list` | A whitespace-separated list of XSLT error codes that must be ignored. If such an error occurs, a warning is issued and further processing continues. | 
 
 | Child element | # | Description | 
 | ----- | ----- | ----- | 
@@ -312,7 +317,7 @@ The `<build>` defines a single build step to be performed as part of an action. 
 
 Besides direct output, a stylesheet can also produce secondary output(s) using the `<xsl:result-document>` instruction. These outputs will be written to disk, using the serialization options as specified on the `<xsl:result-document>` element.
 
-##### <a name="section-anchor-2-2-1-1"/>The <a name="parameter-element"/>`<parameter>` element
+##### <a name="section-anchor-3-2-1-1"/>The <a name="parameter-element"/>`<parameter>` element
 
 The `<parameter>` element defines an additional parameter to be passed to a stylesheet.
 
@@ -339,7 +344,7 @@ When multiple attributes are present, the processing is in this order:
 * When `@href` is present, its absolute value will be used for the value of the parameter (after resolving a relative path, see [common attributes](#common-attributes)).
 * When no attributes are present, the parameter's value will be the empty string.
 
-#### <a name="section-anchor-2-2-2"/><a name="validate-with-x-step"/>The `<validate-with-*>` element
+#### <a name="section-anchor-3-2-2"/><a name="validate-with-x-step"/>The `<validate-with-*>` element
 
 The `<validate-with-*>` element implements validation of the documents produced, using several validation languages. Currently, the following languages are supported:
 
@@ -366,7 +371,7 @@ The `<validate-with-*>` element implements validation of the documents produced,
 | `input-documents` | 1 | Specifies a set of input documents to validate.<br/>Has a required `@directory` attribute (see [common attributes](#common-attributes)) and can have child `<include>` and/or `<exclude>` elements (see [include/exclude elements](#include-exclude)) to further narrow down the set of documents to process.<br/>Set `accept-empty="true"` if you want empty input sets handled without raising an error. | 
 | `output-report` | ? | If present, the individual validation reports are collected in an XML document, as specified by the `@directory` (see [common attributes](#common-attributes)) and `@name` attributes. Validation results are reported in [XVRL](https://spec.xproc.org/master/head/xvrl/).<br/>By default, XVRL validation reports without errors or warnings are discarded. Specify `prune-valid="false"` if you want to see all reports (including the reports for the documents that are valid). | 
 
-#### <a name="section-anchor-2-2-3"/><a name="copy-step"/>The `<copy>` element
+#### <a name="section-anchor-3-2-3"/><a name="copy-step"/>The `<copy>` element
 
 The `<copy>` element implements a straight copy of files from one directory to another.
 
@@ -390,9 +395,9 @@ The `<copy>` element implements a straight copy of files from one directory to a
 
 -----
 
-## <a name="section-anchor-3"/>Common definitions
+## <a name="section-anchor-4"/>Common definitions
 
-### <a name="section-anchor-3-1"/><a name="common-attributes"/>Common attributes
+### <a name="section-anchor-4-1"/><a name="common-attributes"/>Common attributes
 
 The following attributes appear on multiple elements:
 
@@ -401,7 +406,7 @@ The following attributes appear on multiple elements:
 | `directory` | The URI of a directory.<br/>There's magic going on resolving these directory names. See below. | 
 | `href` | Reference to a file, usually situated in the code repository itself (for instance a stylesheet). A relative name is resolved against the location of the data document it is in.<br/>An absolute name must start with `file://`. Using this for production code is strongly discouraged, because several people use the system, all with different disk layouts. | 
 
-#### <a name="section-anchor-3-1-1"/><a name="resolving-directory-attribute"/>Resolving the `@directory` attribute
+#### <a name="section-anchor-4-1-1"/><a name="resolving-directory-attribute"/>Resolving the `@directory` attribute
 
 In resolving the value of the `@directory` attribute the following magic applies:
 
@@ -444,7 +449,7 @@ In both examples, the value of the `build/output/@directory` attribute will expa
 
 
 
-### <a name="section-anchor-3-2"/><a name="include-exclude"/>The `<include>` and `<exclude>` elements
+### <a name="section-anchor-4-2"/><a name="include-exclude"/>The `<include>` and `<exclude>` elements
 
 The `<include>` and `<exclude>` elements define which files will be processed/copied:
 

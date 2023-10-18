@@ -20,34 +20,16 @@
     -->
     <!-- ======================================================================= -->
 
-    <title>Application ada-2-fhir-r4 format reference</title>
-
-    <para>This documents the XML format for the public YATC ada-2-fhir-r4 component's data file in <code>YATC-public/ada-2-fhir-r4/data/ada-2-fhir-r4-data.xml</code>, as used by the <code>ada-2-fhir-r4</code> command.</para>
-
-    <para>General remarks:</para>
-    <unorderedlist>
-        <entry>
-            <para>There are two schemas for this document. For full validation both should be applied:</para>
-            <unorderedlist>
-                <entry>
-                    <para><code>YATC-public/ada-2-fhir-r4/xsd/ada-2-fhir-r4-data.xsd</code></para>
-                </entry>
-                <entry>
-                    <para><code>YATC-public/ada-2-fhir-r4/sch/ada-2-fhir-r4-data.sch</code></para>
-                </entry>
-            </unorderedlist>
-        </entry>
-        <entry>
-            <para>All elements <emph>must</emph> be in the <code>https://nictiz.nl/ns/YATC-public</code> namespace.</para>
-        </entry>
-        <entry>
-            <para>In some places XInclude processing is allowed, using <elm>xi:include</elm> elements. The resulting document (after all XIncludes are dereferenced) must be valid.</para>
-        </entry>
-        <entry>
-            <para>References to YATC parameters, in text or attribute values (using either <code>${parname}</code> or <code>{$parname}</code>), will expand. A referenced parameter must exist.</para>
-        </entry>
-    </unorderedlist>
-
+    <macro name="DATAFILENAME" value="{$yatcComponentName}-data.xml"/>
+    
+    <title>Component <code>{$yatcRepositoryName}/{$yatcComponentName}</code> data format reference</title>
+    
+    <xi:include href="../../../../YATC-shared/srcmod/common-data-format-opening-text.xml"/>
+    
+    <!-- ======================================================================= -->
+    
+    <xi:include href="../../../../YATC-shared/srcmod/common-data-format-general-remarks.xml"/>
+    
     <!-- ======================================================================= -->
 
     <section>
@@ -75,7 +57,7 @@
 
         <para>The <elm>application</elm> element defines the processing to be performed for a single application/version combination.</para>
 
-        <para>The copied and processed/created documents will be stored underneath <code>{$ada2wikiBaseStorageDirectory}/{@name}/{@version}</code> (parameter defined in <code>YATC-public/ada-2-fhir-r4/data/parameters.xml</code>).</para>
+        <para>The copied and processed/created documents will be stored underneath <code>{{$ada2wikiBaseStorageDirectory}/{@name}/{@version}</code> (parameter defined in <code>YATC-public/ada-2-fhir-r4/data/parameters.xml</code>).</para>
 
         <element name="application">
             <attributes>
@@ -110,10 +92,10 @@
         <para>Some applications take their input source from data directly retrieved from ART-DECOR and some from adarefs2ada post-processing (all done by the <code>YATC-shared/get-production-ada-instances</code> component). The <code>@source-adarefs2ada</code> attribute takes care of this:</para>
         <unorderedlist>
             <entry>
-                <para><code>source-adarefs2ada="false"</code>: The source documents are supposed to come straight from ART-DECOR. They're taken from <code>{$productionAdaInstancesBaseStorageDirectory}/{@name}/{@version}/{$productionAdaInstancesDataSubdir}</code> (parameters defined in <code>YATC-shared/data/parameters.xml</code>).</para>
+                <para><code>source-adarefs2ada="false"</code>: The source documents are supposed to come straight from ART-DECOR. They're taken from <code>{{$productionAdaInstancesBaseStorageDirectory}/{@name}/{@version}/{{$productionAdaInstancesDataSubdir}</code> (parameters defined in <code>YATC-shared/data/parameters.xml</code>).</para>
             </entry>
             <entry>
-                <para><code>source-adarefs2ada="true"</code>: The source documents are supposed to come from adarefs2ada post-processing. They're taken from the appropriate subdirectories of <code>{$adarefs2adaBaseStorageDirectory}/{@name}/{@version}/{@usecase}</code> (parameter defined in <code>YATC-shared/data/parameters.xml</code>).</para>
+                <para><code>source-adarefs2ada="true"</code>: The source documents are supposed to come from adarefs2ada post-processing. They're taken from the appropriate subdirectories of <code>{{$adarefs2adaBaseStorageDirectory}/{@name}/{@version}/{@usecase}</code> (parameter defined in <code>YATC-shared/data/parameters.xml</code>).</para>
             </entry>
         </unorderedlist>
 

@@ -25,7 +25,7 @@ The full text of the license is available at http://www.gnu.org/copyleft/lesser.
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-   <xsl:import href="include/2_hl7_mp_include_930.xsl"/>
+   <xsl:import href="../../common-includes/2_hl7_mp_include_930.xsl"/>
    <xd:doc scope="stylesheet">
       <xd:desc>
          <xd:p>

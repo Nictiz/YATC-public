@@ -25,7 +25,7 @@ The full text of the license is available at http://www.gnu.org/copyleft/lesser.
                 xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl"
                 xmlns:pharm="urn:ihe:pharm:medication"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-   <xsl:import href="include/hl7_2_ada_mp_include.xsl"/>
+   <xsl:import href="../../common-includes/hl7_2_ada_mp_include.xsl"/>
    <xsl:output method="xml"
                indent="yes"/>
    <!--    <xsl:param name="deduplicateAdaBouwstenen" as="xs:boolean?" select="false()"/>-->

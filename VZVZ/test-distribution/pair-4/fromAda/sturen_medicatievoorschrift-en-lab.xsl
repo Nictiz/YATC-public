@@ -5,8 +5,8 @@
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema">
-   <xsl:import href="include/sturen_medicatievoorschrift_org.xsl"/>
-   <xsl:import href="include/sturen_laboratoriumresultaten_org.xsl"/>
+   <xsl:import href="../../common-includes/sturen_medicatievoorschrift_org.xsl"/>
+   <xsl:import href="../../common-includes/sturen_laboratoriumresultaten_org.xsl"/>
    <xsl:template match="/">
       <organizer xsi:schemaLocation="urn:hl7-org:v3 ../hl7_schemas/master_organizer.xsd"
                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"

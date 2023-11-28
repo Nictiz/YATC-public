@@ -23,7 +23,7 @@ The full text of the license is available at http://www.gnu.org/copyleft/lesser.
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl"
                 xmlns:local="urn:fhir:stu3:functions">
-   <xsl:import href="include/mp9_latest_package.xsl"/>
+   <xsl:import href="../../common-includes/mp9_latest_package-d4e17.xsl"/>
    <xsl:output indent="yes"
                omit-xml-declaration="yes"/>
    <xd:doc>

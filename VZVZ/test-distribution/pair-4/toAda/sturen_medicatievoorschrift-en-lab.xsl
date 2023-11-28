@@ -5,8 +5,8 @@
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema">
-   <xsl:import href="include/sturen_medicatievoorschrift_2_ada.xsl"/>
-   <xsl:import href="include/sturen_laboratoriumresultaten_2_ada.xsl"/>
+   <xsl:import href="../../common-includes/sturen_medicatievoorschrift_2_ada.xsl"/>
+   <xsl:import href="../../common-includes/sturen_laboratoriumresultaten_2_ada.xsl"/>
    <xsl:template match="/">
       <xsl:variable name="data"
                     as="element()*">

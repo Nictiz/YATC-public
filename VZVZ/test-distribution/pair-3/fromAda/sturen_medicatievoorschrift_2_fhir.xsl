@@ -26,8 +26,8 @@ The full text of the license is available at http://www.gnu.org/copyleft/lesser.
                 xmlns:uuid="http://www.uuid.org"
                 xmlns:nm="http://www.nictiz.nl/mappings"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-   <xsl:import href="include/2_fhir_mp93_include.xsl"/>
-   <xsl:import href="include/2_fhir_BundleEntryRequest.xsl"/>
+   <xsl:import href="../../common-includes/2_fhir_mp93_include.xsl"/>
+   <xsl:import href="../../common-includes/2_fhir_BundleEntryRequest.xsl"/>
    <xd:doc scope="stylesheet">
       <xd:desc>
          <xd:p>

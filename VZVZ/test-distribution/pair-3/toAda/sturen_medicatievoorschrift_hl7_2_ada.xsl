@@ -26,8 +26,8 @@ The full text of the license is available at http://www.gnu.org/copyleft/lesser.
                 xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl"
                 xmlns:pharm="urn:ihe:pharm:medication"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-   <xsl:import href="include/all-zibs.xsl"/>
-   <xsl:import href="include/mp-handle-bouwstenen.xsl"/>
+   <xsl:import href="../../common-includes/all-zibs.xsl"/>
+   <xsl:import href="../../common-includes/mp-handle-bouwstenen.xsl"/>
    <xsl:output method="xml"
                indent="yes"
                exclude-result-prefixes="#all"

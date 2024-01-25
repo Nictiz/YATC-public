@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- == Flattened from: C:/xdata/Nictiz/HL7-mappings/hl7_2_ada/mp/9.3.0/6.12_2_beschikbaarstellen_medicatiegegevens/payload/6.12_2_beschikbaarstellen_medicatiegegevens_hl7_2_ada.xsl == -->
+<!-- == Flattened from: C:/Data/Erik/work/Nictiz/new/HL7-mappings/hl7_2_ada/mp/9.3.0/6.12_2_beschikbaarstellen_medicatiegegevens/payload/6.12_2_beschikbaarstellen_medicatiegegevens_hl7_2_ada.xsl == -->
 <!--
 Copyright © Nictiz
 
@@ -25,7 +25,7 @@ The full text of the license is available at http://www.gnu.org/copyleft/lesser.
                 xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl"
                 xmlns:pharm="urn:ihe:pharm:medication"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-   <xsl:import href="../../common-includes/hl7_2_ada_mp_include.xsl"/>
+   <xsl:import href="../../common/includes/hl7_2_ada_mp_include.xsl"/>
    <xsl:output method="xml"
                indent="yes"/>
    <!--    <xsl:param name="deduplicateAdaBouwstenen" as="xs:boolean?" select="false()"/>-->

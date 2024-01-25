@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- == Flattened from: C:/xdata/Nictiz/HL7-mappings/fhir_2_ada-r4/mp/9.3.0/beschikbaarstellen_medicatiegegevens/payload/beschikbaarstellen_medicatiegegevens_2_ada.xsl == -->
+<!-- == Flattened from: C:/Data/Erik/work/Nictiz/new/HL7-mappings/fhir_2_ada-r4/mp/9.3.0/beschikbaarstellen_medicatiegegevens/payload/beschikbaarstellen_medicatiegegevens_2_ada.xsl == -->
 <!--
 Copyright © Nictiz
 
@@ -23,7 +23,7 @@ The full text of the license is available at http://www.gnu.org/copyleft/lesser.
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl"
                 xmlns:local="urn:fhir:stu3:functions">
-   <xsl:import href="../../common-includes/mp9_latest_package-d4e17.xsl"/>
+   <xsl:import href="../../common/includes/mp9_latest_package-d4e17.xsl"/>
    <xsl:output indent="yes"
                omit-xml-declaration="yes"/>
    <xd:doc>

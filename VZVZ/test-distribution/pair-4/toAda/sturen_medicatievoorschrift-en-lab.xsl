@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- == Flattened from: C:/xdata/Nictiz/HL7-mappings/fhir_2_ada-r4/mp-lab/payload/sturen_medicatievoorschrift-en-lab.xsl == -->
+<!-- == Flattened from: C:/Data/Erik/work/Nictiz/new/HL7-mappings/fhir_2_ada-r4/mp-lab/payload/sturen_medicatievoorschrift-en-lab.xsl == -->
 <xsl:stylesheet exclude-result-prefixes="xs"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema">
-   <xsl:import href="../../common-includes/sturen_medicatievoorschrift_2_ada.xsl"/>
-   <xsl:import href="../../common-includes/sturen_laboratoriumresultaten_2_ada.xsl"/>
+   <xsl:import href="../../common/includes/sturen_medicatievoorschrift_2_ada.xsl"/>
+   <xsl:import href="../../common/includes/sturen_laboratoriumresultaten_2_ada.xsl"/>
    <xsl:template match="/">
       <xsl:variable name="data"
                     as="element()*">

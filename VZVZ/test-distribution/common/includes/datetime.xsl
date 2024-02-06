@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<!-- == Flattened from: C:/Data/Erik/work/Nictiz/new/HL7-mappings/util/datetime.xsl == -->
 <xsl:stylesheet exclude-result-prefixes="xs"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -363,8 +361,7 @@
       <xd:desc>Converts a T-12D{12:34:56} like string into a proper XML date or dateTime</xd:desc>
       <xd:param name="in">The input string to be converted</xd:param>
       <xd:param name="inputDateT"
-                as="xs:date">The T date (if applicable) that 
-<xd:ref name="in"
+                as="xs:date">The T date (if applicable) that <xd:ref name="in"
                  type="parameter"/> is relative to</xd:param>
    </xd:doc>
    <xsl:function name="nf:calculate-t-date"
@@ -439,9 +436,7 @@
                <xsl:call-template name="util:logMessage">
                   <xsl:with-param name="level"
                                   select="$logERROR"/>
-                  <xsl:with-param name="msg">Variable dateTime "
-<xsl:value-of select="$in"/>" found with illegal time string "
-<xsl:value-of select="$timePart"/>"</xsl:with-param>
+                  <xsl:with-param name="msg">Variable dateTime "<xsl:value-of select="$in"/>" found with illegal time string "<xsl:value-of select="$timePart"/>"</xsl:with-param>
                </xsl:call-template>
             </xsl:if>
             <xsl:variable name="calculatedDateTime">

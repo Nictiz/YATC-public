@@ -1,19 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<!-- == Flattened from: C:/Data/Erik/work/Nictiz/new/HL7-mappings/util/constants.xsl == -->
-<!--
-Copyright © Nictiz
-
-This program is free software; you can redistribute it and/or modify it under the terms of the
-GNU Lesser General Public License as published by the Free Software Foundation; either version
-2.1 of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
-without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-See the GNU Lesser General Public License for more details.
-
-The full text of the license is available at http://www.gnu.org/copyleft/lesser.html
--->
 <xsl:stylesheet exclude-result-prefixes="xs xd"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -67,6 +52,8 @@ The full text of the license is available at http://www.gnu.org/copyleft/lesser.
                  select="('microliter', 'ul')"/>
    <xsl:variable name="ada-unit-druppel"
                  select="('druppel', 'drp', '[drp]', 'druppels', 'drops')"/>
+   <xsl:variable name="ada-unit-degrees"
+                 select="('deg', 'degrees', 'graden')"/>
    <xsl:variable name="ada-unit-degrees-celsius"
                  select="('Cel', 'graden Celsius', 'graden celsius', 'degrees Celsius', 'degrees celsius', 'Celsius', 'celsius')"/>
    <xsl:variable name="ada-unit-pH"
@@ -75,6 +62,10 @@ The full text of the license is available at http://www.gnu.org/copyleft/lesser.
                  select="('mmol/L', 'mmol/l', 'mmol per liter')"/>
    <xsl:variable name="ada-unit-mmHg"
                  select="('mmHg', 'mm[Hg]')"/>
+   <xsl:variable name="ada-unit-diopter"
+                 select="('dpt', '[diop]', 'diopter', 'dioptrie')"/>
+   <xsl:variable name="ada-unit-prism-diopter"
+                 select="('PD', '[p''diop]', 'prism diopter', 'prisma dioptrie')"/>
    <xsl:variable name="oidAGB">2.16.840.1.113883.2.4.6.1</xsl:variable>
    <xsl:variable name="oidAGBSpecialismen">2.16.840.1.113883.2.4.6.7</xsl:variable>
    <xsl:variable name="oidAORTAApplicatieID">2.16.840.1.113883.2.4.6.6</xsl:variable>

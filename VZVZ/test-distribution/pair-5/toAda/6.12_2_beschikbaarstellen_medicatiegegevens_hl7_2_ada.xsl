@@ -1,19 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<!-- == Flattened from: C:/Data/Erik/work/Nictiz/new/HL7-mappings/hl7_2_ada/mp/9.3.0/6.12_2_beschikbaarstellen_medicatiegegevens/payload/6.12_2_beschikbaarstellen_medicatiegegevens_hl7_2_ada.xsl == -->
-<!--
-Copyright © Nictiz
-
-This program is free software; you can redistribute it and/or modify it under the terms of the
-GNU Lesser General Public License as published by the Free Software Foundation; either version
-2.1 of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
-without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-See the GNU Lesser General Public License for more details.
-
-The full text of the license is available at http://www.gnu.org/copyleft/lesser.html
--->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -75,8 +60,7 @@ The full text of the license is available at http://www.gnu.org/copyleft/lesser.
                  as="element()*"/>
       <xsl:variable name="adaXml">
          <xsl:if test="$logLevel = $logDEBUG">
-            <xsl:comment>Generated from HL7v3 verstrekkingenlijst 6.12 xml with message id (QURX_IN990113NL/id) 
-<xsl:value-of select="concat('root: ', /hl7:QURX_IN990113NL/hl7:id/@root, ' and extension: ', /hl7:QURX_IN990113NL/hl7:id/@extension)"/>.</xsl:comment>
+            <xsl:comment>Generated from HL7v3 verstrekkingenlijst 6.12 xml with message id (QURX_IN990113NL/id) <xsl:value-of select="concat('root: ', /hl7:QURX_IN990113NL/hl7:id/@root, ' and extension: ', /hl7:QURX_IN990113NL/hl7:id/@extension)"/>.</xsl:comment>
          </xsl:if>
          <adaxml xsi:noNamespaceSchemaLocation="../../beschikbaarstellen_medicatiegegevens/ada_schemas/ada_beschikbaarstellen_medicatiegegevens.xsd">
             <meta status="new"
@@ -158,19 +142,19 @@ The full text of the license is available at http://www.gnu.org/copyleft/lesser.
          <identificatie>
             <xsl:choose>
                <xsl:when test="$PRK">
-                  <xsl:attribute name="extension"
+                  <xsl:attribute name="value"
                                  select="$PRK/@code"/>
                   <xsl:attribute name="root"
                                  select="$genericMBHidPRK"/>
                </xsl:when>
                <xsl:when test="$HPK">
-                  <xsl:attribute name="extension"
+                  <xsl:attribute name="value"
                                  select="$HPK/@code"/>
                   <xsl:attribute name="root"
                                  select="$genericMBHidHPK"/>
                </xsl:when>
                <xsl:otherwise>
-                  <xsl:attribute name="extension"
+                  <xsl:attribute name="value"
                                  select="$current-dispense-event/hl7:id/@extension"/>
                   <xsl:attribute name="root"
                                  select="concat($concatOidMBH, $current-dispense-event/hl7:id/@root)"/>
@@ -291,8 +275,7 @@ The full text of the license is available at http://www.gnu.org/copyleft/lesser.
                            <xsl:with-param name="msg">Found more than one instruction for eenmalig gebruik. Not supported to convert this into structured information for gebruiksperiode-start</xsl:with-param>
                         </xsl:call-template>
                         <xsl:if test="$logLevel = $logDEBUG">
-                           <xsl:comment>Found more than one instruction for eenmalig gebruik in dispense event with id 
-<xsl:value-of select="$current-dispense-event/hl7:id/@extension"/>. Not supported to convert this into structured information for gebruiksperiode-start</xsl:comment>
+                           <xsl:comment>Found more than one instruction for eenmalig gebruik in dispense event with id <xsl:value-of select="$current-dispense-event/hl7:id/@extension"/>. Not supported to convert this into structured information for gebruiksperiode-start</xsl:comment>
                         </xsl:if>
                      </xsl:otherwise>
                   </xsl:choose>

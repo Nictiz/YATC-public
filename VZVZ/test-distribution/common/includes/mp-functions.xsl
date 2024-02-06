@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<!-- == Flattened from: C:/Data/Erik/work/Nictiz/new/HL7-mappings/util/mp-functions.xsl == -->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -425,17 +423,14 @@
       <xsl:for-each select="$current-bouwsteen">
          <xsl:variable name="waarde"
                        as="xs:string*">
-            <xsl:if test="$start-date[@value]">Vanaf 
-<xsl:value-of select="nf:formatDate(nf:calculate-t-date($start-date/@value, $dateT))"/>
+            <xsl:if test="$start-date[@value]">Vanaf <xsl:value-of select="nf:formatDate(nf:calculate-t-date($start-date/@value, $dateT))"/>
             </xsl:if>
             <xsl:if test="$start-date[@value] and ($periode[@value] | $end-date[@value])">
                <xsl:value-of select="', '"/>
             </xsl:if>
-            <xsl:if test="$periode/@value">gedurende 
-<xsl:value-of select="concat($periode/@value, ' ', nwf:unit-string($periode/@value, $periode/@unit))"/>
+            <xsl:if test="$periode/@value">gedurende <xsl:value-of select="concat($periode/@value, ' ', nwf:unit-string($periode/@value, $periode/@unit))"/>
             </xsl:if>
-            <xsl:if test="$end-date[@value]"> tot en met 
-<xsl:value-of select="nf:formatDate(nf:calculate-t-date($end-date/@value, $dateT))"/>
+            <xsl:if test="$end-date[@value]"> tot en met <xsl:value-of select="nf:formatDate(nf:calculate-t-date($end-date/@value, $dateT))"/>
             </xsl:if>
             <!-- projectgroep wil geen tekst 'tot nader order' in omschrijving, teams app Marijke dd 30 mrt 2020 -->
             <!--                <xsl:if test="not($periode[@value]) and not($end-date[@value])"><xsl:if test="$start-date[@value]">, </xsl:if>tot nader order</xsl:if>-->

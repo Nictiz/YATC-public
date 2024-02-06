@@ -1,19 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<!-- == Flattened from: C:/Data/Erik/work/Nictiz/new/HL7-mappings/fhir_2_ada-r4/fhir/fhir_2_ada_fhir_include.xsl == -->
-<!--
-Copyright © Nictiz
-
-This program is free software; you can redistribute it and/or modify it under the terms of the
-GNU Lesser General Public License as published by the Free Software Foundation; either version
-2.1 of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
-without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-See the GNU Lesser General Public License for more details.
-
-The full text of the license is available at http://www.gnu.org/copyleft/lesser.html
--->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -27,8 +12,7 @@ The full text of the license is available at http://www.gnu.org/copyleft/lesser.
    <xsl:output indent="yes"/>
    <xsl:strip-space elements="*"/>
    <xd:doc>
-      <xd:desc>Transforms FHIR 
-<xd:a href="http://hl7.org/fhir/references.html#Reference">Reference</xd:a> to ada 'identificatie'</xd:desc>
+      <xd:desc>Transforms FHIR <xd:a href="http://hl7.org/fhir/references.html#Reference">Reference</xd:a> to ada 'identificatie'</xd:desc>
       <xd:param name="resourceList">Xpath sequence of the resource names as strings that are allowed when resolving the reference (e.g. "('MedicationUse','MedicationStatement'). When not given, no filtering on resourcename is applied.</xd:param>
    </xd:doc>
    <xsl:template name="Reference-to-identificatie">

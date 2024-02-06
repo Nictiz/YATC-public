@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<!-- == Flattened from: C:/Data/Erik/work/Nictiz/new/HL7-mappings/util/units.xsl == -->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -10,9 +8,7 @@
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl">
    <xd:doc>
-      <xd:desc>Functions for 
-<xd:a href="http://unitsofmeasure.org/ucum.html">UCUM</xd:a> units based on the 
-<xd:a href="http://www.unitsofmeasure.org/ucum-essence.xml">UCUM essence</xd:a> file. This is not a complete file but little is missing.</xd:desc>
+      <xd:desc>Functions for <xd:a href="http://unitsofmeasure.org/ucum.html">UCUM</xd:a> units based on the <xd:a href="http://www.unitsofmeasure.org/ucum-essence.xml">UCUM essence</xd:a> file. This is not a complete file but little is missing.</xd:desc>
    </xd:doc>
    <xsl:variable name="strUcumEssence">ucum-essence.xml</xsl:variable>
    <xsl:variable name="docUcumEssence"
@@ -120,8 +116,7 @@
                <xsl:call-template name="util:logMessage">
                   <xsl:with-param name="level"
                                   select="$logERROR"/>
-                  <xsl:with-param name="msg">Onbekende ucum tijdseenheid ('
-<xsl:value-of select="$UCUM-time"/>') gevonden. Kan niet converteren naar ada eenheid: input = output.</xsl:with-param>
+                  <xsl:with-param name="msg">Onbekende ucum tijdseenheid ('<xsl:value-of select="$UCUM-time"/>') gevonden. Kan niet converteren naar ada eenheid: input = output.</xsl:with-param>
                </xsl:call-template>
                <xsl:value-of select="$UCUM-time"/>
             </xsl:otherwise>
@@ -409,14 +404,12 @@
                <xsl:when test="$GstdBasiseenheid_code = '502'">cm2</xsl:when>
                <!-- 504	FE	FIPE	FIP EENHEID	FIP-E	FIP EENHEID (ZIE NED.PH.8.BLZ.836) -->
                <xsl:when test="$GstdBasiseenheid_code = '504'">1</xsl:when>
-               <xsl:otherwise>Unsupported G-standaard basiseenheid: 
-<xsl:value-of select="$GstdBasiseenheid_code"/>
+               <xsl:otherwise>Unsupported G-standaard basiseenheid: <xsl:value-of select="$GstdBasiseenheid_code"/>
                </xsl:otherwise>
             </xsl:choose>
          </xsl:when>
          <xsl:otherwise>
-            <!-- geen integer meegekregen --> G-standaard code is not an integer. Unsupported G-standaard basiseenheid: "
-<xsl:value-of select="$GstdBasiseenheid_code"/>". </xsl:otherwise>
+            <!-- geen integer meegekregen --> G-standaard code is not an integer. Unsupported G-standaard basiseenheid: "<xsl:value-of select="$GstdBasiseenheid_code"/>". </xsl:otherwise>
       </xsl:choose>
    </xsl:function>
    <xd:doc>
@@ -467,6 +460,9 @@
             <xsl:when test="$ADAunit = $ada-unit-cm">cm</xsl:when>
             <xsl:when test="$ADAunit = $ada-unit-m">m</xsl:when>
             <xsl:when test="$ADAunit = $ada-unit-mmHg">mm[Hg]</xsl:when>
+            <xsl:when test="$ADAunit = $ada-unit-diopter">[diop]</xsl:when>
+            <xsl:when test="$ADAunit = $ada-unit-prism-diopter">[p'diop]</xsl:when>
+            <xsl:when test="$ADAunit = $ada-unit-degrees">deg</xsl:when>
             <xsl:when test="nf:isValidUCUMUnit($ADAunit)">
                <xsl:value-of select="$ADAunit"/>
             </xsl:when>
@@ -552,8 +548,7 @@
                   <xsl:call-template name="util:logMessage">
                      <xsl:with-param name="level"
                                      select="$logWARN"/>
-                     <xsl:with-param name="msg">Not supported UCUM eenheid, cannot convert to G-standaard basiseenheid: 
-<xsl:value-of select="$UCUM"/>
+                     <xsl:with-param name="msg">Not supported UCUM eenheid, cannot convert to G-standaard basiseenheid: <xsl:value-of select="$UCUM"/>
                      </xsl:with-param>
                   </xsl:call-template>
                </xsl:otherwise>

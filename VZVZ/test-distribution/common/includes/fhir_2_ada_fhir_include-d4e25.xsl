@@ -1,19 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<!-- == Flattened from: C:/Data/Erik/work/Nictiz/new/HL7-mappings/fhir_2_ada/fhir/fhir_2_ada_fhir_include.xsl == -->
-<!--
-Copyright © Nictiz
-
-This program is free software; you can redistribute it and/or modify it under the terms of the
-GNU Lesser General Public License as published by the Free Software Foundation; either version
-2.1 of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
-without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-See the GNU Lesser General Public License for more details.
-
-The full text of the license is available at http://www.gnu.org/copyleft/lesser.html
--->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -27,8 +12,7 @@ The full text of the license is available at http://www.gnu.org/copyleft/lesser.
    <xsl:output indent="yes"/>
    <xsl:strip-space elements="*"/>
    <xd:doc>
-      <xd:desc>Transforms FHIR 
-<xd:a href="http://hl7.org/fhir/STU3/datatypes.html#code">code @value</xd:a> to ADA code attributes</xd:desc>
+      <xd:desc>Transforms FHIR <xd:a href="http://hl7.org/fhir/STU3/datatypes.html#code">code @value</xd:a> to ADA code attributes</xd:desc>
       <xd:param name="value">The FHIR @value</xd:param>
       <xd:param name="codeMap">Array of map elements to be used to map input FHIR codes to output ADA codes.</xd:param>
    </xd:doc>
@@ -61,8 +45,7 @@ The full text of the license is available at http://www.gnu.org/copyleft/lesser.
       </xsl:if>
    </xsl:template>
    <xd:doc>
-      <xd:desc>Transforms FHIR 
-<xd:a href="http://hl7.org/fhir/STU3/datatypes.html#CodeableConcept">CodeableConcept contents</xd:a> to ada code element.</xd:desc>
+      <xd:desc>Transforms FHIR <xd:a href="http://hl7.org/fhir/STU3/datatypes.html#CodeableConcept">CodeableConcept contents</xd:a> to ada code element.</xd:desc>
       <xd:param name="in">the FHIR CodeableConcept element</xd:param>
       <xd:param name="adaElementName">Optional string to provide the name for the output ada element. Default is 'code.</xd:param>
       <xd:param name="inElementName">Optional string to provide the name of the child of the CodeableConcept. Default is 'coding'.</xd:param>
@@ -142,8 +125,7 @@ The full text of the license is available at http://www.gnu.org/copyleft/lesser.
       </xsl:for-each>
    </xsl:template>
    <xd:doc>
-      <xd:desc>Transforms FHIR 
-<xd:a href="http://hl7.org/fhir/datatypes.html#dateTime">dateTime contents</xd:a> to ada date(time) element.</xd:desc>
+      <xd:desc>Transforms FHIR <xd:a href="http://hl7.org/fhir/datatypes.html#dateTime">dateTime contents</xd:a> to ada date(time) element.</xd:desc>
       <xd:param name="in">the FHIR dateTime element</xd:param>
       <xd:param name="adaElementName">Optional string to provide the name for the output ada element. Default is datum_tijd.</xd:param>
       <xd:param name="adaDatatype">Optional string to add datatype attribute in ada element.</xd:param>
@@ -199,8 +181,7 @@ The full text of the license is available at http://www.gnu.org/copyleft/lesser.
       </xsl:for-each>
    </xsl:template>
    <xd:doc>
-      <xd:desc>Transforms FHIR 
-<xd:a href="http://hl7.org/fhir/STU3/datatypes.html#Coding">Coding contents</xd:a> to ada code element</xd:desc>
+      <xd:desc>Transforms FHIR <xd:a href="http://hl7.org/fhir/STU3/datatypes.html#Coding">Coding contents</xd:a> to ada code element</xd:desc>
       <xd:param name="in">the FHIR Coding contents</xd:param>
    </xd:doc>
    <xsl:template name="Coding-to-code"
@@ -238,8 +219,7 @@ The full text of the license is available at http://www.gnu.org/copyleft/lesser.
       </xsl:if>
    </xsl:template>
    <xd:doc>
-      <xd:desc>Transforms FHIR 
-<xd:a href="http://hl7.org/fhir/STU3/datatypes.html#Duration">Duration</xd:a> to ada hoeveelheid</xd:desc>
+      <xd:desc>Transforms FHIR <xd:a href="http://hl7.org/fhir/STU3/datatypes.html#Duration">Duration</xd:a> to ada hoeveelheid</xd:desc>
       <xd:param name="in">The FHIR Duration element</xd:param>
       <xd:param name="adaElementName">Optional string to provide the name of the ada output element. Default is 'tijdseenheid'.</xd:param>
    </xd:doc>
@@ -269,8 +249,7 @@ The full text of the license is available at http://www.gnu.org/copyleft/lesser.
       </xsl:choose>
    </xsl:template>
    <xd:doc>
-      <xd:desc>Transforms FHIR 
-<xd:a href="http://hl7.org/fhir/STU3/datatypes.html#Quantity">Quantity</xd:a> to ada element of type hoeveelheid</xd:desc>
+      <xd:desc>Transforms FHIR <xd:a href="http://hl7.org/fhir/STU3/datatypes.html#Quantity">Quantity</xd:a> to ada element of type hoeveelheid</xd:desc>
       <xd:param name="adaElementName">Optional string to provide the name of one of the ada output element. Defaults to 'hoeveelheid'.</xd:param>
       <xd:param name="adaDatatype">Optional string to add datatype attribute in ada element.</xd:param>
    </xd:doc>
@@ -300,8 +279,7 @@ The full text of the license is available at http://www.gnu.org/copyleft/lesser.
       </xsl:element>
    </xsl:template>
    <xd:doc>
-      <xd:desc>Transforms FHIR 
-<xd:a href="http://hl7.org/fhir/STU3/datatypes.html#Quantity">Quantity</xd:a> to ada waarde and eenheid elements</xd:desc>
+      <xd:desc>Transforms FHIR <xd:a href="http://hl7.org/fhir/STU3/datatypes.html#Quantity">Quantity</xd:a> to ada waarde and eenheid elements</xd:desc>
       <xd:param name="adaWaarde">Optional string to provide the name of one of the ada output elements. Default (empty string) leads to 'aantal' or 'waarde' element.</xd:param>
       <xd:param name="adaEenheid">Optional string to provide the name of one of the ada output elements. Default is 'eenheid'.</xd:param>
       <xd:param name="withRange">Optional boolean. If true, leads to 'waarde' element having a 'vaste_waarde' child element. Default is false.</xd:param>
@@ -371,8 +349,7 @@ The full text of the license is available at http://www.gnu.org/copyleft/lesser.
       </xsl:if>
    </xsl:template>
    <xd:doc>
-      <xd:desc>Transforms FHIR 
-<xd:a href="http://hl7.org/fhir/STU3/datatypes.html#Ratio">Ratio</xd:a> to ada complex 'hoeveelheid'</xd:desc>
+      <xd:desc>Transforms FHIR <xd:a href="http://hl7.org/fhir/STU3/datatypes.html#Ratio">Ratio</xd:a> to ada complex 'hoeveelheid'</xd:desc>
       <xd:param name="numeratorAdaName">Required string to name the ada element the f:numerator Quantity gets transformed to.</xd:param>
       <xd:param name="denominatorAdaName">Required string to name the ada element the f:denominator Quantity gets transformed to.</xd:param>
    </xd:doc>
@@ -394,8 +371,7 @@ The full text of the license is available at http://www.gnu.org/copyleft/lesser.
       </xsl:for-each>
    </xsl:template>
    <xd:doc>
-      <xd:desc>Transforms FHIR 
-<xd:a href="http://hl7.org/fhir/STU3/datatypes.html#identifier">Identifier</xd:a> to ada 'identificatie'</xd:desc>
+      <xd:desc>Transforms FHIR <xd:a href="http://hl7.org/fhir/STU3/datatypes.html#identifier">Identifier</xd:a> to ada 'identificatie'</xd:desc>
       <xd:param name="in">Optional input element. Should be of type FHIR Identifier. Defaults to self (.)</xd:param>
       <xd:param name="adaElementName">Optional string for the output ada element name. Default is 'identificatie'.</xd:param>
    </xd:doc>
@@ -426,8 +402,7 @@ The full text of the license is available at http://www.gnu.org/copyleft/lesser.
       </xsl:element>
    </xsl:template>
    <xd:doc>
-      <xd:desc>Transforms FHIR 
-<xd:a href="http://hl7.org/fhir/STU3/references.html#Reference">Reference</xd:a> to ada 'identificatie'</xd:desc>
+      <xd:desc>Transforms FHIR <xd:a href="http://hl7.org/fhir/STU3/references.html#Reference">Reference</xd:a> to ada 'identificatie'</xd:desc>
       <xd:param name="resourceList">Xpath sequence of the resource names as strings that are allowed when resolving the reference (e.g. "('MedicationUse','MedicationStatement')</xd:param>
    </xd:doc>
    <xsl:template name="Reference-to-identificatie">
@@ -470,8 +445,7 @@ The full text of the license is available at http://www.gnu.org/copyleft/lesser.
       </xsl:choose>
    </xsl:template>
    <xd:doc>
-      <xd:desc>Transforms FHIR 
-<xd:a href="http://hl7.org/fhir/STU3/references.html#Period">Period</xd:a> to two ada date elements (start and eind)</xd:desc>
+      <xd:desc>Transforms FHIR <xd:a href="http://hl7.org/fhir/STU3/references.html#Period">Period</xd:a> to two ada date elements (start and eind)</xd:desc>
       <xd:param name="in">Optional input element. Shoulfd be FHIR Period. Defaults to self (.).</xd:param>
       <xd:param name="adaElementNameStart">Optional string to name the ada element where f:start is mapped to. Default is 'start'.</xd:param>
       <xd:param name="adaElementNameEnd">Optional string to name the ada element where f:end is mapped to. Default is 'eind'.</xd:param>
@@ -578,8 +552,7 @@ The full text of the license is available at http://www.gnu.org/copyleft/lesser.
       </xsl:for-each>
    </xsl:template>
    <xd:doc>
-      <xd:desc>Transforms FHIR 
-<xd:a href="http://hl7.org/fhir/STU3/datatypes.html#boolean">boolean @value</xd:a> to ada boolean element</xd:desc>
+      <xd:desc>Transforms FHIR <xd:a href="http://hl7.org/fhir/STU3/datatypes.html#boolean">boolean @value</xd:a> to ada boolean element</xd:desc>
       <xd:param name="in">the FHIR boolean element. Defaults to self (.).</xd:param>
    </xd:doc>
    <xsl:template name="boolean-to-boolean"
@@ -739,8 +712,7 @@ The full text of the license is available at http://www.gnu.org/copyleft/lesser.
             <xsl:call-template name="util:logMessage">
                <xsl:with-param name="level"
                                select="$logWARN"/>
-               <xsl:with-param name="msg">local:getOid() expects a FHIR System URI, but got "
-<xsl:value-of select="$uri"/>"</xsl:with-param>
+               <xsl:with-param name="msg">local:getOid() expects a FHIR System URI, but got "<xsl:value-of select="$uri"/>"</xsl:with-param>
             </xsl:call-template>
          </xsl:otherwise>
       </xsl:choose>
@@ -762,8 +734,7 @@ The full text of the license is available at http://www.gnu.org/copyleft/lesser.
             <xsl:call-template name="util:logMessage">
                <xsl:with-param name="level"
                                select="$logWARN"/>
-               <xsl:with-param name="msg">local:getDisplayName() expects an OID, but got "
-<xsl:value-of select="$oid"/>" OR cannot find the matching displayName</xsl:with-param>
+               <xsl:with-param name="msg">local:getDisplayName() expects an OID, but got "<xsl:value-of select="$oid"/>" OR cannot find the matching displayName</xsl:with-param>
             </xsl:call-template>
          </xsl:otherwise>
       </xsl:choose>
@@ -819,8 +790,7 @@ The full text of the license is available at http://www.gnu.org/copyleft/lesser.
    </xd:doc>
    <xsl:template match="f:*"
                  mode="#all">
-      <xsl:comment>Unhandled FHIR node: f:
-<xsl:value-of select="local-name()"/>
+      <xsl:comment>Unhandled FHIR node: f:<xsl:value-of select="local-name()"/>
       </xsl:comment>
    </xsl:template>
 </xsl:stylesheet>

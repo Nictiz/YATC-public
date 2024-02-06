@@ -1,19 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<!-- == Flattened from: C:/Data/Erik/work/Nictiz/new/HL7-mappings/ada_2_fhir-r4/mp/9.3.0/payload/2.0.0-beta.2/all_profiles.xsl == -->
-<!--
-Copyright (c) Nictiz
-
-This program is free software; you can redistribute it and/or modify it under the terms of the
-GNU Lesser General Public License as published by the Free Software Foundation; either version
-2.1 of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
-without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-See the GNU Lesser General Public License for more details.
-
-The full text of the license is available at http://www.gnu.org/copyleft/lesser.html
--->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -28,7 +13,7 @@ The full text of the license is available at http://www.gnu.org/copyleft/lesser.
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
    <xsl:import href="all_zibs-d4e123.xsl"/>
    <xsl:import href="_ada2resourceType.xsl"/>
-   <!-- Overrride the generic ada2resourceType variable with a version that used mp-PharmaceuticalProduct -->
+   <!-- Override the generic ada2resourceType variable with a version that used mp-PharmaceuticalProduct -->
    <xsl:import href="mp-functions.xsl"/>
    <xsl:import href="mp-AdministrationAgreement-d4e198.xsl"/>
    <xsl:import href="mp-DispenseRequest.xsl"/>

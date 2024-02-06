@@ -1,19 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<!-- == Flattened from: C:/Data/Erik/work/Nictiz/new/HL7-mappings/fhir_2_ada-r4/zibs2020/payload/0.8.0-beta.1/all_zibs.xsl == -->
-<!--
-Copyright (c) Nictiz
-
-This program is free software; you can redistribute it and/or modify it under the terms of the
-GNU Lesser General Public License as published by the Free Software Foundation; either version
-2.1 of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
-without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-See the GNU Lesser General Public License for more details.
-
-The full text of the license is available at http://www.gnu.org/copyleft/lesser.html
--->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -36,16 +21,16 @@ The full text of the license is available at http://www.gnu.org/copyleft/lesser.
    <xsl:import href="contextContactEpisodeOfCare.xsl"/>
    <xsl:import href="ext-CopyIndicator-d4e29.xsl"/>
    <xsl:import href="ext-MedicationAgreementPeriodOfUseCondition-d4e30.xsl"/>
+   <xsl:import href="ext-StopType.xsl"/>
    <xsl:import href="ext-TimeInterval-Duration.xsl"/>
-   <xsl:import href="ext-TimeInterval-period.xsl"/>
-   <xsl:import href="nl-core-AddressInformation-d4e33.xsl"/>
+   <xsl:import href="ext-TimeInterval-Period.xsl"/>
+   <xsl:import href="nl-core-AddressInformation-d4e34.xsl"/>
    <xsl:import href="nl-core-AdministrationAgreement.xsl"/>
-   <xsl:import href="nl-core-BodyHeight-d4e35.xsl"/>
-   <xsl:import href="nl-core-BodyWeight-d4e36.xsl"/>
-   <xsl:import href="nl-core-ContactInformation-d4e37.xsl"/>
-   <xsl:import href="nl-core-ContactPerson-d4e38.xsl"/>
+   <xsl:import href="nl-core-BodyHeight-d4e36.xsl"/>
+   <xsl:import href="nl-core-BodyWeight-d4e37.xsl"/>
+   <xsl:import href="nl-core-ContactInformation-d4e38.xsl"/>
+   <xsl:import href="nl-core-ContactPerson-d4e39.xsl"/>
    <xsl:import href="nl-core-DispenseRequest.xsl"/>
-   <xsl:import href="nl-core-ext-StopType.xsl"/>
    <xsl:import href="nl-core-HealthcareProvider-Organization.xsl"/>
    <xsl:import href="nl-core-HealthProfessional-Practitioner.xsl"/>
    <xsl:import href="nl-core-HealthProfessional-PractitionerRole.xsl"/>

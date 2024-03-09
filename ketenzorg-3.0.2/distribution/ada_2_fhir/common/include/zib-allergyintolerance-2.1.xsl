@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- == Flattened from: C:/Data/Erik/work/Nictiz/new/YATC-internal/ada-2-fhir/env/zibs2017/payload/zib-allergyintolerance-2.1.xsl == -->
+<!-- == Flattened from: /Users/ahenket/Development/GitHub/Nictiz/YATC-internal/ada-2-fhir/env/zibs2017/payload/zib-allergyintolerance-2.1.xsl == -->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -40,8 +40,10 @@
               as="xs:boolean"
               select="false()"/>
    <!-- ================================================================== -->
+   <!--<xsl:template name="allergyintoleranceReference" match="(allergie_intolerantie | allergy_intolerance)[not(@datatype = 'reference')][.//(@value | @code | @nullFlavor)]" mode="doAllergyIntoleranceReference-2.1">-->
+   <!-- Match expression was not XSLT2 compliant. Changed to: -->
    <xsl:template name="allergyintoleranceReference"
-                 match="(allergie_intolerantie | allergy_intolerance)[not(@datatype = 'reference')][.//(@value | @code | @nullFlavor)]"
+                 match="allergie_intolerantie[not(@datatype = 'reference')][.//(@value | @code | @nullFlavor)] | allergy_intolerance[not(@datatype = 'reference')][.//(@value | @code | @nullFlavor)]"
                  mode="doAllergyIntoleranceReference-2.1">
       <!-- Returns contents of Reference datatype element -->
       <xsl:variable name="theIdentifier"
@@ -71,8 +73,10 @@
       </xsl:if>
    </xsl:template>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!--<xsl:template name="allergyIntoleranceEntry" match="(allergie_intolerantie | allergy_intolerance)[not(@datatype = 'reference')][.//(@value | @code | @nullFlavor)]" mode="doAllergyIntoleranceEntry-2.1" as="element(f:entry)">-->
+   <!-- Match expression was not XSLT2 compliant. Changed to: -->
    <xsl:template name="allergyIntoleranceEntry"
-                 match="(allergie_intolerantie | allergy_intolerance)[not(@datatype = 'reference')][.//(@value | @code | @nullFlavor)]"
+                 match="allergie_intolerantie[not(@datatype = 'reference')][.//(@value | @code | @nullFlavor)] | allergy_intolerance[not(@datatype = 'reference')][.//(@value | @code | @nullFlavor)]"
                  mode="doAllergyIntoleranceEntry-2.1"
                  as="element(f:entry)">
       <!-- Produces a FHIR entry element with an AllergyIntolerance resource for AllergyIntolerance -->

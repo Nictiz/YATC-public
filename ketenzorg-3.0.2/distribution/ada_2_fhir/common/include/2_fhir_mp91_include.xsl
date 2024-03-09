@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- == Flattened from: C:/Data/Erik/work/Nictiz/new/YATC-internal/ada-2-fhir/env/mp/2_fhir_mp91_include.xsl == -->
+<!-- == Flattened from: /Users/ahenket/Development/GitHub/Nictiz/YATC-internal/ada-2-fhir/env/mp/2_fhir_mp91_include.xsl == -->
 <xsl:stylesheet version="2.0"
                 exclude-result-prefixes="#all"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -30,10 +30,10 @@
         The full text of the license is available at http://www.gnu.org/copyleft/lesser.html
     -->
    <!-- ================================================================== -->
+   <xsl:import href="package-1.3.10.xsl"/>
    <xsl:output method="xml"
                indent="yes"/>
    <xsl:strip-space elements="*"/>
-   <xsl:import href="package-1.3.10.xsl"/>
    <!-- ======================================================================= -->
    <xsl:param name="referById"
               as="xs:boolean"

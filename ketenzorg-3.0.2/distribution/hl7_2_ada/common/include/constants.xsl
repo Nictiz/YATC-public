@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- == Flattened from: C:/Data/Erik/work/Nictiz/new/HL7-mappings/util/constants.xsl == -->
+<!-- == Flattened from: /Users/ahenket/Development/GitHub/Nictiz/HL7-mappings/util/constants.xsl == -->
 <!--
 Copyright © Nictiz
 
@@ -67,6 +67,8 @@ The full text of the license is available at http://www.gnu.org/copyleft/lesser.
                  select="('microliter', 'ul')"/>
    <xsl:variable name="ada-unit-druppel"
                  select="('druppel', 'drp', '[drp]', 'druppels', 'drops')"/>
+   <xsl:variable name="ada-unit-degrees"
+                 select="('deg', 'degrees', 'graden')"/>
    <xsl:variable name="ada-unit-degrees-celsius"
                  select="('Cel', 'graden Celsius', 'graden celsius', 'degrees Celsius', 'degrees celsius', 'Celsius', 'celsius')"/>
    <xsl:variable name="ada-unit-pH"
@@ -75,6 +77,10 @@ The full text of the license is available at http://www.gnu.org/copyleft/lesser.
                  select="('mmol/L', 'mmol/l', 'mmol per liter')"/>
    <xsl:variable name="ada-unit-mmHg"
                  select="('mmHg', 'mm[Hg]')"/>
+   <xsl:variable name="ada-unit-diopter"
+                 select="('dpt', '[diop]', 'diopter', 'dioptrie')"/>
+   <xsl:variable name="ada-unit-prism-diopter"
+                 select="('PD', '[p''diop]', 'prism diopter', 'prisma dioptrie')"/>
    <xsl:variable name="oidAGB">2.16.840.1.113883.2.4.6.1</xsl:variable>
    <xsl:variable name="oidAGBSpecialismen">2.16.840.1.113883.2.4.6.7</xsl:variable>
    <xsl:variable name="oidAORTAApplicatieID">2.16.840.1.113883.2.4.6.6</xsl:variable>
@@ -109,6 +115,7 @@ The full text of the license is available at http://www.gnu.org/copyleft/lesser.
    <xsl:variable name="oidHL7LanguageAbilityProficiency">2.16.840.1.113883.5.61</xsl:variable>
    <xsl:variable name="oidHL7NullFlavor">2.16.840.1.113883.5.1008</xsl:variable>
    <xsl:variable name="oidHL7ObservationInterpretation">2.16.840.1.113883.5.83</xsl:variable>
+   <xsl:variable name="oidHL7SpecimenType">2.16.840.1.113883.5.129</xsl:variable>
    <xsl:variable name="oidHL7ParticipationType">2.16.840.1.113883.5.90</xsl:variable>
    <xsl:variable name="oidHL7RoleCode">2.16.840.1.113883.5.111</xsl:variable>
    <xsl:variable name="oidISO3166">1.0.3166.1.2.2</xsl:variable>
@@ -819,6 +826,9 @@ The full text of the license is available at http://www.gnu.org/copyleft/lesser.
             <map oid="{$oidHL7ObservationInterpretation}"
                  uri="http://hl7.org/fhir/v3/ObservationInterpretation"
                  displayName="HL7 ObservationInterpretation"/>
+            <map oid="{$oidHL7SpecimenType}"
+                 uri="http://hl7.org/fhir/v3/SpecimenType"
+                 displayName="HL7 SpecimenType"/>
             <map oid="{$oidHL7ParticipationType}"
                  uri="http://hl7.org/fhir/v3/ParticipationType"
                  displayName="HL7 ParticipationType"/>
@@ -868,6 +878,9 @@ The full text of the license is available at http://www.gnu.org/copyleft/lesser.
             <map oid="{$oidHL7ObservationInterpretation}"
                  uri="http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation"
                  displayName="HL7 ObservationInterpretation"/>
+            <map oid="{$oidHL7SpecimenType}"
+                 uri="http://terminology.hl7.org/CodeSystem/v3-SpecimenType"
+                 displayName="HL7 SpecimenType"/>
             <map oid="{$oidHL7ParticipationType}"
                  uri="http://terminology.hl7.org/CodeSystem/v3-ParticipationType"
                  displayName="HL7 ParticipationType"/>
@@ -1347,4 +1360,7 @@ The full text of the license is available at http://www.gnu.org/copyleft/lesser.
            displayName="zondag"
            codeSystemName="SNOMED CT"/>
    </xsl:variable>
+   <!-- checks https://hl7.org/fhir/R4/references.html#regex -->
+   <xsl:variable name="restRegexR4"
+                 as="xs:string">((http|https)://([A-Za-z0-9\-\\\.:%\$]*/)+)?(Account|ActivityDefinition|AdverseEvent|AllergyIntolerance|Appointment|AppointmentResponse|AuditEvent|Basic|Binary|BiologicallyDerivedProduct|BodyStructure|Bundle|CapabilityStatement|CarePlan|CareTeam|CatalogEntry|ChargeItem|ChargeItemDefinition|Claim|ClaimResponse|ClinicalImpression|CodeSystem|Communication|CommunicationRequest|CompartmentDefinition|Composition|ConceptMap|Condition|Consent|Contract|Coverage|CoverageEligibilityRequest|CoverageEligibilityResponse|DetectedIssue|Device|DeviceDefinition|DeviceMetric|DeviceRequest|DeviceUseStatement|DiagnosticReport|DocumentManifest|DocumentReference|EffectEvidenceSynthesis|Encounter|Endpoint|EnrollmentRequest|EnrollmentResponse|EpisodeOfCare|EventDefinition|Evidence|EvidenceVariable|ExampleScenario|ExplanationOfBenefit|FamilyMemberHistory|Flag|Goal|GraphDefinition|Group|GuidanceResponse|HealthcareService|ImagingStudy|Immunization|ImmunizationEvaluation|ImmunizationRecommendation|ImplementationGuide|InsurancePlan|Invoice|Library|Linkage|List|Location|Measure|MeasureReport|Media|Medication|MedicationAdministration|MedicationDispense|MedicationKnowledge|MedicationRequest|MedicationStatement|MedicinalProduct|MedicinalProductAuthorization|MedicinalProductContraindication|MedicinalProductIndication|MedicinalProductIngredient|MedicinalProductInteraction|MedicinalProductManufactured|MedicinalProductPackaged|MedicinalProductPharmaceutical|MedicinalProductUndesirableEffect|MessageDefinition|MessageHeader|MolecularSequence|NamingSystem|NutritionOrder|Observation|ObservationDefinition|OperationDefinition|OperationOutcome|Organization|OrganizationAffiliation|Patient|PaymentNotice|PaymentReconciliation|Person|PlanDefinition|Practitioner|PractitionerRole|Procedure|Provenance|Questionnaire|QuestionnaireResponse|RelatedPerson|RequestGroup|ResearchDefinition|ResearchElementDefinition|ResearchStudy|ResearchSubject|RiskAssessment|RiskEvidenceSynthesis|Schedule|SearchParameter|ServiceRequest|Slot|Specimen|SpecimenDefinition|StructureDefinition|StructureMap|Subscription|Substance|SubstanceNucleicAcid|SubstancePolymer|SubstanceProtein|SubstanceReferenceInformation|SubstanceSourceMaterial|SubstanceSpecification|SupplyDelivery|SupplyRequest|Task|TerminologyCapabilities|TestReport|TestScript|ValueSet|VerificationResult|VisionPrescription)/[A-Za-z0-9\-\.]{1,64}(/_history/[A-Za-z0-9\-\.]{1,64})?</xsl:variable>
 </xsl:stylesheet>

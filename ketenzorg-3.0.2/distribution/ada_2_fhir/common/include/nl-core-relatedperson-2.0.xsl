@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- == Flattened from: C:/Data/Erik/work/Nictiz/new/YATC-internal/ada-2-fhir/env/zibs2017/payload/nl-core-relatedperson-2.0.xsl == -->
+<!-- == Flattened from: /Users/ahenket/Development/GitHub/Nictiz/YATC-internal/ada-2-fhir/env/zibs2017/payload/nl-core-relatedperson-2.0.xsl == -->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -41,8 +41,10 @@
               as="xs:boolean"
               select="false()"/>
    <!-- ================================================================== -->
+   <!--    <xsl:template name="relatedPersonReference" match="//(informant//persoon[not(persoon)] | contactpersoon[not(contactpersoon)] | contact_person[not(contact_person)] | contact[not(contact)])" mode="doRelatedPersonReference-2.0">-->
+   <!-- Match expression was not XSLT2 compliant. Changed to: -->
    <xsl:template name="relatedPersonReference"
-                 match="//(informant//persoon[not(persoon)] | contactpersoon[not(contactpersoon)] | contact_person[not(contact_person)] | contact[not(contact)])"
+                 match="//informant//persoon[not(persoon)] | //contactpersoon[not(contactpersoon)] | //contact_person[not(contact_person)] | //contact[not(contact)]"
                  mode="doRelatedPersonReference-2.0">
       <xsl:variable name="theIdentifier"
                     select="identificatie_nummer[@value] | identification_number[@value]"/>
@@ -69,8 +71,10 @@
       </xsl:if>
    </xsl:template>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!--<xsl:template name="relatedPersonEntry" match="//(informant//persoon[not(persoon)] | contactpersoon[not(contactpersoon)] | contact_person[not(contact_person)] | contact[not(contact)])" mode="doRelatedPersonEntry-2.0">-->
+   <!-- Match expression was not XSLT2 compliant. Changed to: -->
    <xsl:template name="relatedPersonEntry"
-                 match="//(informant//persoon[not(persoon)] | contactpersoon[not(contactpersoon)] | contact_person[not(contact_person)] | contact[not(contact)])"
+                 match="//informant//persoon[not(persoon)] | //contactpersoon[not(contactpersoon)] | //contact_person[not(contact_person)] | //contact[not(contact)]"
                  mode="doRelatedPersonEntry-2.0">
       <!-- Produces a FHIR entry element with a RelatedPerson resource for ContactPerson -->
       <xsl:param name="uuid"
@@ -125,8 +129,10 @@
       </entry>
    </xsl:template>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!--<xsl:template name="nl-core-relatedperson-2.0" match="//(informant//persoon[not(persoon)] | contactpersoon[not(contactpersoon)] | contact_person[not(contact_person)] | contact[not(contact)])" mode="doRelatedPersonResource-2.0">-->
+   <!-- Match expression was not XSLT2 compliant. Changed to: -->
    <xsl:template name="nl-core-relatedperson-2.0"
-                 match="//(informant//persoon[not(persoon)] | contactpersoon[not(contactpersoon)] | contact_person[not(contact_person)] | contact[not(contact)])"
+                 match="//informant//persoon[not(persoon)] | //contactpersoon[not(contactpersoon)] | //contact_person[not(contact_person)] | //contact[not(contact)]"
                  mode="doRelatedPersonResource-2.0">
       <!-- Mapping of HCIM ContactPerson concept in ADA to FHIR resource nl-core-relatedperson. -->
       <xsl:param name="in"

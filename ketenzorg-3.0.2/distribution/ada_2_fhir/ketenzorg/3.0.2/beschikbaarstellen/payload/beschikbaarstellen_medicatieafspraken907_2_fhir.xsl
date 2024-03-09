@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- == Flattened from: C:/Data/Erik/work/Nictiz/new/YATC-internal/ada-2-fhir/env/ketenzorg/3.0.2/beschikbaarstellen/payload/beschikbaarstellen_medicatieafspraken907_2_fhir.xsl == -->
+<!-- == Flattened from: /Users/ahenket/Development/GitHub/Nictiz/YATC-internal/ada-2-fhir/env/ketenzorg/3.0.2/beschikbaarstellen/payload/beschikbaarstellen_medicatieafspraken907_2_fhir.xsl == -->
 <xsl:stylesheet version="2.0"
                 exclude-result-prefixes="#all"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -31,12 +31,12 @@
         The full text of the license is available at http://www.gnu.org/copyleft/lesser.html
     -->
    <!-- ================================================================== -->
+   <!-- import because we want to be able to override the param for macAddress for UUID generation and the param for referById -->
+   <xsl:import href="../../../../common/include/2_fhir_mp90_include.xsl"/>
    <xsl:output method="xml"
                indent="yes"
                omit-xml-declaration="yes"/>
    <xsl:strip-space elements="*"/>
-   <!-- import because we want to be able to override the param for macAddress for UUID generation and the param for referById -->
-   <xsl:import href="../../../../common/include/2_fhir_mp90_include.xsl"/>
    <xsl:include href="../../../../common/include/general.mod.xsl"/>
    <xsl:include href="../../../../common/include/href.mod.xsl"/>
    <!-- ======================================================================= -->

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- == Flattened from: C:/Data/Erik/work/Nictiz/new/HL7-mappings/util/uuid.xsl == -->
+<!-- == Flattened from: /Users/ahenket/Development/GitHub/Nictiz/HL7-mappings/util/uuid.xsl == -->
 <xsl:stylesheet version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:util="urn:hl7:utilities"

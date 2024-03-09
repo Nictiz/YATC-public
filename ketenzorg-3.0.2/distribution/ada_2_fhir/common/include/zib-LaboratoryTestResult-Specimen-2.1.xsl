@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- == Flattened from: C:/Data/Erik/work/Nictiz/new/YATC-internal/ada-2-fhir/env/zibs2017/payload/zib-LaboratoryTestResult-Specimen-2.1.xsl == -->
+<!-- == Flattened from: /Users/ahenket/Development/GitHub/Nictiz/YATC-internal/ada-2-fhir/env/zibs2017/payload/zib-LaboratoryTestResult-Specimen-2.1.xsl == -->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -69,8 +69,10 @@
       </xsl:for-each-group>
    </xsl:variable>
    <!-- ================================================================== -->
+   <!--<xsl:template name="laboratoryResultSpecimenReference" match="(laboratory_test_result/specimen | laboratorium_uitslag/monster)[.//(@value | @code | @nullFlavor)]" mode="doLaboratoryResultSpecimenReference-2.1" as="element()+">-->
+   <!-- Match expression was not XSLT2 compliant. Changed to: -->
    <xsl:template name="laboratoryResultSpecimenReference"
-                 match="(laboratory_test_result/specimen | laboratorium_uitslag/monster)[.//(@value | @code | @nullFlavor)]"
+                 match="laboratory_test_result/specimen[.//(@value | @code | @nullFlavor)] | laboratorium_uitslag/monster[.//(@value | @code | @nullFlavor)]"
                  mode="doLaboratoryResultSpecimenReference-2.1"
                  as="element()+">
       <xsl:variable name="theIdentifier"
@@ -98,8 +100,10 @@
       </xsl:if>
    </xsl:template>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!--<xsl:template name="laboratoryResultSpecimenEntry" match="(laboratory_test_result/specimen | laboratorium_uitslag/monster)[.//(@value | @code | @nullFlavor)]" mode="doLaboratoryResultSpecimenEntry-2.1" as="element(f:entry)">-->
+   <!-- Match expression was not XSLT2 compliant. Changed to: -->
    <xsl:template name="laboratoryResultSpecimenEntry"
-                 match="(laboratory_test_result/specimen | laboratorium_uitslag/monster)[.//(@value | @code | @nullFlavor)]"
+                 match="laboratory_test_result/specimen[.//(@value | @code | @nullFlavor)] | laboratorium_uitslag/monster[.//(@value | @code | @nullFlavor)]"
                  mode="doLaboratoryResultSpecimenEntry-2.1"
                  as="element(f:entry)">
       <!-- Produces a FHIR entry element with a Specimen resource for LaboratoryTestResult -->
@@ -161,8 +165,10 @@
       </entry>
    </xsl:template>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!--<xsl:template name="zib-LaboratoryTestResult-Specimen-2.1" match="//(laboratorium_test[not(laboratorium_test)] | laboratory_test[not(laboratory_test)])[not(@datatype = 'reference')][.//(@value | @code | @nullFlavor)]" as="element()" mode="doZibLaboratoryTestResultSpecimen-2.1">-->
+   <!-- Match expression was not XSLT2 compliant. Changed to: -->
    <xsl:template name="zib-LaboratoryTestResult-Specimen-2.1"
-                 match="//(laboratorium_test[not(laboratorium_test)] | laboratory_test[not(laboratory_test)])[not(@datatype = 'reference')][.//(@value | @code | @nullFlavor)]"
+                 match="//laboratorium_test[not(laboratorium_test)][not(@datatype = 'reference')][.//(@value | @code | @nullFlavor)] | //laboratory_test[not(laboratory_test)][not(@datatype = 'reference')][.//(@value | @code | @nullFlavor)]"
                  as="element()"
                  mode="doZibLaboratoryTestResultSpecimen-2.1">
       <!-- Mapping of HCIM LaboratoryTestResult concept in ADA to FHIR resource zib-LaboratoryTestResult-Specimen. -->

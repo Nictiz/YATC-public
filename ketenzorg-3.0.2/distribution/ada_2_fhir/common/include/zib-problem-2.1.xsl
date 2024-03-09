@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- == Flattened from: C:/Data/Erik/work/Nictiz/new/YATC-internal/ada-2-fhir/env/zibs2017/payload/zib-problem-2.1.xsl == -->
+<!-- == Flattened from: /Users/ahenket/Development/GitHub/Nictiz/YATC-internal/ada-2-fhir/env/zibs2017/payload/zib-problem-2.1.xsl == -->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -77,8 +77,10 @@
       </xsl:for-each-group>
    </xsl:variable>
    <!-- ================================================================== -->
+   <!--<xsl:template name="problemReference" match="//(probleem[not(probleem)] | problem[not(problem)])[not(@datatype = 'reference')][.//(@value | @code | @nullFlavor)]" mode="doProblemReference-2.1" as="element()+">-->
+   <!-- Match expression was not XSLT2 compliant. Changed to: -->
    <xsl:template name="problemReference"
-                 match="//(probleem[not(probleem)] | problem[not(problem)])[not(@datatype = 'reference')][.//(@value | @code | @nullFlavor)]"
+                 match="//probleem[not(probleem)][not(@datatype = 'reference')][.//(@value | @code | @nullFlavor)] | //problem[not(problem)][not(@datatype = 'reference')][.//(@value | @code | @nullFlavor)]"
                  mode="doProblemReference-2.1"
                  as="element()+">
       <xsl:variable name="theIdentifier"
@@ -108,8 +110,10 @@
       </xsl:if>
    </xsl:template>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!--<xsl:template name="problemEntry" match="//(probleem[not(probleem)] | problem[not(problem)])[not(@datatype = 'reference')][.//(@value | @code | @nullFlavor)]" mode="doProblemEntry-2.1" as="element(f:entry)">-->
+   <!-- Match expression was not XSLT2 compliant. Changed to: -->
    <xsl:template name="problemEntry"
-                 match="//(probleem[not(probleem)] | problem[not(problem)])[not(@datatype = 'reference')][.//(@value | @code | @nullFlavor)]"
+                 match="//probleem[not(probleem)][not(@datatype = 'reference')][.//(@value | @code | @nullFlavor)] | //problem[not(problem)][not(@datatype = 'reference')][.//(@value | @code | @nullFlavor)]"
                  mode="doProblemEntry-2.1"
                  as="element(f:entry)">
       <!-- Produces a FHIR entry element with a Condition resource -->
@@ -191,8 +195,10 @@
       </entry>
    </xsl:template>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!--<xsl:template name="zib-Problem-2.1" match="//(probleem[not(probleem)] | problem[not(problem)])[not(@datatype = 'reference')][.//(@value | @code | @nullFlavor)]" as="element(f:Condition)" mode="doZibProblem-2.1">-->
+   <!-- Match expression was not XSLT2 compliant. Changed to: -->
    <xsl:template name="zib-Problem-2.1"
-                 match="//(probleem[not(probleem)] | problem[not(problem)])[not(@datatype = 'reference')][.//(@value | @code | @nullFlavor)]"
+                 match="//probleem[not(probleem)][not(@datatype = 'reference')][.//(@value | @code | @nullFlavor)] | //problem[not(problem)][not(@datatype = 'reference')][.//(@value | @code | @nullFlavor)]"
                  as="element(f:Condition)"
                  mode="doZibProblem-2.1">
       <!-- Mapping of nl.zorg.Problem concept in ADA to FHIR resource zib-Problem. -->

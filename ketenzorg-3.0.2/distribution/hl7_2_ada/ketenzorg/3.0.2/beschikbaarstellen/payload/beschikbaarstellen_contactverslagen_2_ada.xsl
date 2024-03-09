@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- == Flattened from: C:/Data/Erik/work/Nictiz/new/HL7-mappings/hl7_2_ada/ketenzorg/3.0.2/beschikbaarstellen/payload/beschikbaarstellen_contactverslagen_2_ada.xsl == -->
+<!-- == Flattened from: /Users/ahenket/Development/GitHub/Nictiz/HL7-mappings/hl7_2_ada/ketenzorg/3.0.2/beschikbaarstellen/payload/beschikbaarstellen_contactverslagen_2_ada.xsl == -->
 <!--
 Copyright © Nictiz
 

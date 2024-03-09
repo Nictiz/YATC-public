@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- == Flattened from: C:/Data/Erik/work/Nictiz/new/YATC-internal/ada-2-fhir/env/fhir/2_fhir_fhir_include.xsl == -->
+<!-- == Flattened from: /Users/ahenket/Development/GitHub/Nictiz/YATC-internal/ada-2-fhir/env/fhir/2_fhir_fhir_include.xsl == -->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -297,14 +297,17 @@
                <xsl:when test="@code">
                   <xsl:value-of select="@code"/>
                </xsl:when>
+               <xsl:when test="@value">
+                  <xsl:value-of select="@value"/>
+               </xsl:when>
                <xsl:otherwise>
-                  <xsl:value-of select="@nullFlavor"/>
+                  <xsl:value-of select="(@nullFlavor, 'NI')[1]"/>
                </xsl:otherwise>
             </xsl:choose>
          </xsl:variable>
          <xsl:variable name="theCodeSystem">
             <xsl:choose>
-               <xsl:when test="@code">
+               <xsl:when test="@code | @value">
                   <xsl:value-of select="@codeSystem"/>
                </xsl:when>
                <xsl:otherwise>
@@ -368,8 +371,11 @@
             <xsl:when test="$in/@code">
                <xsl:value-of select="$in/@code"/>
             </xsl:when>
+            <xsl:when test="$in/@value">
+               <xsl:value-of select="$in/@value"/>
+            </xsl:when>
             <xsl:otherwise>
-               <xsl:value-of select="$in/@nullFlavor"/>
+               <xsl:value-of select="($in/@nullFlavor, 'NI')[1]"/>
             </xsl:otherwise>
          </xsl:choose>
       </xsl:variable>
@@ -449,10 +455,23 @@
                  select="false()">
          <!-- Optionally provide a boolean to treat an input NullFlavor as coding. Needed for when the nullFlavor is part of the valueSet. Defaults to false, which puts the NullFlavor in an extension. -->
       </xsl:param>
+      <xsl:variable name="theCode">
+         <xsl:choose>
+            <xsl:when test="$in/@code">
+               <xsl:value-of select="$in/@code"/>
+            </xsl:when>
+            <xsl:when test="$in/@value">
+               <xsl:value-of select="$in/@value"/>
+            </xsl:when>
+            <xsl:otherwise>
+               <xsl:value-of select="($in/@nullFlavor, 'NI')[1]"/>
+            </xsl:otherwise>
+         </xsl:choose>
+      </xsl:variable>
       <xsl:choose>
          <xsl:when test="$in[@codeSystem = $oidHL7NullFlavor] and not($treatNullFlavorAsCoding)">
             <extension url="{$urlExtHL7NullFlavor}">
-               <valueCode value="{$in/@code}"/>
+               <valueCode value="{$theCode}"/>
             </extension>
          </xsl:when>
          <xsl:when test="$in[not(@codeSystem = $oidHL7NullFlavor) or $treatNullFlavorAsCoding]">
@@ -470,7 +489,7 @@
                   </xsl:call-template>
                </version>
             </xsl:if>
-            <code value="{normalize-space($in/@code)}"/>
+            <code value="{normalize-space($theCode)}"/>
             <xsl:if test="$in/@displayName">
                <display>
                   <xsl:call-template name="string-to-string">

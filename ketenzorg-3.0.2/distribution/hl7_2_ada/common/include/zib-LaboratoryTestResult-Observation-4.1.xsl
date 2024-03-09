@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- == Flattened from: C:/Data/Erik/work/Nictiz/new/HL7-mappings/hl7_2_ada/zibs2017/payload/zib-LaboratoryTestResult-Observation-4.1.xsl == -->
+<!-- == Flattened from: /Users/ahenket/Development/GitHub/Nictiz/HL7-mappings/hl7_2_ada/zibs2017/payload/zib-LaboratoryTestResult-Observation-4.1.xsl == -->
 <!--
 Copyright © Nictiz
 

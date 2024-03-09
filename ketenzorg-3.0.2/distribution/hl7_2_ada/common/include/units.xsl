@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- == Flattened from: C:/Data/Erik/work/Nictiz/new/HL7-mappings/util/units.xsl == -->
+<!-- == Flattened from: /Users/ahenket/Development/GitHub/Nictiz/HL7-mappings/util/units.xsl == -->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -467,6 +467,9 @@
             <xsl:when test="$ADAunit = $ada-unit-cm">cm</xsl:when>
             <xsl:when test="$ADAunit = $ada-unit-m">m</xsl:when>
             <xsl:when test="$ADAunit = $ada-unit-mmHg">mm[Hg]</xsl:when>
+            <xsl:when test="$ADAunit = $ada-unit-diopter">[diop]</xsl:when>
+            <xsl:when test="$ADAunit = $ada-unit-prism-diopter">[p'diop]</xsl:when>
+            <xsl:when test="$ADAunit = $ada-unit-degrees">deg</xsl:when>
             <xsl:when test="nf:isValidUCUMUnit($ADAunit)">
                <xsl:value-of select="$ADAunit"/>
             </xsl:when>

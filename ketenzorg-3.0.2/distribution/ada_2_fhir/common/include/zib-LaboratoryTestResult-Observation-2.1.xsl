@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- == Flattened from: C:/Data/Erik/work/Nictiz/new/YATC-internal/ada-2-fhir/env/zibs2017/payload/zib-LaboratoryTestResult-Observation-2.1.xsl == -->
+<!-- == Flattened from: /Users/ahenket/Development/GitHub/Nictiz/YATC-internal/ada-2-fhir/env/zibs2017/payload/zib-LaboratoryTestResult-Observation-2.1.xsl == -->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -69,8 +69,10 @@
       </xsl:for-each-group>
    </xsl:variable>
    <!-- ================================================================== -->
+   <!-- <xsl:template name="laboratoryResultObservationReference" match="//(laboratorium_test[not(laboratorium_test)] | laboratory_test[not(laboratory_test)])[not(@datatype = 'reference')][.//(@value | @code | @nullFlavor)]" mode="doLaboratoryResultObservationReference-2.1" as="element()+">-->
+   <!-- Match expression was not XSLT2 compliant. Changed to: -->
    <xsl:template name="laboratoryResultObservationReference"
-                 match="//(laboratorium_test[not(laboratorium_test)] | laboratory_test[not(laboratory_test)])[not(@datatype = 'reference')][.//(@value | @code | @nullFlavor)]"
+                 match="//laboratorium_test[not(laboratorium_test)][not(@datatype = 'reference')][.//(@value | @code | @nullFlavor)] | //laboratory_test[not(laboratory_test)][not(@datatype = 'reference')][.//(@value | @code | @nullFlavor)]"
                  mode="doLaboratoryResultObservationReference-2.1"
                  as="element()+">
       <xsl:variable name="theIdentifier"
@@ -100,8 +102,10 @@
       </xsl:if>
    </xsl:template>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!--<xsl:template name="laboratoryResultObservationEntry" match="//(laboratorium_test[not(laboratorium_test)] | laboratory_test[not(laboratory_test)])[not(@datatype = 'reference')][.//(@value | @code | @nullFlavor)]" mode="doLaboratoryResultObservationEntry-2.1" as="element(f:entry)">-->
+   <!-- Match expression was not XSLT2 compliant. Changed to: -->
    <xsl:template name="laboratoryResultObservationEntry"
-                 match="//(laboratorium_test[not(laboratorium_test)] | laboratory_test[not(laboratory_test)])[not(@datatype = 'reference')][.//(@value | @code | @nullFlavor)]"
+                 match="//laboratorium_test[not(laboratorium_test)][not(@datatype = 'reference')][.//(@value | @code | @nullFlavor)] | //laboratory_test[not(laboratory_test)][not(@datatype = 'reference')][.//(@value | @code | @nullFlavor)]"
                  mode="doLaboratoryResultObservationEntry-2.1"
                  as="element(f:entry)">
       <!-- Produces a FHIR entry element with an Observation resource for LaboratoryTestResult -->
@@ -175,8 +179,10 @@
       </entry>
    </xsl:template>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!-- <xsl:template name="zib-LaboratoryTestResult-PanelObservation-2.1" match="//(laboratorium_uitslag[not(laboratorium_uitslag)] | laboratory_test_result[not(laboratory_test_result)])[not(@datatype = 'reference')][.//(@value | @code | @nullFlavor)]" as="element(f:Observation)" mode="doZibLaboratoryTestResultPanelObservation-2.1">-->
+   <!-- Match expression was not XSLT2 compliant. Changed to: -->
    <xsl:template name="zib-LaboratoryTestResult-PanelObservation-2.1"
-                 match="//(laboratorium_uitslag[not(laboratorium_uitslag)] | laboratory_test_result[not(laboratory_test_result)])[not(@datatype = 'reference')][.//(@value | @code | @nullFlavor)]"
+                 match="//laboratorium_uitslag[not(laboratorium_uitslag)][not(@datatype = 'reference')][.//(@value | @code | @nullFlavor)] | //laboratory_test_result[not(laboratory_test_result)][not(@datatype = 'reference')][.//(@value | @code | @nullFlavor)]"
                  as="element(f:Observation)"
                  mode="doZibLaboratoryTestResultPanelObservation-2.1">
       <!-- Mapping of HCIM LaboratoryTestResult concept in ADA to FHIR resource zib-LaboratoryTestResult-Observation. -->
@@ -402,8 +408,10 @@
       </xsl:for-each>
    </xsl:template>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!--<xsl:template name="zib-LaboratoryTestResult-Observation-2.1" match="//(laboratorium_test[not(laboratorium_test)] | laboratory_test[not(laboratory_test)])[not(@datatype = 'reference')][.//(@value | @code | @nullFlavor)]" as="element(f:Observation)" mode="doZibLaboratoryTestResultObservation-2.1">-->
+   <!-- Match expression was not XSLT2 compliant. Changed to: -->
    <xsl:template name="zib-LaboratoryTestResult-Observation-2.1"
-                 match="//(laboratorium_test[not(laboratorium_test)] | laboratory_test[not(laboratory_test)])[not(@datatype = 'reference')][.//(@value | @code | @nullFlavor)]"
+                 match="//laboratorium_test[not(laboratorium_test)][not(@datatype = 'reference')][.//(@value | @code | @nullFlavor)] | //laboratory_test[not(laboratory_test)][not(@datatype = 'reference')][.//(@value | @code | @nullFlavor)]"
                  as="element(f:Observation)"
                  mode="doZibLaboratoryTestResultObservation-2.1">
       <!-- Mapping of HCIM LaboratoryTest concept in ADA to FHIR resource zib-LaboratoryTestResult-Observation. -->
@@ -461,8 +469,19 @@
                      </valueReference>
                   </extension>
                </xsl:for-each>
-               <!--NL-CM:0.0.6   Identificatienummer-->
-               <xsl:for-each select="../(zibroot/identificatienummer | hcimroot/identification_number)[@value]">
+               <!--NL-CM:0.0.6   Identificatienummer. Use the child identifier (which the zib normally does not have but some datasets have added). If there is no child identifier AND if there is exactly 1 test, AND there is no panel: use the parent identifier. A business identifier can only be used in 1 business object. -->
+               <xsl:variable name="theIdentifier"
+                             as="element()*">
+                  <xsl:choose>
+                     <xsl:when test="(zibroot/identificatienummer | hcimroot/identification_number)[@value]">
+                        <xsl:copy-of select="(zibroot/identificatienummer | hcimroot/identification_number)[@value]"/>
+                     </xsl:when>
+                     <xsl:when test="self::*[empty(preceding-sibling::laboratorium_test | preceding-sibling::laboratory_test | following-sibling::laboratorium_test | following-sibling::laboratory_test | ../onderzoek | ../panel_or_battery)]">
+                        <xsl:copy-of select="../(zibroot/identificatienummer | hcimroot/identification_number)[@value]"/>
+                     </xsl:when>
+                  </xsl:choose>
+               </xsl:variable>
+               <xsl:for-each select="$theIdentifier">
                   <identifier>
                      <xsl:call-template name="id-to-Identifier">
                         <xsl:with-param name="in"
@@ -644,9 +663,9 @@
                </xsl:for-each>
                <!--NL-CM:13.1.11	ReferenceRangeUpperLimit	0..1	The upper reference limit for the patient of the value measured in the test.-->
                <!--NL-CM:13.1.12	ReferenceRangeLowerLimit	0..1	The lower reference limit for the patient of the value measured with the test.-->
-               <xsl:if test="referentie_bovengrens | reference_range_upper_limit | referentie_ondergrens | reference_range_lower_limit">
+               <xsl:if test="(referentie_bovengrens | reference_range_upper_limit | referentie_ondergrens | reference_range_lower_limit)[@value]">
                   <referenceRange>
-                     <xsl:for-each select="referentie_ondergrens | reference_range_lower_limit">
+                     <xsl:for-each select="(referentie_ondergrens | reference_range_lower_limit)[@value]">
                         <low>
                            <xsl:call-template name="hoeveelheid-to-Quantity">
                               <xsl:with-param name="in"
@@ -654,7 +673,7 @@
                            </xsl:call-template>
                         </low>
                      </xsl:for-each>
-                     <xsl:for-each select="referentie_bovengrens | reference_range_upper_limit">
+                     <xsl:for-each select="(referentie_bovengrens | reference_range_upper_limit)[@value]">
                         <high>
                            <xsl:call-template name="hoeveelheid-to-Quantity">
                               <xsl:with-param name="in"

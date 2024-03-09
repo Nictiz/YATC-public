@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- == Flattened from: C:/Data/Erik/work/Nictiz/new/YATC-internal/ada-2-fhir/env/ketenzorg/2_fhir_ketenzorg_include.xsl == -->
+<!-- == Flattened from: /Users/ahenket/Development/GitHub/Nictiz/YATC-internal/ada-2-fhir/env/ketenzorg/2_fhir_ketenzorg_include.xsl == -->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -1557,11 +1557,18 @@
             <!-- As title, the display name of the 'E' entry can be used.
                      If no 'E' entry is availabe, fallback to a generic title. -->
             <xsl:variable name="e_entry"
-                          select="($gp-JournalEntries/descendant-or-self::f:Observation[1]/f:component[f:code//f:code/@value = 'DISDX'])[1]"
-                          as="element()?"/>
+                          select="$gp-JournalEntries/descendant-or-self::f:Observation[1]/f:component[f:code//f:code/@value = 'DISDX'][1]"
+                          as="element()*"/>
             <xsl:choose>
                <xsl:when test="$e_entry">
-                  <title value="{$e_entry//f:valueCodeableConcept//f:display/@value}"/>
+                  <xsl:variable name="theTitle"
+                                as="xs:string*">
+                     <xsl:for-each-group select="$e_entry//f:valueCodeableConcept//f:display/@value"
+                                         group-by="lower-case(.)">
+                        <xsl:value-of select="current-group()[1]"/>
+                     </xsl:for-each-group>
+                  </xsl:variable>
+                  <title value="{$theTitle}"/>
                </xsl:when>
                <xsl:otherwise>
                   <title value="{concat('Contactverslag ', $patient/*[local-name()='display']/@value)}"/>

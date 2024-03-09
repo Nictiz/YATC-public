@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- == Flattened from: C:/Data/Erik/work/Nictiz/new/YATC-internal/ada-2-fhir/env/zibs2017/payload/nl-core-organization-2.0.xsl == -->
+<!-- == Flattened from: /Users/ahenket/Development/GitHub/Nictiz/YATC-internal/ada-2-fhir/env/zibs2017/payload/nl-core-organization-2.0.xsl == -->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -91,8 +91,10 @@
       </xsl:for-each-group>
    </xsl:variable>
    <!-- ================================================================== -->
+   <!--<xsl:template name="organizationReference" match="//(zorgaanbieder[not(zorgaanbieder)] | healthcare_provider[not(healthcare_provider)] | payer/insurance_company)" mode="doOrganizationReference-2.0">-->
+   <!-- Match expression was not XSLT2 compliant. Changed to: -->
    <xsl:template name="organizationReference"
-                 match="//(zorgaanbieder[not(zorgaanbieder)] | healthcare_provider[not(healthcare_provider)] | payer/insurance_company)"
+                 match="//zorgaanbieder[not(zorgaanbieder)] | //healthcare_provider[not(healthcare_provider)] | //payer/insurance_company"
                  mode="doOrganizationReference-2.0">
       <!-- Creates organization reference -->
       <xsl:variable name="theIdentifier"
@@ -122,8 +124,10 @@
       </xsl:if>
    </xsl:template>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!--<xsl:template name="organizationEntry" match="//(zorgaanbieder[not(zorgaanbieder)] | healthcare_provider[not(healthcare_provider)] | payer/insurance_company)" mode="doOrganizationEntry-2.0">-->
+   <!-- Match expression was not XSLT2 compliant. Changed to: -->
    <xsl:template name="organizationEntry"
-                 match="//(zorgaanbieder[not(zorgaanbieder)] | healthcare_provider[not(healthcare_provider)] | payer/insurance_company)"
+                 match="//zorgaanbieder[not(zorgaanbieder)] | //healthcare_provider[not(healthcare_provider)] | pa//yer/insurance_company"
                  mode="doOrganizationEntry-2.0">
       <!-- Produces a FHIR entry element with an Organization resource -->
       <xsl:param name="uuid"
@@ -199,8 +203,10 @@
       </entry>
    </xsl:template>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!--<xsl:template name="nl-core-organization-2.0" match="//(zorgaanbieder[not(zorgaanbieder)] | healthcare_provider[not(healthcare_provider)] | payer/insurance_company)" mode="doOrganizationResource-2.0">-->
+   <!-- Match expression was not XSLT2 compliant. Changed to: -->
    <xsl:template name="nl-core-organization-2.0"
-                 match="//(zorgaanbieder[not(zorgaanbieder)] | healthcare_provider[not(healthcare_provider)] | payer/insurance_company)"
+                 match="//zorgaanbieder[not(zorgaanbieder)] | //healthcare_provider[not(healthcare_provider)] | //payer/insurance_company"
                  mode="doOrganizationResource-2.0">
       <xsl:param name="in"
                  as="element()?">

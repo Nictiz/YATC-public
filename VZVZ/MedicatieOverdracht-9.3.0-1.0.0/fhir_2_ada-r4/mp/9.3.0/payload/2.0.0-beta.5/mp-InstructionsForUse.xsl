@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- == Provenance: HL7-mappings/fhir_2_ada-r4/mp/9.3.0/payload/2.0.0-beta.5/mp-InstructionsForUse.xsl == -->
-<!-- == Distribution: VZVZ-MedicatieOverdracht-9.3.0; 1.0.0; 2024-04-17T16:22:13.91+02:00 == -->
+<!-- == Distribution: VZVZ-MedicatieOverdracht-9.3.0; 1.0.0; 2024-04-17T17:00:31.15+02:00 == -->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -51,8 +51,26 @@
             <xsl:apply-templates select="../f:extension[@url = $ext-RenderedDosageInstruction]"
                                  mode="#current"/>
             <!-- toedieningsweg -->
-            <xsl:apply-templates select="f:route"
-                                 mode="#current"/>
+            <xsl:if test="f:route">
+               <xsl:apply-templates select="f:route"
+                                    mode="#current"/>
+            </xsl:if>
+            <xsl:if test="not(f:route)">
+               <xsl:variable name="nullFlavorDisplayName"
+                             select="$hl7NullFlavorMap[@hl7NullFlavor = 'NI']/@displayName"/>
+               <xsl:element name="toedieningsweg">
+                  <xsl:call-template name="Coding-to-code">
+                     <xsl:with-param name="in"
+                                     as="element()">
+                        <f:coding>
+                           <f:system value="{$oidHL7NullFlavor}"/>
+                           <f:code value="NI"/>
+                           <f:display value="{$nullFlavorDisplayName}"/>
+                        </f:coding>
+                     </xsl:with-param>
+                  </xsl:call-template>
+               </xsl:element>
+            </xsl:if>
             <!-- aanvullende_instructie -->
             <xsl:apply-templates select="f:additionalInstruction"
                                  mode="#current"/>
@@ -125,6 +143,22 @@
    <xsl:template match="f:extension[@url = $ext-RenderedDosageInstruction]"
                  mode="mp-InstructionsForUse">
       <omschrijving value="{f:valueString/@value}"/>
+      <xsl:if test="not(./following-sibling::f:dosageInstruction)">
+         <xsl:variable name="nullFlavorDisplayName"
+                       select="$hl7NullFlavorMap[@hl7NullFlavor = 'NI']/@displayName"/>
+         <xsl:element name="toedieningsweg">
+            <xsl:call-template name="Coding-to-code">
+               <xsl:with-param name="in"
+                               as="element()">
+                  <f:coding>
+                     <f:system value="{$oidHL7NullFlavor}"/>
+                     <f:code value="NI"/>
+                     <f:display value="{$nullFlavorDisplayName}"/>
+                  </f:coding>
+               </xsl:with-param>
+            </xsl:call-template>
+         </xsl:element>
+      </xsl:if>
    </xsl:template>
    <xd:doc>
       <xd:desc>Template to convert f:additionalInstruction to aanvullende_instructie</xd:desc>

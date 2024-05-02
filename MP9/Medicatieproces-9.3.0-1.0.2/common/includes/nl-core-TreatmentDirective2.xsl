@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- == Provenance: HL7-mappings/ada_2_fhir-r4/zibs2020/payload/0.7-beta1/nl-core-TreatmentDirective2.xsl == -->
-<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.2; 2024-05-01T09:51:16.23+02:00 == -->
+<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.2; 2024-05-02T14:16:32.98+02:00 == -->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- == Provenance: HL7-mappings/fhir_2_ada-r4/mp/9.3.0/payload/2.0.0-beta.5/mp-InstructionsForUse.xsl == -->
-<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.2; 2024-05-01T09:51:16.23+02:00 == -->
+<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.2; 2024-05-02T14:16:32.98+02:00 == -->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -83,22 +83,6 @@
                   </xsl:element>
                </xsl:otherwise>
             </xsl:choose>
-            <xsl:if test="not(./following-sibling::f:dosageInstruction) and not(exists(following-sibling::*/f:route))">
-               <xsl:variable name="nullFlavorDisplayName"
-                             select="$hl7NullFlavorMap[@hl7NullFlavor = 'NI']/@displayName"/>
-               <xsl:element name="toedieningsweg">
-                  <xsl:call-template name="Coding-to-code">
-                     <xsl:with-param name="in"
-                                     as="element()">
-                        <f:coding>
-                           <f:system value="{$oidHL7NullFlavor}"/>
-                           <f:code value="NI"/>
-                           <f:display value="{$nullFlavorDisplayName}"/>
-                        </f:coding>
-                     </xsl:with-param>
-                  </xsl:call-template>
-               </xsl:element>
-            </xsl:if>
             <!-- aanvullende_instructie -->
             <xsl:apply-templates select="f:additionalInstruction"
                                  mode="#current"/>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?yatc-distribution-provenance href="YATC-internal/ada-2-fhir/env/zibs2017/payload/zib-alert-2.1.xsl"?>
+<?yatc-distribution-provenance href="YATC-internal/ada-2-fhir/env/zibs2017/payload/zib-advancedirective-2.1.xsl"?>
 <?yatc-distribution-info name="ketenzorg-3.0.2" timestamp="2024-06-03T19:33:22.78+02:00" version="1.4.27"?>
-<!-- == Provenance: YATC-internal/ada-2-fhir/env/zibs2017/payload/zib-alert-2.1.xsl == -->
+<!-- == Provenance: YATC-internal/ada-2-fhir/env/zibs2017/payload/zib-advancedirective-2.1.xsl == -->
 <!-- == Distribution: ketenzorg-3.0.2; 1.4.27; 2024-06-03T19:33:22.78+02:00 == -->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
@@ -41,17 +41,42 @@
    <xsl:param name="referById"
               as="xs:boolean"
               select="false()"/>
+   <xsl:variable name="advanceDirectives"
+                 as="element()*">
+      <xsl:for-each-group select="//(wilsverklaring[not(wilsverklaring)] | advance_directive[not(advance_directive)])[not(@datatype = 'reference')][.//(@value | @code | @nullFlavor)]"
+                          group-by="nf:getGroupingKeyDefault(.)">
+         <!-- uuid als fullUrl en ook een fhir id genereren vanaf de tweede groep -->
+         <xsl:variable name="uuid"
+                       as="xs:boolean"
+                       select="position() &gt; 1"/>
+         <unique-advanceDirective xmlns="">
+            <group-key>
+               <xsl:value-of select="current-grouping-key()"/>
+            </group-key>
+            <reference-display>
+               <xsl:value-of select="(wilsverklaring_type | living_will_type)/@displayName"/>
+            </reference-display>
+            <xsl:apply-templates select="current-group()[1]"
+                                 mode="doAdvanceDirectiveEntry-2.1">
+               <xsl:with-param name="uuid"
+                               select="$uuid"/>
+            </xsl:apply-templates>
+         </unique-advanceDirective>
+      </xsl:for-each-group>
+   </xsl:variable>
    <!-- ================================================================== -->
-   <xsl:template name="alertReference"
-                 match="alert[not(@datatype = 'reference')][.//(@value | @code | @nullFlavor)]"
-                 mode="doAlertReference-2.1">
+   <!--<xsl:template name="advanceDirectiveReference" match="//(wilsverklaring[not(wilsverklaring)] | advance_directive[not(advance_directive)])[not(@datatype = 'reference')][.//(@value | @code | @nullFlavor)]" mode="doAdvanceDirectiveReference-2.1">-->
+   <!-- Match expression was not XSLT2 compliant. Changed to: -->
+   <xsl:template name="advanceDirectiveReference"
+                 match="//wilsverklaring[not(wilsverklaring)][not(@datatype = 'reference')][.//(@value | @code | @nullFlavor)] | //advance_directive[not(advance_directive)][not(@datatype = 'reference')][.//(@value | @code | @nullFlavor)]"
+                 mode="doAdvanceDirectiveReference-2.1">
       <!-- Returns contents of Reference datatype element -->
       <xsl:variable name="theIdentifier"
                     select="identificatie_nummer[@value] | identification_number[@value]"/>
       <xsl:variable name="theGroupKey"
                     select="nf:getGroupingKeyDefault(.)"/>
       <xsl:variable name="theGroupElement"
-                    select="$alerts[group-key = $theGroupKey]"
+                    select="$advanceDirectives[group-key = $theGroupKey]"
                     as="element()?"/>
       <xsl:choose>
          <xsl:when test="$theGroupElement">
@@ -73,18 +98,20 @@
       </xsl:if>
    </xsl:template>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-   <xsl:template name="alertEntry"
-                 match="alert[not(@datatype = 'reference')][.//(@value | @code | @nullFlavor)]"
-                 mode="doAlertEntry-2.1"
+   <!--<xsl:template name="advanceDirectiveEntry" match="//(wilsverklaring[not(wilsverklaring)] | advance_directive[not(advance_directive)])[not(@datatype = 'reference')][.//(@value | @code | @nullFlavor)]" mode="doAdvanceDirectiveEntry-2.1" as="element(f:entry)">-->
+   <!-- Match expression was not XSLT2 compliant. Changed to: -->
+   <xsl:template name="advanceDirectiveEntry"
+                 match="//wilsverklaring[not(wilsverklaring)][not(@datatype = 'reference')][.//(@value | @code | @nullFlavor)] | //advance_directive[not(advance_directive)][not(@datatype = 'reference')][.//(@value | @code | @nullFlavor)]"
+                 mode="doAdvanceDirectiveEntry-2.1"
                  as="element(f:entry)">
-      <!-- Produces a FHIR entry element with a Flag resource for Alert -->
+      <!-- Produces a FHIR entry element with a Consent resource for AdvanceDirective -->
       <xsl:param name="uuid"
                  select="false()"
                  as="xs:boolean">
          <!-- If true generate uuid from scratch. Defaults to false(). Generating a uuid from scratch limits reproduction of the same output as the uuids will be different every time. -->
       </xsl:param>
       <xsl:param name="adaPatient"
-                 select="(ancestor::*/patient[*//@value] | ancestor::*/bundle/subject/patient[*//@value])[1]"
+                 select="(ancestor::*/patient[*//@value] | ancestor::*/bundle/subject/patient[*//@value] | ancestor::bundle//subject//patient[not(patient)][*//@value])[1]"
                  as="element()">
          <!-- Optional, but should be there. Patient this resource is for. -->
       </xsl:param>
@@ -97,7 +124,7 @@
          <!-- Optional. Value for the entry.fullUrl -->
       </xsl:param>
       <xsl:param name="fhirResourceId">
-         <!-- Optional. Value for the entry.resource.Flag.id -->
+         <!-- Optional. Value for the entry.resource.Consent.id -->
          <xsl:if test="$referById">
             <xsl:choose>
                <xsl:when test="not($uuid) and string-length(nf:removeSpecialCharacters((zibroot/identificatienummer | hcimroot/identification_number)/@value)) gt 0">
@@ -116,7 +143,7 @@
       <entry>
          <fullUrl value="{$entryFullUrl}"/>
          <resource>
-            <xsl:call-template name="zib-Alert-2.1">
+            <xsl:call-template name="zib-AdvanceDirective-2.1">
                <xsl:with-param name="in"
                                select="."/>
                <xsl:with-param name="logicalId"
@@ -136,24 +163,26 @@
       </entry>
    </xsl:template>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-   <xsl:template name="zib-Alert-2.1"
-                 match="alert[not(@datatype = 'reference')][.//(@value | @code | @nullFlavor)]"
-                 as="element()"
-                 mode="doZibAlert-2.1">
-      <!-- Mapping of HCIM Alert concept in ADA to FHIR resource zib-Alert. -->
+   <!--<xsl:template name="zib-AdvanceDirective-2.1" match="//(wilsverklaring[not(wilsverklaring)] | advance_directive[not(advance_directive)])[not(@datatype = 'reference')][.//(@value | @code | @nullFlavor)]" as="element(f:Consent)" mode="doZibAdvanceDirective-2.1">-->
+   <!-- Match expression was not XSLT2 compliant. Changed to: -->
+   <xsl:template name="zib-AdvanceDirective-2.1"
+                 match="//wilsverklaring[not(wilsverklaring)][not(@datatype = 'reference')][.//(@value | @code | @nullFlavor)] | //advance_directive[not(advance_directive)][not(@datatype = 'reference')][.//(@value | @code | @nullFlavor)]"
+                 as="element(f:Consent)"
+                 mode="doZibAdvanceDirective-2.1">
+      <!-- Mapping of HCIM AdvanceDirective concept in ADA to FHIR resource zib-AdvanceDirective. -->
       <xsl:param name="in"
                  select="."
                  as="element()?">
-         <!-- Node to consider in the creation of the Flag resource for Alert. -->
+         <!-- Node to consider in the creation of the Consent resource for AdvanceDirective. -->
       </xsl:param>
       <xsl:param name="logicalId"
                  as="xs:string?">
-         <!-- Optional FHIR logical id for the patient record. -->
+         <!-- Optional FHIR logical id for the record. -->
       </xsl:param>
       <xsl:param name="adaPatient"
-                 select="(ancestor::*/patient[*//@value] | ancestor::*/bundle/subject/patient[*//@value])[1]"
+                 select="(ancestor::*/patient[*//@value] | ancestor::*/bundle/subject/patient[*//@value] | ancestor::bundle//subject//patient[not(patient)][*//@value])[1]"
                  as="element()">
-         <!-- The ada patient that is subject of this Alert. -->
+         <!-- Required. ADA patient concept to build a reference to from this resource -->
       </xsl:param>
       <xsl:param name="dateT"
                  as="xs:date?">
@@ -161,36 +190,35 @@
       </xsl:param>
       <xsl:for-each select="$in">
          <xsl:variable name="resource">
-            <xsl:variable name="profileValue">http://nictiz.nl/fhir/StructureDefinition/zib-Alert</xsl:variable>
-            <Flag>
+            <xsl:variable name="profileValue">http://nictiz.nl/fhir/StructureDefinition/zib-AdvanceDirective</xsl:variable>
+            <Consent>
                <xsl:if test="string-length($logicalId) gt 0">
                   <id value="{nf:make-fhir-logicalid(tokenize($profileValue, './')[last()], $logicalId)}"/>
                </xsl:if>
                <meta>
                   <profile value="{$profileValue}"/>
                </meta>
-               <xsl:for-each select="conditie/probleem | condition/problem">
+               <xsl:for-each select="aandoening/probleem | disorder/problem">
                   <xsl:choose>
                      <xsl:when test="*">
-                        <extension url="http://hl7.org/fhir/StructureDefinition/flag-detail">
+                        <extension url="http://nictiz.nl/fhir/StructureDefinition/zib-AdvanceDirective-Disorder">
                            <valueReference>
                               <xsl:apply-templates select="."
                                                    mode="doProblemReference-3.0"/>
                            </valueReference>
                         </extension>
                      </xsl:when>
-                     <xsl:otherwise>
-                        <xsl:for-each select="nf:ada-resolve-reference(.)">
-                           <extension url="http://hl7.org/fhir/StructureDefinition/flag-detail">
-                              <valueReference>
-                                 <xsl:call-template name="_doReference">
-                                    <xsl:with-param name="ResourceType">Condition</xsl:with-param>
-                                 </xsl:call-template>
-                              </valueReference>
-                           </extension>
-                        </xsl:for-each>
-                     </xsl:otherwise>
                   </xsl:choose>
+               </xsl:for-each>
+               <xsl:for-each select="(toelichting | comment)[@value]">
+                  <extension url="http://nictiz.nl/fhir/StructureDefinition/Comment">
+                     <valueString>
+                        <xsl:call-template name="string-to-string">
+                           <xsl:with-param name="in"
+                                           select="."/>
+                        </xsl:call-template>
+                     </valueString>
+                  </extension>
                </xsl:for-each>
                <xsl:for-each select="zibroot/identificatienummer | hcimroot/identification_number">
                   <identifier>
@@ -200,56 +228,83 @@
                      </xsl:call-template>
                   </identifier>
                </xsl:for-each>
-               <!-- status does not exist in zib but is 1..1 in FHIR profile (not possible to add data-absent-reason due to required binding) -->
                <status value="active"/>
-               <xsl:for-each select="alert_type[@code]">
-                  <category>
-                     <xsl:call-template name="code-to-CodeableConcept">
-                        <xsl:with-param name="in"
-                                        select="."/>
-                     </xsl:call-template>
-                  </category>
-               </xsl:for-each>
-               <!-- code is 1..1 in FHIR profile, in zib either alert_naam or reference to problem should exist -->
-               <code>
-                  <xsl:variable name="nullFlavorsInValueset"
-                                select="('OTH')"/>
+               <category>
+                  <coding>
+                     <system value="{local:getUri($oidSNOMEDCT)}"/>
+                     <code value="11341000146107"/>
+                     <display value="levenstestament en wilsverklaring in dossier"/>
+                  </coding>
+               </category>
+               <!-- category typeOfLivingWill is required in the FHIR profile, so always output category, data-absent-reason if no actual value -->
+               <category>
                   <xsl:choose>
-                     <xsl:when test="(alert_naam | alert_name)[@code]">
+                     <xsl:when test="(wilsverklaring_type | living_will_type)[@code]">
+                        <xsl:variable name="nullFlavorsInValueset"
+                                      select="('OTH')"/>
                         <xsl:call-template name="code-to-CodeableConcept">
                            <xsl:with-param name="in"
-                                           select="alert_naam | alert_name"/>
+                                           select="wilsverklaring_type | living_will_type"/>
                            <xsl:with-param name="treatNullFlavorAsCoding"
-                                           select="(alert_naam | alert_name)/@code = $nullFlavorsInValueset and (alert_naam | alert_name)/@codeSystem = $oidHL7NullFlavor"/>
+                                           select="(wilsverklaring_type | living_will_type)/@code = $nullFlavorsInValueset and (wilsverklaring_type | living_will_type)/@codeSystem = $oidHL7NullFlavor"/>
                         </xsl:call-template>
                      </xsl:when>
                      <xsl:otherwise>
-                        <extension url="http://hl7.org/fhir/StructureDefinition/data-absent-reason">
+                        <extension url="{$urlExtHL7DataAbsentReason}">
                            <valueCode value="unknown"/>
                         </extension>
                      </xsl:otherwise>
                   </xsl:choose>
-               </code>
+               </category>
                <!-- Patient reference -->
-               <subject>
+               <patient>
                   <xsl:apply-templates select="$adaPatient"
                                        mode="doPatientReference-2.1"/>
-               </subject>
-               <xsl:for-each select="(begin_datum_tijd | start_date_time)[@value]">
-                  <period>
-                     <start>
+               </patient>
+               <!-- dateTime is required in the FHIR profile, so always output dateTime, data-absent-reason if no actual value -->
+               <dateTime>
+                  <xsl:choose>
+                     <xsl:when test="(wilsverklaring_datum | living_will_date)[@value]">
                         <xsl:attribute name="value">
                            <xsl:call-template name="format2FHIRDate">
                               <xsl:with-param name="dateTime"
-                                              select="xs:string(@value)"/>
+                                              select="xs:string((wilsverklaring_datum | living_will_date)/@value)"/>
                               <xsl:with-param name="dateT"
                                               select="$dateT"/>
                            </xsl:call-template>
                         </xsl:attribute>
-                     </start>
-                  </period>
+                     </xsl:when>
+                     <xsl:otherwise>
+                        <extension url="{$urlExtHL7DataAbsentReason}">
+                           <valueCode value="unknown"/>
+                        </extension>
+                     </xsl:otherwise>
+                  </xsl:choose>
+               </dateTime>
+               <xsl:for-each select="vertegenwoordiger/contactpersoon | representative/contact">
+                  <xsl:choose>
+                     <xsl:when test="*">
+                        <consentingParty>
+                           <xsl:apply-templates select="."
+                                                mode="doRelatedPersonReference-2.0"/>
+                        </consentingParty>
+                     </xsl:when>
+                  </xsl:choose>
                </xsl:for-each>
-            </Flag>
+               <xsl:for-each select="(wilsverklaring_document | living_will_document)[@value]">
+                  <sourceAttachment>
+                     <contentType value="application/pdf"/>
+                     <data>
+                        <xsl:attribute name="value">
+                           <xsl:value-of select="@value"/>
+                        </xsl:attribute>
+                     </data>
+                  </sourceAttachment>
+               </xsl:for-each>
+               <policy>
+                  <uri value="http://wetten.overheid.nl/"/>
+               </policy>
+            </Consent>
          </xsl:variable>
          <!-- Add resource.text -->
          <xsl:apply-templates select="$resource"

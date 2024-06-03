@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- == Flattened from: /Users/ahenket/Development/GitHub/Nictiz/YATC-shared/xslmod/general.mod.xsl == -->
+<?yatc-distribution-provenance href="YATC-shared/xslmod/general.mod.xsl"?>
+<?yatc-distribution-info name="ketenzorg-3.0.2" timestamp="2024-06-03T19:33:22.78+02:00" version="1.4.27"?>
+<!-- == Provenance: YATC-shared/xslmod/general.mod.xsl == -->
+<!-- == Distribution: ketenzorg-3.0.2; 1.4.27; 2024-06-03T19:33:22.78+02:00 == -->
 <xsl:stylesheet version="2.0"
                 exclude-result-prefixes="#all"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -601,16 +604,18 @@
    <!-- LOADING DOCUMENTS: -->
    <xsl:function name="yatcs:get-document-collection"
                  as="document-node()*">
-      <!--~ Loads a collection of documents from a directory with XML files. Returns an error if $acceptEmpty is 
-              false and no documents were found. -->
+      <!--~ Loads a collection of documents from a directory with documents that follow a given filename pattern. 
+              Returns an error if $acceptEmpty is false and no documents were found. -->
       <xsl:param name="hrefDir"
+                 as="xs:string"/>
+      <xsl:param name="filenamePattern"
                  as="xs:string"/>
       <xsl:param name="acceptEmpty"
                  as="xs:boolean"/>
-      <!-- Gets the collection of ada files in $dir. Raises an error if this set is empty. -->
+      <!-- Gets the collection of documents. Raises an error if this set is empty. -->
       <xsl:variable name="documents"
                     as="document-node()*"
-                    select="collection($hrefDir || '?select=*.xml')"/>
+                    select="collection(concat($hrefDir, '?select=', $filenamePattern))"/>
       <xsl:choose>
          <xsl:when test="exists($documents)">
             <xsl:sequence select="$documents"/>
@@ -625,6 +630,17 @@
             </xsl:call-template>
          </xsl:otherwise>
       </xsl:choose>
+   </xsl:function>
+   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <xsl:function name="yatcs:get-document-collection"
+                 as="document-node()*">
+      <!--~ Loads a collection of documents from a directory with XML files. Returns an error if $acceptEmpty is 
+              false and no documents were found. -->
+      <xsl:param name="hrefDir"
+                 as="xs:string"/>
+      <xsl:param name="acceptEmpty"
+                 as="xs:boolean"/>
+      <xsl:sequence select="yatcs:get-document-collection($hrefDir, '*.xml', $acceptEmpty)"/>
    </xsl:function>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
    <xsl:function name="yatcs:get-document-collection"

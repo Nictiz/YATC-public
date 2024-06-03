@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- == Flattened from: /Users/ahenket/Development/GitHub/Nictiz/YATC-shared/xslmod/href.mod.xsl == -->
+<?yatc-distribution-provenance href="YATC-shared/xslmod/href.mod.xsl"?>
+<?yatc-distribution-info name="ketenzorg-3.0.2" timestamp="2024-06-03T19:33:22.78+02:00" version="1.4.27"?>
+<!-- == Provenance: YATC-shared/xslmod/href.mod.xsl == -->
+<!-- == Distribution: ketenzorg-3.0.2; 1.4.27; 2024-06-03T19:33:22.78+02:00 == -->
 <xsl:stylesheet version="2.0"
                 exclude-result-prefixes="#all"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -239,7 +242,7 @@
       <!-- Assemble it together again: -->
       <xsl:variable name="href-canonical-filename"
                     as="xs:string"
-                    select="$href-start-slash || string-join(local:href-canonical-process-components($href-components, 0), '/')"/>
+                    select="concat($href-start-slash, string-join(local:href-canonical-process-components($href-components, 0), '/'))"/>
       <xsl:sequence select="yatcs:href-protocol-add($href-canonical-filename, $protocol, false())"/>
    </xsl:function>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->

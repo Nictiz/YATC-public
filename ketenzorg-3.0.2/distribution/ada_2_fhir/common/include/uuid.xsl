@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- == Flattened from: /Users/ahenket/Development/GitHub/Nictiz/YATC-shared/xsl/util/uuid.xsl == -->
+<?yatc-distribution-provenance href="YATC-shared/xsl/util/uuid.xsl"?>
+<?yatc-distribution-info name="ketenzorg-3.0.2" timestamp="2024-06-03T19:33:22.78+02:00" version="1.4.27"?>
+<!-- == Provenance: YATC-shared/xsl/util/uuid.xsl == -->
+<!-- == Distribution: ketenzorg-3.0.2; 1.4.27; 2024-06-03T19:33:22.78+02:00 == -->
 <xsl:stylesheet version="2.0"
                 exclude-result-prefixes="#all"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -10,7 +13,7 @@
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl"
                 xmlns:uuid="http://www.uuid.org"
-                xmlns:local="#local.2023111508475453126650100">
+                xmlns:local="#local.2024020614533918404340100">
    <!-- ================================================================== -->
    <!--
         TBD

@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- == Flattened from: /Users/ahenket/Development/GitHub/Nictiz/YATC-shared/xsl/util/mp-functions.xsl == -->
+<?yatc-distribution-provenance href="YATC-shared/xsl/util/mp-functions.xsl"?>
+<?yatc-distribution-info name="ketenzorg-3.0.2" timestamp="2024-06-03T19:33:22.78+02:00" version="1.4.27"?>
+<!-- == Provenance: YATC-shared/xsl/util/mp-functions.xsl == -->
+<!-- == Distribution: ketenzorg-3.0.2; 1.4.27; 2024-06-03T19:33:22.78+02:00 == -->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -10,7 +13,7 @@
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:nwf="http://www.nictiz.nl/wiki-functions"
                 xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl"
-                xmlns:local="#local.2023111508475388346220100"
+                xmlns:local="#local.2024020614533854545020100"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
    <!-- ================================================================== -->
    <!--
@@ -431,38 +434,42 @@
    <xsl:function name="nf:periode-string"
                  as="xs:string?">
       <!-- Outputs a human readable string for a period with a possible start, duration, end date. The actual dates may be replaced by a configurable "T"-date with an addition of subtraction of a given number of days. -->
-      <xsl:param name="current-bouwsteen">
-         <!-- The current MP building block, for example: medicatieafspraak or toedieningsafspraak. -->
-      </xsl:param>
-      <xsl:param name="start-date">
+      <xsl:param name="start-date"
+                 as="element()?">
          <!-- start date of the period -->
       </xsl:param>
-      <xsl:param name="periode">
+      <xsl:param name="periode"
+                 as="element()?">
          <!-- duration of the period -->
       </xsl:param>
-      <xsl:param name="end-date">
+      <xsl:param name="end-date"
+                 as="element()?">
          <!-- end date of the period -->
       </xsl:param>
-      <xsl:for-each select="$current-bouwsteen">
-         <xsl:variable name="waarde"
-                       as="xs:string*">
-            <xsl:if test="$start-date[@value]">Vanaf 
+      <xsl:param name="criterium"
+                 as="element()?">
+         <!-- criterium of the period -->
+      </xsl:param>
+      <xsl:variable name="waarde"
+                    as="xs:string*">
+         <xsl:if test="$start-date[@value]">Vanaf 
 <xsl:value-of select="nf:formatDate(nf:calculate-t-date($start-date/@value, $dateT))"/>
-            </xsl:if>
-            <xsl:if test="$start-date[@value] and ($periode[@value] | $end-date[@value])">
-               <xsl:value-of select="', '"/>
-            </xsl:if>
-            <xsl:if test="$periode/@value">gedurende 
+         </xsl:if>
+         <xsl:if test="$start-date[@value] and ($periode[@value] | $end-date[@value])">
+            <xsl:value-of select="', '"/>
+         </xsl:if>
+         <xsl:if test="$periode[@value]">gedurende 
 <xsl:value-of select="concat($periode/@value, ' ', nwf:unit-string($periode/@value, $periode/@unit))"/>
-            </xsl:if>
-            <xsl:if test="$end-date[@value]"> tot en met 
+         </xsl:if>
+         <xsl:if test="$end-date[@value]"> tot en met 
 <xsl:value-of select="nf:formatDate(nf:calculate-t-date($end-date/@value, $dateT))"/>
-            </xsl:if>
-            <!-- projectgroep wil geen tekst 'tot nader order' in omschrijving, teams app Marijke dd 30 mrt 2020 -->
-            <!--                <xsl:if test="not($periode[@value]) and not($end-date[@value])"><xsl:if test="$start-date[@value]">, </xsl:if>tot nader order</xsl:if>-->
-         </xsl:variable>
-         <xsl:value-of select="normalize-space(string-join($waarde, ''))"/>
-      </xsl:for-each>
+         </xsl:if>
+         <xsl:if test="$criterium[@value]"> (
+<xsl:value-of select="$criterium/@value"/>)</xsl:if>
+         <!-- projectgroep wil geen tekst 'tot nader order' in omschrijving, teams app Marijke dd 30 mrt 2020 -->
+         <!--                <xsl:if test="not($periode[@value]) and not($end-date[@value])"><xsl:if test="$start-date[@value]">, </xsl:if>tot nader order</xsl:if>-->
+      </xsl:variable>
+      <xsl:value-of select="normalize-space(string-join($waarde, ''))"/>
    </xsl:function>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
    <xsl:function name="nf:gebruiksintructie-string"
@@ -484,7 +491,7 @@
                        as="xs:string*">
             <!-- gebruiksperiode -->
             <xsl:variable name="periodeString"
-                          select="nf:periode-string(., ../(gebruiksperiode_start | gebruiksperiode/start_datum_tijd), ../(gebruiksperiode[@value] | gebruiksperiode/tijds_duur), ../(gebruiksperiode_eind | gebruiksperiode/eind_datum_tijd))"/>
+                          select="nf:periode-string(../(gebruiksperiode_start | gebruiksperiode/start_datum_tijd), ../(gebruiksperiode[@value] | gebruiksperiode/tijds_duur), ../(gebruiksperiode_eind | gebruiksperiode/eind_datum_tijd), ../gebruiksperiode/criterium)"/>
             <xsl:if test="string-length($periodeString) gt 0">
                <xsl:value-of select="$periodeString"/>
             </xsl:if>

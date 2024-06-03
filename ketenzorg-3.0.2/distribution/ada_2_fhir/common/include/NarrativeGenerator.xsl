@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- == Flattened from: /Users/ahenket/Development/GitHub/Nictiz/YATC-shared/xsl/util/NarrativeGenerator.xsl == -->
+<?yatc-distribution-provenance href="YATC-shared/xsl/util/NarrativeGenerator.xsl"?>
+<?yatc-distribution-info name="ketenzorg-3.0.2" timestamp="2024-06-03T19:33:22.78+02:00" version="1.4.27"?>
+<!-- == Provenance: YATC-shared/xsl/util/NarrativeGenerator.xsl == -->
+<!-- == Distribution: ketenzorg-3.0.2; 1.4.27; 2024-06-03T19:33:22.78+02:00 == -->
 <xsl:stylesheet version="2.0"
                 exclude-result-prefixes="#all"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -8,7 +11,7 @@
                 xmlns:f="http://hl7.org/fhir"
                 xmlns:yatcs="https://nictiz.nl/ns/YATC-shared"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                xmlns:local="#local.2023111508475401544530100"
+                xmlns:local="#local.2024020614533867108350100"
                 xmlns:xhtml="http://www.w3.org/1999/xhtml">
    <!-- ================================================================== -->
    <!--
@@ -168,7 +171,7 @@
             </xsl:if>
             <xsl:copy>
                <xsl:apply-templates select="@* | node()"
-                                    mode="#current"/>
+                                    mode="addNarrative"/>
             </xsl:copy>
          </xsl:otherwise>
       </xsl:choose>

@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- == Flattened from: /Users/ahenket/Development/GitHub/Nictiz/HL7-mappings/util/datetime.xsl == -->
+<?yatc-distribution-provenance href="HL7-mappings/util/datetime.xsl"?>
+<?yatc-distribution-info name="ketenzorg-3.0.2" timestamp="2024-06-03T19:33:22.78+02:00" version="1.4.27"?>
+<!-- == Provenance: HL7-mappings/util/datetime.xsl == -->
+<!-- == Distribution: ketenzorg-3.0.2; 1.4.27; 2024-06-03T19:33:22.78+02:00 == -->
 <xsl:stylesheet exclude-result-prefixes="xs"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"

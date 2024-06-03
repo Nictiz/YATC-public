@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- == Flattened from: /Users/ahenket/Development/GitHub/Nictiz/YATC-internal/ada-2-fhir/env/zibs2017/payload/ext-zib-medication-repeat-period-cyclical-schedule-2.0.xsl == -->
+<?yatc-distribution-provenance href="YATC-internal/ada-2-fhir/env/zibs2017/payload/ext-zib-medication-repeat-period-cyclical-schedule-2.0.xsl"?>
+<?yatc-distribution-info name="ketenzorg-3.0.2" timestamp="2024-06-03T19:33:22.78+02:00" version="1.4.27"?>
+<!-- == Provenance: YATC-internal/ada-2-fhir/env/zibs2017/payload/ext-zib-medication-repeat-period-cyclical-schedule-2.0.xsl == -->
+<!-- == Distribution: ketenzorg-3.0.2; 1.4.27; 2024-06-03T19:33:22.78+02:00 == -->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"

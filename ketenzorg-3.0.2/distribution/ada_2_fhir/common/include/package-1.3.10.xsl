@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- == Flattened from: /Users/ahenket/Development/GitHub/Nictiz/YATC-internal/ada-2-fhir/env/zibs2017/payload/package-1.3.10.xsl == -->
+<?yatc-distribution-provenance href="YATC-internal/ada-2-fhir/env/zibs2017/payload/package-1.3.10.xsl"?>
+<?yatc-distribution-info name="ketenzorg-3.0.2" timestamp="2024-06-03T19:33:22.78+02:00" version="1.4.27"?>
+<!-- == Provenance: YATC-internal/ada-2-fhir/env/zibs2017/payload/package-1.3.10.xsl == -->
+<!-- == Distribution: ketenzorg-3.0.2; 1.4.27; 2024-06-03T19:33:22.78+02:00 == -->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -52,6 +55,7 @@
    <xsl:import href="nl-core-humanname-2.0.xsl"/>
    <xsl:import href="nl-core-address-2.0.xsl"/>
    <xsl:import href="nl-core-contactpoint-1.0.xsl"/>
+   <xsl:import href="zib-advancedirective-2.1.xsl"/>
    <xsl:import href="zib-alert-2.1.xsl"/>
    <xsl:import href="zib-allergyintolerance-2.1.xsl"/>
    <xsl:import href="zib-body-height-2.1.xsl"/>

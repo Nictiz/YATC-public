@@ -1,24 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- == Flattened from: /Users/ahenket/Development/GitHub/Nictiz/HL7-mappings/util/constants.xsl == -->
-<!--
-Copyright © Nictiz
-
-This program is free software; you can redistribute it and/or modify it under the terms of the
-GNU Lesser General Public License as published by the Free Software Foundation; either version
-2.1 of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
-without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-See the GNU Lesser General Public License for more details.
-
-The full text of the license is available at http://www.gnu.org/copyleft/lesser.html
--->
+<?yatc-distribution-provenance href="HL7-mappings/util/constants.xsl"?>
+<?yatc-distribution-info name="ketenzorg-3.0.2" timestamp="2024-06-03T19:33:22.78+02:00" version="1.4.27"?>
+<!-- == Provenance: HL7-mappings/util/constants.xsl == -->
+<!-- == Distribution: ketenzorg-3.0.2; 1.4.27; 2024-06-03T19:33:22.78+02:00 == -->
 <xsl:stylesheet exclude-result-prefixes="xs xd"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl">
+   <!-- ================================================================== -->
+   <!--
+         Contains any constants we might need. Anticipated are OIDs/URIs, ConceptMaps, ...
+    -->
+   <!-- ================================================================== -->
+   <!--
+        Copyright © Nictiz
+        
+        This program is free software; you can redistribute it and/or modify it under the terms of the
+        GNU Lesser General Public License as published by the Free Software Foundation; either version
+        2.1 of the License, or (at your option) any later version.
+        
+        This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+        without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+        See the GNU Lesser General Public License for more details.
+        
+        The full text of the license is available at http://www.gnu.org/copyleft/lesser.html
+    -->
+   <!-- ================================================================== -->
    <xd:doc scope="stylesheet">
       <xd:desc>
          <xd:p>
@@ -145,11 +154,21 @@ The full text of the license is available at http://www.gnu.org/copyleft/lesser.
    <xsl:variable name="oidURAOrganizations">2.16.528.1.1007.3.3</xsl:variable>
    <!-- http://www.oid-info.com/get/1.3.6.1.1.16 -->
    <xsl:variable name="oidUUID">1.3.6.1.1.16</xsl:variable>
+   <xsl:variable name="oidVektisCOD472RolCode">2.16.840.1.113883.2.4.3.11.22.472</xsl:variable>
    <xsl:variable name="oidUZIPersons">2.16.528.1.1007.3.1</xsl:variable>
    <xsl:variable name="oidUZISystems">2.16.528.1.1007.3.2</xsl:variable>
    <xsl:variable name="oidUZIRoleCode">2.16.840.1.113883.2.4.15.111</xsl:variable>
    <xsl:variable name="oidUZOVI">2.16.840.1.113883.2.4.6.4</xsl:variable>
+   <xsl:variable name="oidZIBNL-CM-CS">2.16.840.1.113883.2.4.3.11.60.40.4</xsl:variable>
+   <xsl:variable name="oidZIBAanduidingBijNummer">2.16.840.1.113883.2.4.3.11.60.101.5.3</xsl:variable>
+   <xsl:variable name="oidZIBGewichtContextKleding">2.16.840.1.113883.2.4.3.11.60.40.4.8.1</xsl:variable>
+   <xsl:variable name="oidZIBManchetType">2.16.840.1.113883.2.4.3.11.60.40.4.15.1</xsl:variable>
+   <xsl:variable name="oidZIBNaamgebruik">2.16.840.1.113883.2.4.3.11.60.101.5.4</xsl:variable>
    <xsl:variable name="oidZIBLaboratoriumUitslagTestUitslagStatus">2.16.840.1.113883.2.4.3.11.60.40.4.16.1</xsl:variable>
+   <xsl:variable name="oidZIBTelecomToestelTypes">2.16.840.1.113883.2.4.3.11.60.40.4.22.1</xsl:variable>
+   <xsl:variable name="oidZIBVerzekeringssoort">2.16.840.1.113883.2.4.3.11.60.101.5.1</xsl:variable>
+   <xsl:variable name="oidZIBWilsverklaringType">2.16.840.1.113883.2.4.3.11.60.40.4.14.1</xsl:variable>
+   <xsl:variable name="oidZIBWoningType">2.16.840.1.113883.2.4.3.11.60.40.4.13.1</xsl:variable>
    <xsl:variable name="oidsGstandaardMedication"
                  as="xs:string*"
                  select="($oidGStandaardSSK, $oidGStandaardSNK, $oidGStandaardGPK, $oidGStandaardPRK, $oidGStandaardHPK, $oidGStandaardZInummer)"/>
@@ -731,6 +750,9 @@ The full text of the license is available at http://www.gnu.org/copyleft/lesser.
            displayName="G-Standaard thesaurus basiseenheden"/>
       <map oid="{$oidGStandaardFarmaceutischeVormen}"
            displayName="G-Standaard Farmaceutische vormen (tabel 6)"/>
+      <map oid="{$oidGTIN}"
+           uri="https://www.gs1.org/gtin"
+           displayName="GS1 GTIN"/>
       <map oid="{$oidICD10NL-STU3}"
            uri="http://hl7.org/fhir/sid/icd-10-nl"
            displayName="ICD-10 NL"/>
@@ -803,6 +825,28 @@ The full text of the license is available at http://www.gnu.org/copyleft/lesser.
       <map oid="{$oidUZOVI}"
            uri="http://fhir.nl/fhir/NamingSystem/uzovi"
            displayName="UZOVI"/>
+      <map oid="{$oidVektisCOD472RolCode}"
+           displayName="Vektis Rolcode COD472-VEKT"/>
+      <map oid="{$oidZIBAanduidingBijNummer}"
+           displayName="ZIB AanduidingBijNummer"/>
+      <map oid="{$oidZIBGewichtContextKleding}"
+           displayName="ZIB ContextKleding"/>
+      <map oid="{$oidZIBLaboratoriumUitslagTestUitslagStatus}"
+           displayName="ZIB Laboratoriumuitslag Testuitslag ResultaatStatus"/>
+      <map oid="{$oidZIBManchetType}"
+           displayName="ZIB ManchetType"/>
+      <map oid="{$oidZIBNaamgebruik}"
+           displayName="ZIB Naamgebruik"/>
+      <map oid="{$oidZIBNL-CM-CS}"
+           displayName="ZIB NL-CM-CS Algemeen"/>
+      <map oid="{$oidZIBTelecomToestelTypes}"
+           displayName="ZIB Telecom ToestelTypes"/>
+      <map oid="{$oidZIBVerzekeringssoort}"
+           displayName="ZIB Verzekeringssoort"/>
+      <map oid="{$oidZIBWilsverklaringType}"
+           displayName="ZIB WilsverklaringType"/>
+      <map oid="{$oidZIBWoningType}"
+           displayName="ZIB WoningType"/>
       <xsl:choose>
          <xsl:when test="$fhirVersion='STU3'">
             <map oid="{$oidChoiceListOrientation}"
@@ -846,6 +890,9 @@ The full text of the license is available at http://www.gnu.org/copyleft/lesser.
                  displayName="QuestionnaireItemUsageMode Item UI Control Codes"/>
             <map uri="http://hl7.org/fhir/v2/0078"
                  displayName="HL7 Version 2 Table 0078 v2 Interpretation Codes"/>
+            <map oid="{$oidHL7V3MaritalStatus}"
+                 uri="http://hl7.org/fhir/v3/MaritalStatus"
+                 displayName="HL7 MaritalStatus"/>
          </xsl:when>
          <xsl:when test="$fhirVersion = 'R4'">
             <map oid="{$oidChoiceListOrientation}"

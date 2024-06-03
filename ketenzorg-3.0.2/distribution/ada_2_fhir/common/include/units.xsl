@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- == Flattened from: /Users/ahenket/Development/GitHub/Nictiz/YATC-shared/xsl/util/units.xsl == -->
+<?yatc-distribution-provenance href="YATC-shared/xsl/util/units.xsl"?>
+<?yatc-distribution-info name="ketenzorg-3.0.2" timestamp="2024-06-03T19:33:22.78+02:00" version="1.4.27"?>
+<!-- == Provenance: YATC-shared/xsl/util/units.xsl == -->
+<!-- == Distribution: ketenzorg-3.0.2; 1.4.27; 2024-06-03T19:33:22.78+02:00 == -->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -10,7 +13,7 @@
                 xmlns:yatcs="https://nictiz.nl/ns/YATC-shared"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl"
-                xmlns:local="#local.202311150847544262810100">
+                xmlns:local="#local.2024020614533906444350100">
    <!-- ================================================================== -->
    <!--
         TBD
@@ -696,6 +699,9 @@
             <xsl:when test="$ADAunit = $ada-unit-cm">cm</xsl:when>
             <xsl:when test="$ADAunit = $ada-unit-m">m</xsl:when>
             <xsl:when test="$ADAunit = $ada-unit-mmHg">mm[Hg]</xsl:when>
+            <xsl:when test="$ADAunit = $ada-unit-diopter">[diop]</xsl:when>
+            <xsl:when test="$ADAunit = $ada-unit-prism-diopter">[p'diop]</xsl:when>
+            <xsl:when test="$ADAunit = $ada-unit-degrees">deg</xsl:when>
             <xsl:when test="nf:isValidUCUMUnit($ADAunit)">
                <xsl:value-of select="$ADAunit"/>
             </xsl:when>

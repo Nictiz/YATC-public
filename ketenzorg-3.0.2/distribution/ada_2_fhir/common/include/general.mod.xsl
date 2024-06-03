@@ -195,7 +195,7 @@
       <xsl:variable name="regexp-string"
                     as="xs:string"
                     select="replace(string($in), '([.\\?*+|\^${}()\[\]])', '\\$1')"/>
-      <xsl:sequence select="if ($anchor) then ('^'  || $regexp-string || '$') else $regexp-string"/>
+      <xsl:sequence select="if ($anchor) then concat('^', $regexp-string, '$') else $regexp-string"/>
    </xsl:function>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
    <xsl:function name="yatcs:str2regexp"

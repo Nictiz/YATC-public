@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?yatc-distribution-provenance href="YATC-internal/ada-2-fhir/env/zibs2017/payload/zib-problem-2.1.xsl"?>
-<?yatc-distribution-info name="ketenzorg-3.0.2" timestamp="2024-06-03T19:33:22.78+02:00" version="1.4.27"?>
+<?yatc-distribution-info name="ketenzorg-3.0.2" timestamp="2024-06-28T14:38:20.79+02:00" version="1.4.28"?>
 <!-- == Provenance: YATC-internal/ada-2-fhir/env/zibs2017/payload/zib-problem-2.1.xsl == -->
-<!-- == Distribution: ketenzorg-3.0.2; 1.4.27; 2024-06-03T19:33:22.78+02:00 == -->
+<!-- == Distribution: ketenzorg-3.0.2; 1.4.28; 2024-06-28T14:38:20.79+02:00 == -->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -204,18 +204,18 @@
                  match="//probleem[not(probleem)][not(@datatype = 'reference')][.//(@value | @code | @nullFlavor)] | //problem[not(problem)][not(@datatype = 'reference')][.//(@value | @code | @nullFlavor)]"
                  as="element(f:Condition)"
                  mode="doZibProblem-2.1">
-      <!-- Mapping of nl.zorg.Problem concept in ADA to FHIR resource zib-Problem. -->
+      <!-- Mapping of HCIM Problem concept in ADA to FHIR resource zib-Problem. -->
       <xsl:param name="in"
                  select="."
                  as="element()?">
-         <!-- Node to consider in the creation of a Condition resource -->
+         <!-- Node to consider in the creation of the Condition resource for Problem. -->
       </xsl:param>
       <xsl:param name="logicalId"
                  as="xs:string?">
          <!-- Optional FHIR logical id for the record. -->
       </xsl:param>
       <xsl:param name="adaPatient"
-                 select="(ancestor::*/patient[*//@value] | ancestor::*/bundle/subject/patient[*//@value])[1]"
+                 select="(ancestor::*/patient[*//@value] | ancestor::*/bundle/subject/patient[*//@value] | ancestor::bundle//subject//patient[not(patient)][*//@value])[1]"
                  as="element()">
          <!-- Required. ADA patient concept to build a reference to from this resource -->
       </xsl:param>
@@ -256,49 +256,43 @@
                      </xsl:call-template>
                   </identifier>
                </xsl:for-each>
-               <!-- Clinical Status, mapping https://simplifier.net/NictizSTU3-Zib2017/ProbleemStatusCodelijst-to-Condition-Clinical-Status-Codes-->
+               <!-- clinicalStatus is required in the FHIR profile. mapping https://simplifier.net/NictizSTU3-Zib2017/ProbleemStatusCodelijst-to-Condition-Clinical-Status-Code -->
                <!-- probleem status -->
                <clinicalStatus>
-                  <xsl:choose>
-                     <xsl:when test="(problem_status | probleem_status)/@code = '73425007'">
-                        <xsl:attribute name="value">inactive</xsl:attribute>
-                     </xsl:when>
-                     <xsl:when test="(problem_status | probleem_status)/@code = '55561003'">
-                        <xsl:attribute name="value">active</xsl:attribute>
-                     </xsl:when>
-                     <!--<xsl:otherwise>
-                                <extension url="{$urlExtHL7DataAbsentReason}">
-                                    <valueCode value="unknown"/>
-                                </extension>
-                            </xsl:otherwise>-->
-                     <xsl:otherwise>
-                        <xsl:attribute name="value">active</xsl:attribute>
-                     </xsl:otherwise>
-                  </xsl:choose>
+                  <xsl:attribute name="value">
+                     <xsl:choose>
+                        <xsl:when test="(probleem_status | problem_status)/@code = '73425007'">inactive</xsl:when>
+                        <xsl:when test="(probleem_status | problem_status)/@code = '55561003'">active</xsl:when>
+                        <xsl:otherwise>active</xsl:otherwise>
+                     </xsl:choose>
+                  </xsl:attribute>
                   <!-- MM-1036 add code.specification extension -->
                   <xsl:call-template name="ext-code-specification-1.0">
                      <xsl:with-param name="in"
-                                     select="problem_status | probleem_status"/>
+                                     select="probleem_status | problem_status"/>
                   </xsl:call-template>
                </clinicalStatus>
                <!-- Verification Status-->
-               <xsl:for-each select="(verification_status | verificatie_status)/@code">
+               <xsl:for-each select="(verificatie_status | verification_status)[@code]">
                   <verificationStatus>
                      <xsl:attribute name="value">
                         <xsl:choose>
-                           <xsl:when test=". = '415684004'">provisional</xsl:when>
-                           <xsl:when test=". = '410590009'">differential</xsl:when>
-                           <xsl:when test=". = '410605003'">confirmed</xsl:when>
-                           <xsl:when test=". = '410516002'">refuted</xsl:when>
-                           <xsl:when test=". = 'UNK'">unknown</xsl:when>
+                           <xsl:when test="@code = '415684004'">provisional</xsl:when>
+                           <xsl:when test="@code = '410590009'">differential</xsl:when>
+                           <xsl:when test="@code = '410605003'">confirmed</xsl:when>
+                           <xsl:when test="@code = '410516002'">refuted</xsl:when>
+                           <xsl:when test="@code = 'UNK'">unknown</xsl:when>
                         </xsl:choose>
                      </xsl:attribute>
                      <!-- MM-1036 add code.specification extension -->
-                     <xsl:call-template name="ext-code-specification-1.0"/>
+                     <xsl:call-template name="ext-code-specification-1.0">
+                        <xsl:with-param name="in"
+                                        select="."/>
+                     </xsl:call-template>
                   </verificationStatus>
                </xsl:for-each>
                <!-- Problem Type (.category) -->
-               <xsl:for-each select="(problem_type | probleem_type)[.//(@value | @code)]">
+               <xsl:for-each select="(probleem_type | problem_type)[@code]">
                   <category>
                      <xsl:call-template name="code-to-CodeableConcept">
                         <xsl:with-param name="in"
@@ -307,17 +301,27 @@
                   </category>
                </xsl:for-each>
                <!-- Problem Name (.code) -->
+               <!-- code is required in the FHIR profile, so always output code, data-absent-reason if no actual value -->
                <code>
-                  <xsl:call-template name="code-to-CodeableConcept">
-                     <xsl:with-param name="in"
-                                     select="problem_name | probleem_naam"/>
-                  </xsl:call-template>
+                  <xsl:choose>
+                     <xsl:when test="(probleem_naam | problem_name)[@code]">
+                        <xsl:call-template name="code-to-CodeableConcept">
+                           <xsl:with-param name="in"
+                                           select="probleem_naam | problem_name"/>
+                        </xsl:call-template>
+                     </xsl:when>
+                     <xsl:otherwise>
+                        <extension url="{$urlExtHL7DataAbsentReason}">
+                           <valueCode value="unknown"/>
+                        </extension>
+                     </xsl:otherwise>
+                  </xsl:choose>
                </code>
                <!-- BodySite SHALL be present when laterality or anatomical location is present in the adaxml -->
                <xsl:variable name="problemAnatomic"
-                             select="(problem_anatomical_location | probleem_anatomische_locatie)[@value | @code]"/>
+                             select="(problem_anatomical_location | probleem_anatomische_locatie)[@code]"/>
                <xsl:variable name="problemLateral"
-                             select="(problem_laterality | probleem_lateraliteit)[@value | @code]"/>
+                             select="(problem_laterality | probleem_lateraliteit)[@code]"/>
                <xsl:if test="$problemAnatomic | $problemLateral">
                   <bodySite>
                      <!-- extensie toevoegen als lateraliteit aanwezig is -->
@@ -340,64 +344,37 @@
                      </xsl:for-each>
                   </bodySite>
                </xsl:if>
-               <!-- The problem has as subject the patient -->
+               <!-- Patient reference -->
                <subject>
                   <xsl:copy-of select="$patientRef[self::f:extension]"/>
                   <xsl:copy-of select="$patientRef[self::f:reference]"/>
                   <xsl:copy-of select="$patientRef[self::f:identifier]"/>
                   <xsl:copy-of select="$patientRef[self::f:display]"/>
                </subject>
-               <!-- OnsetPeriod -->
-               <xsl:if test="(problem_start_date | probleem_begin_datum | problem_end_date | probleem_eind_datum)[@value]">
-                  <onsetPeriod>
-                     <!-- StartDateTime -->
-                     <xsl:if test="(problem_start_date | probleem_begin_datum)[@value]">
-                        <start>
-                           <xsl:attribute name="value">
-                              <xsl:call-template name="format2FHIRDate">
-                                 <xsl:with-param name="dateTime"
-                                                 select="xs:string((problem_start_date | probleem_begin_datum)/@value)"/>
-                              </xsl:call-template>
-                           </xsl:attribute>
-                        </start>
-                     </xsl:if>
-                     <!-- EndDateTime -->
-                     <xsl:if test="(problem_end_date | probleem_eind_datum)[@value]">
-                        <end>
-                           <xsl:attribute name="value">
-                              <xsl:call-template name="format2FHIRDate">
-                                 <xsl:with-param name="dateTime"
-                                                 select="xs:string((problem_end_date | probleem_eind_datum)/@value)"/>
-                              </xsl:call-template>
-                           </xsl:attribute>
-                        </end>
-                     </xsl:if>
-                  </onsetPeriod>
-               </xsl:if>
-               <!-- FUTURE IMPLEMENTATION, AN ISSUE HAS BEEN ENTERED TO CHANGE MAPPING OF START AND END DATE, BUT THIS IS STILL TO BE APPROVED-->
-               <!-- <!-\- OnsetDatetime -\->
-                    <xsl:if test="(problem_start_date | probleem_start_datum)[@value | @code]">
-                        <onsetDateTime>
-                            <xsl:attribute name="value">
-                                <xsl:call-template name="format2FHIRDate">
-                                    <xsl:with-param name="dateTime"
-                                        select="xs:string((problem_start_date | probleem_start_datum)/@value)"/>
-                                </xsl:call-template>
-                            </xsl:attribute>
-                        </onsetDateTime>
-                    </xsl:if>
-                    
-                    <!-\- AbatementDateTime -\->
-                    <xsl:if test="problem_end_date | probleem_eind_datum">
-                        <abatementDateTime>
-                            <xsl:attribute name="value">
-                                <xsl:call-template name="format2FHIRDate">
-                                    <xsl:with-param name="dateTime"
-                                        select="xs:string((problem_end_date | probleem_eind_datum)/@value)"/>
-                                </xsl:call-template>
-                            </xsl:attribute>
-                        </abatementDateTime>
-                    </xsl:if>-->
+               <xsl:for-each select="(probleem_begin_datum | problem_start_date)[@value]">
+                  <onsetDateTime>
+                     <xsl:attribute name="value">
+                        <xsl:call-template name="format2FHIRDate">
+                           <xsl:with-param name="dateTime"
+                                           select="xs:string(@value)"/>
+                           <xsl:with-param name="dateT"
+                                           select="$dateT"/>
+                        </xsl:call-template>
+                     </xsl:attribute>
+                  </onsetDateTime>
+               </xsl:for-each>
+               <xsl:for-each select="(probleem_eind_datum | problem_end_date)[@value]">
+                  <abatementDateTime>
+                     <xsl:attribute name="value">
+                        <xsl:call-template name="format2FHIRDate">
+                           <xsl:with-param name="dateTime"
+                                           select="xs:string(@value)"/>
+                           <xsl:with-param name="dateT"
+                                           select="$dateT"/>
+                        </xsl:call-template>
+                     </xsl:attribute>
+                  </abatementDateTime>
+               </xsl:for-each>
                <!-- TS    NL-CM:0.0.14    DatumTijd    0..1-->
                <!-- assertedDate -->
                <xsl:for-each select="(zibroot/datum_tijd | hcimroot/date_time)[@value]">
@@ -502,11 +479,16 @@
                   </xsl:when>
                </xsl:choose>
                <!-- Comment (.note) -->
-               <xsl:if test="(comment | toelichting)[@value]">
+               <xsl:for-each select="(toelichting | comment)[@value]">
                   <note>
-                     <text value="{(comment | toelichting)/@value}"/>
+                     <text>
+                        <xsl:call-template name="string-to-string">
+                           <xsl:with-param name="in"
+                                           select="."/>
+                        </xsl:call-template>
+                     </text>
                   </note>
-               </xsl:if>
+               </xsl:for-each>
             </Condition>
          </xsl:variable>
          <!-- Add resource.text -->

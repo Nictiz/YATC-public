@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?yatc-distribution-provenance href="YATC-internal/ada-2-fhir/env/zibs2017/payload/ext-zib-medication-medication-treatment-2.0.xsl"?>
-<?yatc-distribution-info name="ketenzorg-3.0.2" timestamp="2024-06-03T19:33:22.78+02:00" version="1.4.27"?>
+<?yatc-distribution-info name="ketenzorg-3.0.2" timestamp="2024-06-28T14:38:20.79+02:00" version="1.4.28"?>
 <!-- == Provenance: YATC-internal/ada-2-fhir/env/zibs2017/payload/ext-zib-medication-medication-treatment-2.0.xsl == -->
-<!-- == Distribution: ketenzorg-3.0.2; 1.4.27; 2024-06-03T19:33:22.78+02:00 == -->
+<!-- == Distribution: ketenzorg-3.0.2; 1.4.28; 2024-06-28T14:38:20.79+02:00 == -->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"

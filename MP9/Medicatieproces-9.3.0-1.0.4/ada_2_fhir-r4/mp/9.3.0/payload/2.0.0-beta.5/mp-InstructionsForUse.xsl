@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- == Provenance: HL7-mappings/ada_2_fhir-r4/mp/9.3.0/payload/2.0.0-beta.5/mp-InstructionsForUse.xsl == -->
-<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.4; 2024-10-31T16:16:31.52+01:00 == -->
+<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.4; 2024-11-07T16:21:01.99+01:00 == -->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -235,7 +235,7 @@
                                  <xsl:variable name="rate"
                                                as="element()?">
                                     <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
-                                    <!-- this is zib ada dataset -->
+                                    <!-- this is zib ada dataset and MP9 ada dataset from 3.0.0-beta.4 onwards -->
                                     <xsl:for-each select="toedieningssnelheid[minimum_waarde | nominale_waarde | maximum_waarde]">
                                        <xsl:if test="nominale_waarde[@value | @unit | @nullFlavor]">
                                           <rateQuantity>
@@ -269,7 +269,7 @@
                                     <!-- end of zib ada dataset -->
                                     <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
                                     <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
-                                    <!-- this is MP9 ada dataset -->
+                                    <!-- this is MP9 ada dataset 3.0.0-beta.3 or before -->
                                     <xsl:for-each select="toedieningssnelheid[*/(minimum_waarde | nominale_waarde | maximum_waarde)]">
                                        <!-- MP-1367 tijdseenheid is no longer used in toedieningssnelheid from MP 9.3 beta.3 onwards but kept in stylesheet due to backwards compatibility with older versions -->
                                        <xsl:choose>
@@ -359,7 +359,7 @@
                                           </xsl:when>
                                        </xsl:choose>
                                     </xsl:for-each>
-                                    <!-- end of MP ada dataset -->
+                                    <!-- end of MP ada dataset 3.0.0-beta.3 or before -->
                                     <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
                                  </xsl:variable>
                                  <xsl:if test="$dose or $rate">

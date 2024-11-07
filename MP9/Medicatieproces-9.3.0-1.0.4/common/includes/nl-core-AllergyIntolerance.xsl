@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- == Provenance: HL7-mappings/ada_2_fhir-r4/zibs2020/payload/0.5-beta1/nl-core-AllergyIntolerance.xsl == -->
-<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.4; 2024-10-31T16:16:31.52+01:00 == -->
+<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.4; 2024-11-07T16:21:01.99+01:00 == -->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"

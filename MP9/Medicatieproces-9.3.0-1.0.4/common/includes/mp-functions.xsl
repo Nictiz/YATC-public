@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- == Provenance: YATC-shared/xsl/util/mp-functions.xsl == -->
-<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.4; 2024-10-31T16:16:31.52+01:00 == -->
+<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.4; 2024-11-07T16:21:01.99+01:00 == -->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -496,8 +496,9 @@
       </xsl:param>
       <xsl:for-each select="$in">
          <xsl:for-each select="omschrijving[@value != '']">
-            <f:extension url="http://nictiz.nl/fhir/StructureDefinition/ext-RenderedDosageInstruction">
-               <f:valueString>
+            <extension url="http://nictiz.nl/fhir/StructureDefinition/ext-RenderedDosageInstruction"
+                       xmlns="http://hl7.org/fhir">
+               <valueString>
                   <xsl:attribute name="value">
                      <xsl:choose>
                         <xsl:when test="$generateInstructionText">
@@ -508,8 +509,8 @@
                         </xsl:otherwise>
                      </xsl:choose>
                   </xsl:attribute>
-               </f:valueString>
-            </f:extension>
+               </valueString>
+            </extension>
          </xsl:for-each>
       </xsl:for-each>
    </xsl:template>
@@ -531,37 +532,6 @@
          <!-- generate omschrijving using structured fields -->
          <xsl:variable name="theOmschrijving"
                        as="xs:string*">
-            <!-- first the stoptype cancelled -->
-            <xsl:variable name="theStoptype"
-                          select="../(stoptype | medicatieafspraak_stop_type | toedieningsafspraak_stop_type | medicatiegebruik_stop_type | medicatie_gebruik_stop_type | stop_type | wisselend_doseerschema_stop_type)[@code]"/>
-            <xsl:variable name="theGebruiksperiodeStart"
-                          select="../(gebruiksperiode_start | gebruiksperiode/start_datum_tijd)"/>
-            <xsl:variable name="theGebruiksperiodeEnd"
-                          select="../(gebruiksperiode_eind | gebruiksperiode/eind_datum_tijd)"/>
-            <xsl:variable name="cancelledBouwsteen"
-                          select="$stoptypeMap[@stoptype = 'geannuleerd'][@code = $theStoptype/@code][@codeSystem = $theStoptype/@codeSystem] and $theGebruiksperiodeStart/@value = $theGebruiksperiodeEnd/@value"/>
-            <xsl:if test="$cancelledBouwsteen">
-               <xsl:value-of select="concat('Geannuleerd: start niet per ', nf:formatDate(nf:calculate-t-date($theGebruiksperiodeStart/@value, $dateT)))"/>
-            </xsl:if>
-            <!-- gebruiksperiode -->
-            <xsl:variable name="theStoptype"
-                          select="../(stoptype | medicatieafspraak_stop_type | toedieningsafspraak_stop_type | medicatiegebruik_stop_type | medicatie_gebruik_stop_type | stop_type | wisselend_doseerschema_stop_type)[@code]"/>
-            <xsl:variable name="theGebruiksperiodeStart"
-                          select="../(gebruiksperiode_start | gebruiksperiode/start_datum_tijd)"/>
-            <!-- Herhaalperiode cyclisch schema -->
-            <xsl:variable name="theGebruiksperiodeEnd"
-                          select="../(gebruiksperiode_eind | gebruiksperiode/eind_datum_tijd)"/>
-            <xsl:variable name="cancelledBouwsteen"
-                          select="$stoptypeMap[@stoptype = 'geannuleerd'][@code = $theStoptype/@code][@codeSystem = $theStoptype/@codeSystem] and $theGebruiksperiodeStart/@value = $theGebruiksperiodeEnd/@value"/>
-            <xsl:if test="$cancelledBouwsteen">
-               <xsl:value-of select="concat('Geannuleerd: start niet per ', nf:formatDate(nf:calculate-t-date($theGebruiksperiodeStart/@value, $dateT)))"/>
-            </xsl:if>
-            <!-- gebruiksperiode -->
-            <xsl:variable name="periodeString"
-                          select="nf:periode-string($theGebruiksperiodeStart, ../(gebruiksperiode[@value] | gebruiksperiode/tijds_duur), $theGebruiksperiodeEnd, ../gebruiksperiode/criterium)"/>
-            <xsl:if test="not($cancelledBouwsteen) and string-length($periodeString) gt 0">
-               <xsl:value-of select="$periodeString"/>
-            </xsl:if>
             <!-- Herhaalperiode cyclisch schema -->
             <xsl:variable name="herhaalperiodeString"
                           as="xs:string*">
@@ -611,12 +581,6 @@
             <!-- bij medicatiegebruik kan er ook sprake zijn van NIET gebruiken gedurende de gebruiksperiode, dat hoort ook bij de omschrijving -->
             <xsl:if test="../gebruik_indicator/@value = 'false'">
                <xsl:value-of>geneesmiddel niet in gebruik</xsl:value-of>
-            </xsl:if>
-            <!-- en ten slotte hoort het stoptype ook in de omschrijving -->
-            <xsl:if test="not($cancelledBouwsteen)">
-               <xsl:for-each select="$theStoptype">
-                  <xsl:value-of select="$stoptypeMap[@code = current()/@code][@codeSystem = current()/@codeSystem]/@displayName"/>
-               </xsl:for-each>
             </xsl:if>
          </xsl:variable>
          <xsl:value-of select="string-join($theOmschrijving, ', ')"/>

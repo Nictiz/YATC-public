@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?yatc-distribution-provenance href="HL7-mappings/hl7_2_ada/ketenzorg/hl7_2_ada_ketenzorg_include.xsl"?>
-<?yatc-distribution-info name="ketenzorg-3.0.2" timestamp="2024-06-28T14:38:20.79+02:00" version="1.4.28"?>
+<?yatc-distribution-info name="ketenzorg-3.0.2" timestamp="2024-11-15T00:15:11.67+01:00" version="1.4.29"?>
 <!-- == Provenance: HL7-mappings/hl7_2_ada/ketenzorg/hl7_2_ada_ketenzorg_include.xsl == -->
-<!-- == Distribution: ketenzorg-3.0.2; 1.4.28; 2024-06-28T14:38:20.79+02:00 == -->
+<!-- == Distribution: ketenzorg-3.0.2; 1.4.29; 2024-11-15T00:15:11.67+01:00 == -->
 <xsl:stylesheet version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:hl7="urn:hl7-org:v3"
@@ -950,6 +950,8 @@
                      <xsl:with-param name="in"
                                      select="hl7:value"/>
                      <xsl:with-param name="elemName">result_value</xsl:with-param>
+                     <xsl:with-param name="dodatatype"
+                                     select="true()"/>
                      <!-- mapping into itself relevant to get the @value attributes which is required in the schema -->
                      <xsl:with-param name="codeMap"
                                      as="element(map)*">
@@ -973,11 +975,13 @@
                      <xsl:with-param name="in"
                                      select="hl7:referenceRange/hl7:observationRange/hl7:value/hl7:low"/>
                      <xsl:with-param name="elemName">reference_range_lower_limit</xsl:with-param>
+                     <xsl:with-param name="datatype">quantity</xsl:with-param>
                   </xsl:call-template>
                   <xsl:call-template name="handlePQ">
                      <xsl:with-param name="in"
                                      select="hl7:referenceRange/hl7:observationRange/hl7:value/hl7:high"/>
                      <xsl:with-param name="elemName">reference_range_upper_limit</xsl:with-param>
+                     <xsl:with-param name="datatype">quantity</xsl:with-param>
                   </xsl:call-template>
                   <xsl:call-template name="handleCV">
                      <xsl:with-param name="in"

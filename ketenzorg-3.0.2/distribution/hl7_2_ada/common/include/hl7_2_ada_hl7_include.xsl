@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?yatc-distribution-provenance href="HL7-mappings/hl7_2_ada/hl7/hl7_2_ada_hl7_include.xsl"?>
-<?yatc-distribution-info name="ketenzorg-3.0.2" timestamp="2024-06-28T14:38:20.79+02:00" version="1.4.28"?>
+<?yatc-distribution-info name="ketenzorg-3.0.2" timestamp="2024-11-15T00:15:11.67+01:00" version="1.4.29"?>
 <!-- == Provenance: HL7-mappings/hl7_2_ada/hl7/hl7_2_ada_hl7_include.xsl == -->
-<!-- == Distribution: ketenzorg-3.0.2; 1.4.28; 2024-06-28T14:38:20.79+02:00 == -->
+<!-- == Distribution: ketenzorg-3.0.2; 1.4.29; 2024-11-15T00:15:11.67+01:00 == -->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -161,91 +161,114 @@
                  as="xs:string">
       <xsl:param name="input-hl7-date"
                  as="xs:string"/>
-      <xsl:param name="precision"/>
+      <xsl:param name="precision"
+                 as="xs:string?"/>
+      <!-- we support timezone Z should that have been entered in HL7v3, however Z is officially not allowed in datatype TS in HL7v3, it should be +0000 -->
+      <xsl:variable name="inputWithoutTimeZone"
+                    select="replace($input-hl7-date, '(^\d+(\.\d+)?)(Z|[+-]\d{2,4})?$', '$1')"/>
       <!-- year -->
-      <xsl:variable name="yyyy">
-         <xsl:if test="string-length($input-hl7-date) ge 4">
-            <xsl:value-of select="substring($input-hl7-date, 1, 4)"/>
+      <xsl:variable name="yyyy"
+                    as="xs:string?">
+         <xsl:if test="string-length($inputWithoutTimeZone) ge 4">
+            <xsl:value-of select="substring($inputWithoutTimeZone, 1, 4)"/>
          </xsl:if>
       </xsl:variable>
       <!-- month -->
-      <xsl:variable name="mm">
-         <xsl:if test="string-length($input-hl7-date) ge 6">
-            <xsl:value-of select="substring($input-hl7-date, 5, 2)"/>
+      <xsl:variable name="mm"
+                    as="xs:string?">
+         <xsl:if test="string-length($inputWithoutTimeZone) ge 6">
+            <xsl:value-of select="substring($inputWithoutTimeZone, 5, 2)"/>
          </xsl:if>
       </xsl:variable>
       <!-- day -->
       <xsl:variable name="dd"
                     as="xs:string?">
-         <xsl:if test="string-length($input-hl7-date) ge 8">
-            <xsl:value-of select="substring($input-hl7-date, 7, 2)"/>
+         <xsl:if test="string-length($inputWithoutTimeZone) ge 8">
+            <xsl:value-of select="substring($inputWithoutTimeZone, 7, 2)"/>
          </xsl:if>
       </xsl:variable>
       <!-- hour -->
       <xsl:variable name="HH"
                     as="xs:string?">
-         <xsl:if test="string-length($input-hl7-date) ge 10">
-            <xsl:value-of select="substring($input-hl7-date, 9, 2)"/>
+         <xsl:if test="string-length($inputWithoutTimeZone) ge 10">
+            <xsl:value-of select="substring($inputWithoutTimeZone, 9, 2)"/>
          </xsl:if>
       </xsl:variable>
       <!-- minute -->
       <xsl:variable name="MM"
                     as="xs:string?">
-         <xsl:if test="string-length($input-hl7-date) ge 12">
-            <xsl:value-of select="substring($input-hl7-date, 11, 2)"/>
+         <xsl:if test="string-length($inputWithoutTimeZone) ge 12">
+            <xsl:value-of select="substring($inputWithoutTimeZone, 11, 2)"/>
          </xsl:if>
       </xsl:variable>
       <!-- second -->
       <xsl:variable name="SS"
                     as="xs:string?">
-         <xsl:if test="string-length($input-hl7-date) ge 14">
-            <xsl:value-of select="substring($input-hl7-date, 13, 2)"/>
+         <xsl:if test="string-length($inputWithoutTimeZone) ge 14">
+            <xsl:value-of select="substring($inputWithoutTimeZone, 13, 2)"/>
          </xsl:if>
       </xsl:variable>
       <!-- millisecond -->
       <xsl:variable name="sss"
                     as="xs:string?">
-         <xsl:if test="matches($input-hl7-date, '^\d+(\.\d+)')">
-            <xsl:value-of select="replace($input-hl7-date, '^\d+(\.\d+)', '$1')"/>
+         <xsl:if test="matches($inputWithoutTimeZone, '^\d+(\.\d+)')">
+            <xsl:value-of select="replace($inputWithoutTimeZone, '^\d+(\.\d+)', '$1')"/>
          </xsl:if>
       </xsl:variable>
       <!-- timezone -->
       <xsl:variable name="TZ"
                     as="xs:string?">
-         <xsl:if test="matches($input-hl7-date, '^\d+(\.\d+)')">
-            <xsl:value-of select="replace($input-hl7-date, '.*([+-]\d{2,4})$', '$1')"/>
+         <xsl:if test="matches($input-hl7-date, '^\d+(\.\d+)?([+-]\d{2,4})$')">
+            <xsl:value-of select="replace($input-hl7-date, '.*([+-]\d{2})(\d{2})?$', '$1:$2')"/>
+         </xsl:if>
+         <xsl:if test="matches($input-hl7-date, '^\d+(\.\d+)?Z$')">
+            <xsl:value-of select="'Z'"/>
+            <xsl:call-template name="util:logMessage">
+               <xsl:with-param name="level"
+                               select="$logWARN"/>
+               <xsl:with-param name="msg">Encountered an Hl7v3 TS with timezone 'Z' (
+<xsl:value-of select="$input-hl7-date"/>). Officially this is not allowed, but we'll do our best to convert it anyway.</xsl:with-param>
+            </xsl:call-template>
          </xsl:if>
       </xsl:variable>
       <xsl:variable name="str_date"
                     select="concat($yyyy, '-', $mm, '-', $dd)"/>
+      <xsl:variable name="strDateTZ"
+                    select="concat($yyyy, '-', $mm, '-', $dd, $TZ)"/>
       <xsl:variable name="str_time"
-                    select="concat($HH, ':', $MM, ':', $SS, $sss, $TZ)"/>
+                    select="concat($HH, ':', $MM, ':', $SS, $sss)"/>
       <xsl:variable name="str_datetime"
-                    select="concat($str_date, 'T', $str_time)"/>
+                    select="concat($str_date, 'T', $str_time, $TZ)"/>
       <xsl:choose>
          <xsl:when test="upper-case($precision) = ('SECOND', 'SECONDE', 'SECONDS', 'SECONDEN', 'SEC', 'S')">
             <xsl:value-of select="$str_datetime"/>
          </xsl:when>
          <xsl:when test="upper-case($precision) = ('MINUTE', 'MINUUT', 'MINUTES', 'MINUTEN', 'MIN', 'M')">
-            <xsl:value-of select="substring($str_datetime, 1, 16)"/>
+            <xsl:value-of select="concat(substring($str_datetime, 1, 16), $TZ)"/>
          </xsl:when>
          <xsl:when test="upper-case($precision) = ('HOUR', 'UUR', 'HOURS', 'UREN', 'HR', 'HH', 'H', 'U')">
-            <xsl:value-of select="substring($str_datetime, 1, 13)"/>
+            <xsl:value-of select="concat(substring($str_datetime, 1, 13), $TZ)"/>
          </xsl:when>
          <xsl:when test="upper-case($precision) = ('DAY', 'DAG', 'DAYS', 'DAGEN', 'D')">
-            <xsl:value-of select="$str_date"/>
+            <xsl:value-of select="$strDateTZ"/>
          </xsl:when>
-         <xsl:when test="$str_date castable as xs:dateTime">
-            <xsl:value-of select="$str_date"/>
+         <xsl:when test="upper-case($precision) = ('MONTH', 'MAAND', 'MONTHS', 'MAANDEN', 'MO')">
+            <xsl:value-of select="concat($yyyy, '-', $mm, $TZ)"/>
+         </xsl:when>
+         <xsl:when test="upper-case($precision) = ('YEAR', 'JAAR', 'YEARS', 'JAREN', 'Y')">
+            <xsl:value-of select="concat($yyyy, $TZ)"/>
+         </xsl:when>
+         <xsl:when test="$str_datetime castable as xs:dateTime">
+            <xsl:value-of select="$str_datetime"/>
          </xsl:when>
          <xsl:when test="$str_date castable as xs:date">
-            <xsl:value-of select="$str_date"/>
+            <xsl:value-of select="concat($str_date, $TZ)"/>
          </xsl:when>
          <xsl:otherwise>
             <xsl:value-of select="$input-hl7-date"/>
             <xsl:call-template name="util:logMessage">
                <xsl:with-param name="level"
-                               select="$logWARN"/>
+                               select="$logERROR"/>
                <xsl:with-param name="msg">Could not determine xml date from input: '
 <xsl:value-of select="$input-hl7-date"/>' with precision: '
 <xsl:value-of select="$precision"/>'.</xsl:with-param>
@@ -259,12 +282,14 @@
    </xd:doc>
    <xsl:function name="nf:determine_date_precision">
       <xsl:param name="input-hl7-date"/>
+      <xsl:variable name="inputWithoutTimeZone"
+                    select="replace($input-hl7-date, '(^\d+(\.\d+)?)(([+-]\d{2,4})$)?', '$1')"/>
       <xsl:choose>
-         <xsl:when test="string-length($input-hl7-date) le 4">YEAR</xsl:when>
-         <xsl:when test="string-length($input-hl7-date) le 6">MONTH</xsl:when>
-         <xsl:when test="string-length($input-hl7-date) le 8">DAY</xsl:when>
-         <xsl:when test="string-length($input-hl7-date) = 10">HOUR</xsl:when>
-         <xsl:when test="string-length($input-hl7-date) = 12">MINUTE</xsl:when>
+         <xsl:when test="string-length($inputWithoutTimeZone) le 4">YEAR</xsl:when>
+         <xsl:when test="string-length($inputWithoutTimeZone) le 6">MONTH</xsl:when>
+         <xsl:when test="string-length($inputWithoutTimeZone) le 8">DAY</xsl:when>
+         <xsl:when test="string-length($inputWithoutTimeZone) = 10">HOUR</xsl:when>
+         <xsl:when test="string-length($inputWithoutTimeZone) = 12">MINUTE</xsl:when>
          <xsl:otherwise>SECOND</xsl:otherwise>
       </xsl:choose>
    </xsl:function>
@@ -1532,7 +1557,11 @@
                   <xsl:copy-of select="$codeMap[@inCode = $theCode][@inCodeSystem = $theCodeSystem]"/>
                </xsl:when>
                <xsl:otherwise>
-                  <xsl:copy-of select="."/>
+                  <!-- we don't want the @value if it is there, because in ada this has no significant meaning on a coded element and ada will probably break on negative values, which are possible in hl7 -->
+                  <!-- MP-1567 so not use xsl:copy/@select -->
+                  <xsl:element name="{local-name()}">
+                     <xsl:copy-of select="@*[name() != 'value']"/>
+                  </xsl:element>
                </xsl:otherwise>
             </xsl:choose>
          </xsl:variable>
@@ -1866,6 +1895,39 @@
             </xsl:if>
             <xsl:copy-of select="@nullFlavor"/>
          </xsl:element>
+      </xsl:for-each>
+   </xsl:template>
+   <xd:doc>
+      <xd:desc>Creates ada attributes taking a hl7 code element as input</xd:desc>
+      <xd:param name="current-hl7-code">The hl7 code element for which to create the attributes</xd:param>
+   </xd:doc>
+   <xsl:template name="mp9-code-attribs">
+      <xsl:param name="current-hl7-code"
+                 as="element()?"
+                 select="."/>
+      <xsl:for-each select="$current-hl7-code">
+         <xsl:choose>
+            <xsl:when test=".[@code]">
+               <xsl:copy-of select="@code | @codeSystem | @codeSystemName | @codeSystemVersion | @displayName"/>
+               <!-- really should not happen with a properly coded element, but let's preserve whatever was there -->
+               <xsl:for-each select="hl7:originalText">
+                  <xsl:attribute name="originalText"
+                                 select="."/>
+               </xsl:for-each>
+            </xsl:when>
+            <xsl:when test=".[@nullFlavor]">
+               <xsl:attribute name="code"
+                              select="./@nullFlavor"/>
+               <xsl:attribute name="codeSystem"
+                              select="$oidHL7NullFlavor"/>
+               <xsl:attribute name="displayName"
+                              select="$hl7NullFlavorMap[@hl7NullFlavor = current()/@nullFlavor]/@displayName"/>
+               <xsl:for-each select="hl7:originalText">
+                  <xsl:attribute name="originalText"
+                                 select="."/>
+               </xsl:for-each>
+            </xsl:when>
+         </xsl:choose>
       </xsl:for-each>
    </xsl:template>
    <xd:doc>

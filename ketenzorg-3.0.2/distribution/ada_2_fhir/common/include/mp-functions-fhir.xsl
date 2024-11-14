@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?yatc-distribution-provenance href="YATC-shared/xsl/util/mp-functions-fhir.xsl"?>
-<?yatc-distribution-info name="ketenzorg-3.0.2" timestamp="2024-06-28T14:38:20.79+02:00" version="1.4.28"?>
+<?yatc-distribution-info name="ketenzorg-3.0.2" timestamp="2024-11-15T00:15:11.67+01:00" version="1.4.29"?>
 <!-- == Provenance: YATC-shared/xsl/util/mp-functions-fhir.xsl == -->
-<!-- == Distribution: ketenzorg-3.0.2; 1.4.28; 2024-06-28T14:38:20.79+02:00 == -->
+<!-- == Distribution: ketenzorg-3.0.2; 1.4.29; 2024-11-15T00:15:11.67+01:00 == -->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -41,10 +41,10 @@
    <xsl:param name="dateT"
               as="xs:date?"/>
    <!-- ================================================================== -->
+   <!-- Create contents of FHIR timing based on ada toedieningsschema -->
    <xsl:template name="adaToedieningsschema2FhirTimingContents"
                  match="toedieningsschema"
                  mode="adaToedieningsschema2FhirTimingContents">
-      <!-- Create contents of FHIR timing based on ada toedieningsschema -->
       <xsl:param name="in"
                  as="element()?"
                  select=".">
@@ -177,12 +177,12 @@
       </xsl:for-each>
    </xsl:template>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!-- Create contents of FHIR timing based on ada doseerinstructie. Sometimes the doseerinstructie does not have a toedieningsschema, 
+        but you still need it for a pause period in a cyclic schedule, so for elements herhaalperiode_cyclisch_schema and doseerduur. 
+        Possibly there is a toedieningsduur without a schedule, which is strange, but oh well, sometimes people do strange things. Who are we to judge? -->
    <xsl:template name="adaDoseerinstructie2FhirTimingContents"
                  match="doseerinstructie"
                  mode="adaDoseerinstructie2FhirTimingContents">
-      <!-- Create contents of FHIR timing based on ada doseerinstructie. Sometimes the doseerinstructie does not have a toedieningsschema, 
-            but you still need it for a pause period in a cyclic schedule, so for elements herhaalperiode_cyclisch_schema and doseerduur. 
-            Possibly there is a toedieningsduur without a schedule, which is strange, but oh well, sometimes people do strange things. Who are we to judge? -->
       <xsl:param name="in"
                  as="element()?"
                  select=".">

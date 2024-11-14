@@ -1,22 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?yatc-distribution-provenance href="HL7-mappings/util/units.xsl"?>
-<?yatc-distribution-info name="ketenzorg-3.0.2" timestamp="2024-06-28T14:38:20.79+02:00" version="1.4.28"?>
-<!-- == Provenance: HL7-mappings/util/units.xsl == -->
-<!-- == Distribution: ketenzorg-3.0.2; 1.4.28; 2024-06-28T14:38:20.79+02:00 == -->
+<?yatc-distribution-provenance href="YATC-shared/xsl/util/units.xsl"?>
+<?yatc-distribution-info name="ketenzorg-3.0.2" timestamp="2024-11-15T00:15:11.67+01:00" version="1.4.29"?>
+<!-- == Provenance: YATC-shared/xsl/util/units.xsl == -->
+<!-- == Distribution: ketenzorg-3.0.2; 1.4.29; 2024-11-15T00:15:11.67+01:00 == -->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:ucum="http://unitsofmeasure.org/ucum-essence"
                 xmlns:util="urn:hl7:utilities"
                 xmlns:nf="http://www.nictiz.nl/functions"
+                xmlns:yatcs="https://nictiz.nl/ns/YATC-shared"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl">
-   <xd:doc>
-      <xd:desc>Functions for 
-<xd:a href="http://unitsofmeasure.org/ucum.html">UCUM</xd:a> units based on the 
-<xd:a href="http://www.unitsofmeasure.org/ucum-essence.xml">UCUM essence</xd:a> file. This is not a complete file but little is missing.</xd:desc>
-   </xd:doc>
+                xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl"
+                xmlns:local="#local.2024020614533906444350100">
+   <!-- ================================================================== -->
+   <!--
+        TBD
+    -->
+   <!-- ================================================================== -->
+   <!--
+        Copyright © Nictiz
+        
+        This program is free software; you can redistribute it and/or modify it under the terms of the
+        GNU Lesser General Public License as published by the Free Software Foundation; either version
+        2.1 of the License, or (at your option) any later version.
+        
+        This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+        without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+        See the GNU Lesser General Public License for more details.
+        
+        The full text of the license is available at http://www.gnu.org/copyleft/lesser.html
+    -->
+   <!-- ================================================================== -->
    <xsl:variable name="strUcumEssence">ucum-essence.xml</xsl:variable>
    <xsl:variable name="docUcumEssence"
                  select="doc($strUcumEssence)/ucum:root"
@@ -87,494 +103,6 @@
    <xsl:key name="prefixcode"
             match="ucum:prefix"
             use="@Code"/>
-   <xd:doc>
-      <xd:desc>converts UCUM time to ada unit</xd:desc>
-      <xd:param name="UCUM-time"/>
-   </xd:doc>
-   <xsl:function name="nf:convertTime_UCUM2ADA_unit"
-                 as="xs:string?">
-      <xsl:param name="UCUM-time"
-                 as="xs:string?"/>
-      <xsl:if test="$UCUM-time">
-         <xsl:choose>
-            <xsl:when test="$UCUM-time = 's'">
-               <xsl:value-of select="$ada-unit-second[1]"/>
-            </xsl:when>
-            <xsl:when test="$UCUM-time = 'min'">
-               <xsl:value-of select="$ada-unit-minute[1]"/>
-            </xsl:when>
-            <xsl:when test="$UCUM-time = 'h'">
-               <xsl:value-of select="$ada-unit-hour[1]"/>
-            </xsl:when>
-            <xsl:when test="$UCUM-time = 'd'">
-               <xsl:value-of select="$ada-unit-day[1]"/>
-            </xsl:when>
-            <xsl:when test="$UCUM-time = 'wk'">
-               <xsl:value-of select="$ada-unit-week[1]"/>
-            </xsl:when>
-            <xsl:when test="$UCUM-time = 'mo'">
-               <xsl:value-of select="$ada-unit-month[1]"/>
-            </xsl:when>
-            <xsl:when test="$UCUM-time = 'a'">
-               <xsl:value-of select="$ada-unit-year[1]"/>
-            </xsl:when>
-            <xsl:otherwise>
-               <!-- If all else fails: log message but return the input value -->
-               <xsl:call-template name="util:logMessage">
-                  <xsl:with-param name="level"
-                                  select="$logERROR"/>
-                  <xsl:with-param name="msg">Onbekende ucum tijdseenheid ('
-<xsl:value-of select="$UCUM-time"/>') gevonden. Kan niet converteren naar ada eenheid: input = output.</xsl:with-param>
-               </xsl:call-template>
-               <xsl:value-of select="$UCUM-time"/>
-            </xsl:otherwise>
-         </xsl:choose>
-      </xsl:if>
-   </xsl:function>
-   <xd:doc>
-      <xd:desc>Converts an UCUM unit as used in FHIR to ada time unit</xd:desc>
-      <xd:param name="UCUMFHIR">The UCUM unit string</xd:param>
-   </xd:doc>
-   <xsl:function name="nf:convertTime_UCUM_FHIR2ADA_unit"
-                 as="xs:string?">
-      <xsl:param name="UCUMFHIR"
-                 as="xs:string?"/>
-      <xsl:value-of select="nf:convertTime_UCUM2ADA_unit($UCUMFHIR)"/>
-   </xsl:function>
-   <xd:doc>
-      <xd:desc>Return boolean true() or false() on whether or not a UCUM expression is valid expression.</xd:desc>
-      <xd:param name="unit">Unit string. empty string will return false</xd:param>
-   </xd:doc>
-   <xsl:function name="nf:isValidUCUMUnit"
-                 as="xs:boolean">
-      <xsl:param name="unit"
-                 as="xs:string?"/>
-      <!-- §6 curly braces 
-            1 The full range of characters 33–126 can be used within a pair of curly braces (‘{’ and ‘}’). The material enclosed in curly braces is called annotation.
-            2 Annotations do not contribute to the semantics of the unit but are meaningless by definition. 
-            
-                Therefore, any fully conformant parser must discard all annotations. Parsers of limited conformace should not value annotations in comparison of units.
-            
-            3 Annotations do, however, signify the end of a unit symbol. 
-            4 An annotation without a leading symbol implies the default unit 1 (the unity).
-            5 Curly braces must not be nested. -->
-      <xsl:variable name="prunedUnit"
-                    select="replace($unit, '\{[^\}]*\}', '')"/>
-      <xsl:variable name="constituents"
-                    select="tokenize($prunedUnit, '/')[not(. = '')]"
-                    as="xs:string*"/>
-      <xsl:variable name="validParts"
-                    as="element(part)*">
-         <!-- 1 All expressions of The Unified Code for Units of Measure shall be built from characters of the 7-bit US-ASCII character set exclusively.  -->
-         <xsl:choose>
-            <xsl:when test="matches($unit, '^[&#x9;-]+$')">
-               <!--<part id="1" p="{$unit}">true</part>-->
-            </xsl:when>
-            <xsl:otherwise>
-               <part id="1"
-                     p="{$unit}">false</part>
-            </xsl:otherwise>
-         </xsl:choose>
-         <!-- 2 Terminal unit symbols can consist of all ASCII characters in the range of 33–126 (0x21–0x7E) excluding double quotes (‘"’), 
-                parentheses (‘(’ and ‘)’), plus sign (‘+’'), minus sign (‘-’'), period (‘.’'), solidus (‘/’'), equal sign (‘=’'), square 
-                brackets (‘[’ and ‘]’), and curly braces (‘{’ and ‘}’), which have special meaning.  -->
-         <xsl:choose>
-            <xsl:when test="$prunedUnit = ''"/>
-            <xsl:when test="empty($constituents[matches(., '^[&#34;''\(\)\[\]\.\*\^/=+-]+$')])"/>
-            <xsl:otherwise>
-               <part id="2"
-                     p="{$unit}">false</part>
-            </xsl:otherwise>
-         </xsl:choose>
-         <!-- 3 A terminal unit symbol can not consist of only digits (‘0’–‘9’) because those digit strings are interpreted as positive integer numbers. 
-                However, a symbol “10*” is allowed because it ends with a non-digit allowed to be part of a symbol. -->
-         <xsl:if test="matches($constituents[last()], '^\d+$')">
-            <part id="3"
-                  p="{$unit}">false</part>
-         </xsl:if>
-         <!--<xsl:if test="string-length($unit) gt 0 and $prunedUnit = ''">
-                <part id="4" p="{$unit}">true</part>
-            </xsl:if>-->
-         <!-- split mmol/l into constituents -->
-         <xsl:for-each select="$constituents">
-            <!-- current unit -->
-            <xsl:variable name="cu"
-                          select="."/>
-            <!-- current unit no parentheses -->
-            <xsl:variable name="cu-np"
-                          select="replace($cu, '(^\()|(\)$)', '')"/>
-            <!-- prefix (first char) -->
-            <xsl:variable name="pu"
-                          select="substring($cu-np, 1, 1)"/>
-            <!-- residual unit (after first char) -->
-            <xsl:variable name="ru"
-                          select="substring($cu-np, 2)"/>
-            <!-- prefix (first two chars) -->
-            <xsl:variable name="pu2"
-                          select="substring($cu-np, 1, 2)"/>
-            <!-- residual unit (after first two chars) -->
-            <xsl:variable name="ru2"
-                          select="substring($cu-np, 3)"/>
-            <xsl:choose>
-               <!--<xsl:when test="$docUcumEssence/key('unitcode', $cu)">
-                        <part id="5a" p="{.}">true</part>
-                    </xsl:when>-->
-               <xsl:when test="$docUcumEssence/key('unitcode', $cu-np)">
-                  <!--<part id="5b" p="{.}">true</part>-->
-               </xsl:when>
-               <!-- §4 prefixes 
-                        1 Metric units (cf. §11) may be combinations of a unit symbol with a prefix symbol. 
-                        2 The unit symbol to be combined with the prefix must not itself contain a prefix. Such a prefix-less unit symbol is called unit atom.  -->
-               <xsl:when test="$docUcumEssence/key('prefixcode', $pu) and $docUcumEssence/key('unitcode', $ru)">
-                  <!--<part id="6" p="{.}">true</part>-->
-               </xsl:when>
-               <xsl:when test="$docUcumEssence/key('prefixcode', $pu2) and $docUcumEssence/key('unitcode', $ru2)">
-                  <!--<part id="7" p="{.}">true</part>-->
-               </xsl:when>
-               <!-- Numeric. Simple like 1.73 -->
-               <xsl:when test="matches($cu-np, '^\d+(\.\d)$')">
-                  <!--<part id="8" p="{.}">true</part>-->
-               </xsl:when>
-               <!-- Numeric. Complex like 10*9 -->
-               <xsl:when test="matches($cu-np, '^10\*\d+$')">
-                  <!--<part id="9" p="{.}">true</part>-->
-               </xsl:when>
-               <!-- Numeric. Complex like 10^9 -->
-               <xsl:when test="matches($cu-np, '^10\^\d+$')">
-                  <!--<part id="10" p="{.}">true</part>-->
-               </xsl:when>
-               <xsl:when test="matches($cu-np, '[^\d][23]\)?$')">
-                  <!-- current unit no leading digits -->
-                  <xsl:variable name="cu-nd"
-                                select="replace($cu-np, '^\d+(\.\d*)?', '')"/>
-                  <part id="11"
-                        p="{.}">
-                     <xsl:value-of select="nf:isValidUCUMUnit(replace($cu-nd, '[23]$', ''))"/>
-                  </part>
-               </xsl:when>
-               <xsl:when test="matches($cu-np, '\.')">
-                  <!-- Check each part of the multiplication except decimals/integers -->
-                  <xsl:variable name="npuvalid"
-                                select="                                 for $npuc in tokenize($cu-np, '\.')[not(matches(., '^\d+(\.\d)$'))]                                 return                                     nf:isValidUCUMUnit($npuc)"
-                                as="xs:boolean*"/>
-                  <part id="11"
-                        p="{.}">
-                     <xsl:value-of select="$npuvalid = true()"/>
-                  </part>
-               </xsl:when>
-               <xsl:otherwise>
-                  <part id="99"
-                        p="{.}">false</part>
-               </xsl:otherwise>
-            </xsl:choose>
-         </xsl:for-each>
-      </xsl:variable>
-      <xsl:value-of select="empty($validParts[. = 'false'])"/>
-   </xsl:function>
-   <xd:doc>
-      <xd:desc>Converts unit from G-Standaard to UCUM</xd:desc>
-      <xd:param name="GstdBasiseenheid_code"/>
-   </xd:doc>
-   <xsl:function name="nf:convertGstdBasiseenheid2UCUM"
-                 as="xs:string*">
-      <xsl:param name="GstdBasiseenheid_code"
-                 as="xs:string"/>
-      <xsl:choose>
-         <xsl:when test="$GstdBasiseenheid_code castable as xs:integer">
-            <xsl:choose>
-               <!-- 201	AB	ABW	ANTITOXINE B.W.	ABW	ANTITOXINE BINDINGS WAARDE   (ZIE RIV VAD.'81, 16) -->
-               <!-- 202	AE	AE	ANTITOXISCHE EH	AE	ANTITOXISCHE EENHEID         (ZIE RIV VAD.'81, 16) -->
-               <xsl:when test="$GstdBasiseenheid_code = ('201', '202')">1</xsl:when>
-               <!-- 203	BQ	BECQ	BECQUEREL	Bq	BECQUEREL -->
-               <xsl:when test="$GstdBasiseenheid_code = '203'">Bq</xsl:when>
-               <!-- 205	CM	CM	CENTIMETER	cm	CENTIMETER -->
-               <xsl:when test="$GstdBasiseenheid_code = '205'">cm</xsl:when>
-               <!-- 206	C2	CM-2	VIERKANTE CM	cm2	VIERKANTE CENTIMETER -->
-               <xsl:when test="$GstdBasiseenheid_code = '206'">cm2</xsl:when>
-               <!-- 207	D	D	DECIM.POTENTIE	D	DECIMALE POTENTIE -->
-               <xsl:when test="$GstdBasiseenheid_code = '207'">[hp_X]</xsl:when>
-               <!-- 208	DO	DOSI	DOSIS	dosis	DOSIS -->
-               <!-- 211	E	EENH	EENHEID	E	EENHEID -->
-               <!-- 213	FE	FIPE	FIP EENHEID	FIP-E	FIP EENHEID                 (ZIE NED.PH.8.BLZ.836) -->
-               <xsl:when test="$GstdBasiseenheid_code = ('208', '211', '213')">1</xsl:when>
-               <!-- 215	G	GRAM	GRAM	g	GRAM -->
-               <xsl:when test="$GstdBasiseenheid_code = '215'">g</xsl:when>
-               <!-- 217	IE	IE	INTERNAT.EENH.	IE	INTERNATIONALE EENHEID -->
-               <xsl:when test="$GstdBasiseenheid_code = '217'">[iU]</xsl:when>
-               <!-- 218	J	JOUL	JOULE	J	JOULE -->
-               <xsl:when test="$GstdBasiseenheid_code = '218'">J</xsl:when>
-               <!-- 219	KG	KG	KILOGRAM	kg	KILOGRAM -->
-               <xsl:when test="$GstdBasiseenheid_code = '219'">kg</xsl:when>
-               <!-- 221	KM	KIEM	KIEMEN	kiemen	KIEMEN -->
-               <xsl:when test="$GstdBasiseenheid_code = ('221')">1</xsl:when>
-               <!-- 222	L	L	LITER	l	LITER -->
-               <xsl:when test="$GstdBasiseenheid_code = ('222')">l</xsl:when>
-               <!-- 225	M	M	METER	m	METER -->
-               <xsl:when test="$GstdBasiseenheid_code = ('225')">m</xsl:when>
-               <!-- 229	MG	MG	MILLIGRAM	mg	MILLIGRAM -->
-               <xsl:when test="$GstdBasiseenheid_code = '229'">mg</xsl:when>
-               <!-- 231	MI	MMOL	MILLIMOL	mmol	MILLIMOL -->
-               <xsl:when test="$GstdBasiseenheid_code = '231'">mmol</xsl:when>
-               <!-- 233	ML	ML	MILLILITER	ml	MILLILITER -->
-               <xsl:when test="$GstdBasiseenheid_code = '233'">ml</xsl:when>
-               <!-- 234	MM	MM	MILLIMETER	mm	MILLIMETER -->
-               <xsl:when test="$GstdBasiseenheid_code = '234'">mm</xsl:when>
-               <!-- 235	MO	MOL	MOL	mol	MOL                   (ZIE MARTINDALE 28, BLZ XXI) -->
-               <xsl:when test="$GstdBasiseenheid_code = '235'">mol</xsl:when>
-               <!-- 236	M2	M-2	VIERKANTE METER	m2	VIERKANTE METER -->
-               <xsl:when test="$GstdBasiseenheid_code = '236'">m2</xsl:when>
-               <!-- 237	N	N	NORMAAL	N	NORMAAL -->
-               <xsl:when test="$GstdBasiseenheid_code = '237'">1</xsl:when>
-               <!-- 238	NE	NOOE	NOON EENHEID	Noon-E	NOON EENHEID                     (POLLENALLERGEEN) -->
-               <!-- 242	PE	PLOE	PLOUGH EENHEID	Plough-E	PLOUGH EENHEID -->
-               <xsl:when test="$GstdBasiseenheid_code = ('238', '242')">1</xsl:when>
-               <!-- 244	PU	PFU	POCK FORM. UNIT	pfu	POCK/PLAQUE FORMING UNIT -->
-               <xsl:when test="$GstdBasiseenheid_code = '244'">[PFU]</xsl:when>
-               <!-- 245	ST	STUK	STUK	stuk	STUK -->
-               <xsl:when test="$GstdBasiseenheid_code = '245'">1</xsl:when>
-               <!-- 246	CC	CCID	CCID50	CCID50	CELL CULTURE INFECTIVE DOSE 50% (CCID50) -->
-               <xsl:when test="$GstdBasiseenheid_code = '246'">[CCID_50]</xsl:when>
-               <!-- 247	TE	TB-E	TUBERCULIN EENH	TB-E	TUBERCULINE EENHEID -->
-               <xsl:when test="$GstdBasiseenheid_code = '247'">[tb'U]</xsl:when>
-               <!-- 252	UG	UG	MICROGRAM	ug	MICROGRAM -->
-               <xsl:when test="$GstdBasiseenheid_code = '252'">ug</xsl:when>
-               <!-- 253	UK	UKAT	MICROKATAL	uKat	MICROKATAL                  (ZIE NED.PH.8,BLZ 522) -->
-               <xsl:when test="$GstdBasiseenheid_code = '253'">ukat</xsl:when>
-               <!-- 254	UL	UL	MICROLITER	ul	MICROLITER -->
-               <xsl:when test="$GstdBasiseenheid_code = '254'">ul</xsl:when>
-               <!-- 255	UU	USPE	USP EENHEID	USP-E	USP EENHEID,INCL ANSON,ARMOUR,USNF,WALLACE,WAMPOLE -->
-               <xsl:when test="$GstdBasiseenheid_code = '255'">[USP'U]</xsl:when>
-               <!-- 257	WE	WILE	WILSTATTER EENH	Wilst-E	WILLSTATTER EENHEID -->
-               <!-- 290	AH	AHFE	ANTIHEMOF.FAC.E	AHF-E	ANTIHEMOFILIE FACTOR EENHEID -->
-               <!-- 292	BE	BP-E	BRITISH PH.EENH	BP-E	BRITISH PHARMACOPOEIA EENHEID -->
-               <xsl:when test="$GstdBasiseenheid_code = ('257', '290', '292')">1</xsl:when>
-               <!-- 303	DR	DRUP	DRUPPEL	gt	DRUPPEL -->
-               <xsl:when test="$GstdBasiseenheid_code = '303'">[drp]</xsl:when>
-               <!-- 304	LE	LEVE	LEVY EENHEID	Levy-E	LEVY EENHEID          (ZIE MARTINDALE 28, BLZ 654) -->
-               <!-- 305	KE	KIE	KALLID.INACT.EH	KIE	KALLIDINOGENASE INACTIVERENDE EENHEID -->
-               <xsl:when test="$GstdBasiseenheid_code = ('304', '305')">1</xsl:when>
-               <!-- 306	LF	LFEQ	LIMES FLOC.EQUI	Lf	LIMES FLOCCULATIE EQUIVALENT        (ZIE NED.PH.8) -->
-               <xsl:when test="$GstdBasiseenheid_code = '306'">[Lf]</xsl:when>
-               <!-- 308	MK	MK	MILJ.KIEMEN	milj.kiem	MILJOEN KIEMEN (ZIE RIV VADEM.'81 16) -->
-               <xsl:when test="$GstdBasiseenheid_code = '308'">1</xsl:when>
-               <!-- 310	MQ	MBEQ	MEGABECQUEREL	MBq	MEGABECQUEREL          (ZIE MARTINDALE 28,BLZ XXI) -->
-               <xsl:when test="$GstdBasiseenheid_code = '310'">MBq</xsl:when>
-               <!-- 316	NI	NIHE	NIH-EENHEID	NIH-E	NATIONAL INSTITUTE OF HEALTH EENHEID -->
-               <!-- 331	HE	HDBE	HDB-EENHEID	HDB-E	HEPARINOID BAYER EENHEID -->
-               <xsl:when test="$GstdBasiseenheid_code = ('316', '331')">1</xsl:when>
-               <!-- 332	UM	UMOL	MICROMOL	umol	MICROMOL -->
-               <xsl:when test="$GstdBasiseenheid_code = '332'">umol</xsl:when>
-               <!-- 335	CH	CHRE	CRICK-H-R EENH.	CHR-E	CRICK-HARPER-RAPER EENHEID (ZIE INF.M.'84,BLZ 426) -->
-               <!-- 336	CU	CL-E	CLINISCHE EENH.	CL-E	CLINISCHE EENHEID         (ZIE INF.M.1984,BLZ 426) -->
-               <!-- 337	XX	XX	ONBEP. EENHEID	onbepaald	ONBEPAALDE EENHEID -->
-               <!-- 338	CB	CHBE	CHYMOT.BOURN-EH	CHB-E	CHYMOTRYPSINE BOURNONVILLE EENHEID -->
-               <xsl:when test="$GstdBasiseenheid_code = ('335', '336', '337', '338')">1</xsl:when>
-               <!-- 339	QQ	MGML	MG/ML	mg/ml-g	MG/ML NB. ALLEEN TOEGESTAAN BIJ GEIMPR.DEPPER/GAAS -->
-               <xsl:when test="$GstdBasiseenheid_code = ('339')">1</xsl:when>
-               <!-- 340	NK	NKAT	NANOKATAL	nKat	NANOKATAL -->
-               <xsl:when test="$GstdBasiseenheid_code = '340'">nkat</xsl:when>
-               <!-- 341	DE	D-AE	D-ANTIGEEN EENH	DE	D-ANTIGEEN EENHEID  (ZIE RIV VAD.'81,POLIO VACCIN) -->
-               <xsl:when test="$GstdBasiseenheid_code = '341'">[D'ag'U]</xsl:when>
-               <!-- 342	OE	IOE	INT.OPACIT.EENH	IOE	INTERNATIONALE OPACITY EENHEID   (ZIE RIV VAD.'81) -->
-               <xsl:when test="$GstdBasiseenheid_code = '342'">1</xsl:when>
-               <!-- 343	VM	MM2	VIERKANTE MM	mm2	VIERKANTE MILLIMETER -->
-               <xsl:when test="$GstdBasiseenheid_code = '343'">mm2</xsl:when>
-               <!-- 344	ID	ID-E	IVY DOG EENHEID	Ivy dog-E	IVY DOG EENHEID (ZIE MARTINDALE 28 BLZ 521) -->
-               <xsl:when test="$GstdBasiseenheid_code = '344'">1</xsl:when>
-               <!-- 345	ME	ME	MILJ. IE	milj. IE	MILJOEN IE -->
-               <xsl:when test="$GstdBasiseenheid_code = '345'">M[iU]</xsl:when>
-               <!-- 346	AX	AXAE	ANTI-XA-E	AXa-E	ANTIFACTOR-XA-ACTIVITEIT EENHEID -->
-               <xsl:when test="$GstdBasiseenheid_code = '346'">[anti'Xa'U]</xsl:when>
-               <!-- 347	KQ	KBEQ	KILOBECQUEREL	kBq	KILOBECQUEREL -->
-               <xsl:when test="$GstdBasiseenheid_code = '347'">kBq</xsl:when>
-               <!-- 348	GQ	GBQ	GIGABECQUEREL	GBq	GIGABECQUEREL -->
-               <xsl:when test="$GstdBasiseenheid_code = '348'">GBq</xsl:when>
-               <!-- 349	CE	CEL	CELLEN	cellen	CELLEN -->
-               <xsl:when test="$GstdBasiseenheid_code = '349'">1</xsl:when>
-               <!-- 350	IR	RE.I	REACT. INDEX	IR	REACTIVITEITSINDEX (STALLERGENES) -->
-               <xsl:when test="$GstdBasiseenheid_code = '350'">[IR]</xsl:when>
-               <!-- 351	GK	GENK	GEN.KOPIE	gen.k	GENOOMKOPIEËN -->
-               <!-- 352	TG	TGK	TERGENKOP	teragenoomkopieën	TERAGENOOMKOPIEËN -->
-               <xsl:when test="$GstdBasiseenheid_code = ('351', '352')">1</xsl:when>
-               <!-- 353	MU	MPFU	MILJ. PFU	milj. pfu	MILJOEN PLAQUE FORMING UNITS -->
-               <xsl:when test="$GstdBasiseenheid_code = '353'">M[PFU]</xsl:when>
-               <!-- 354	AU	AU	ANTIGEEN-EENH	AU	ANTIGEEN-EENHEID -->
-               <xsl:when test="$GstdBasiseenheid_code = '354'">1</xsl:when>
-               <!-- 356	MD	MIE	MILLI-IE	mIE	MILLI-INTERNATIONALE EENHEID -->
-               <xsl:when test="$GstdBasiseenheid_code = '356'">m[iU]</xsl:when>
-               <!-- 490	VP	VERP	VERPAKKING	verp.	VERPAKKING -->
-               <xsl:when test="$GstdBasiseenheid_code = '490'">1</xsl:when>
-               <!-- 500	CH	CH	CHARRIERE	CHARRIERE	CHARRIERE -->
-               <xsl:when test="$GstdBasiseenheid_code = '500'">[Ch]</xsl:when>
-               <!-- 501	MQ	MBEQ	MEGABEQUEREL	MBq	MEGABEQUEREL -->
-               <xsl:when test="$GstdBasiseenheid_code = '501'">MBq</xsl:when>
-               <!-- 502	C2	CM-2	VIERKANTE CM	cm2	VIERKANTE CENTIMETER -->
-               <xsl:when test="$GstdBasiseenheid_code = '502'">cm2</xsl:when>
-               <!-- 504	FE	FIPE	FIP EENHEID	FIP-E	FIP EENHEID (ZIE NED.PH.8.BLZ.836) -->
-               <xsl:when test="$GstdBasiseenheid_code = '504'">1</xsl:when>
-               <xsl:otherwise>Unsupported G-standaard basiseenheid: 
-<xsl:value-of select="$GstdBasiseenheid_code"/>
-               </xsl:otherwise>
-            </xsl:choose>
-         </xsl:when>
-         <xsl:otherwise>
-            <!-- geen integer meegekregen --> G-standaard code is not an integer. Unsupported G-standaard basiseenheid: "
-<xsl:value-of select="$GstdBasiseenheid_code"/>". </xsl:otherwise>
-      </xsl:choose>
-   </xsl:function>
-   <xd:doc>
-      <xd:desc>Converts ADA unit 2 UCUM</xd:desc>
-      <xd:param name="ADAunit"/>
-   </xd:doc>
-   <xsl:function name="nf:convert_ADA_unit2UCUM"
-                 as="xs:string?">
-      <xsl:param name="ADAunit"
-                 as="xs:string?"/>
-      <xsl:if test="$ADAunit">
-         <xsl:choose>
-            <xsl:when test="$ADAunit = $ada-unit-kilo">kg</xsl:when>
-            <xsl:when test="$ADAunit = $ada-unit-gram">g</xsl:when>
-            <xsl:when test="$ADAunit = $ada-unit-cm">cm</xsl:when>
-            <xsl:when test="$ADAunit = $ada-unit-m">m</xsl:when>
-            <xsl:when test="$ADAunit = $ada-unit-liter">l</xsl:when>
-            <xsl:when test="$ADAunit = $ada-unit-dl">dl</xsl:when>
-            <xsl:when test="$ADAunit = $ada-unit-cl">cl</xsl:when>
-            <xsl:when test="$ADAunit = $ada-unit-ml">ml</xsl:when>
-            <xsl:when test="$ADAunit = $ada-unit-ul">ul</xsl:when>
-            <xsl:when test="$ADAunit = $ada-unit-druppel">[drp]</xsl:when>
-            <xsl:when test="$ADAunit = $ada-unit-degrees-celsius">Cel</xsl:when>
-            <xsl:when test="$ADAunit = $ada-unit-pH">[pH]</xsl:when>
-            <xsl:when test="$ADAunit = $ada-unit-mmol-l">mmol/L</xsl:when>
-            <xsl:when test="not(contains(nf:convertTime_ADA_unit2UCUM($ADAunit), 'onbekend'))">
-               <xsl:value-of select="nf:convertTime_ADA_unit2UCUM($ADAunit)"/>
-            </xsl:when>
-            <xsl:otherwise>
-               <!-- let's assume it is a valid UCUM code -->
-               <xsl:value-of select="$ADAunit"/>
-            </xsl:otherwise>
-         </xsl:choose>
-      </xsl:if>
-   </xsl:function>
-   <xd:doc>
-      <xd:desc>Converts an ada unit to the UCUM unit as used in FHIR</xd:desc>
-      <xd:param name="ADAunit">The ada unit string</xd:param>
-   </xd:doc>
-   <xsl:function name="nf:convert_ADA_unit2UCUM_FHIR"
-                 as="xs:string?">
-      <xsl:param name="ADAunit"
-                 as="xs:string?"/>
-      <xsl:if test="$ADAunit">
-         <xsl:choose>
-            <xsl:when test="$ADAunit = $ada-unit-gram">g</xsl:when>
-            <xsl:when test="$ADAunit = $ada-unit-kilo">kg</xsl:when>
-            <xsl:when test="$ADAunit = $ada-unit-cm">cm</xsl:when>
-            <xsl:when test="$ADAunit = $ada-unit-m">m</xsl:when>
-            <xsl:when test="$ADAunit = $ada-unit-mmHg">mm[Hg]</xsl:when>
-            <xsl:when test="$ADAunit = $ada-unit-diopter">[diop]</xsl:when>
-            <xsl:when test="$ADAunit = $ada-unit-prism-diopter">[p'diop]</xsl:when>
-            <xsl:when test="$ADAunit = $ada-unit-degrees">deg</xsl:when>
-            <xsl:when test="nf:isValidUCUMUnit($ADAunit)">
-               <xsl:value-of select="$ADAunit"/>
-            </xsl:when>
-            <xsl:when test="not(contains(nf:convertTime_ADA_unit2UCUM_FHIR($ADAunit), 'onbekend'))">
-               <xsl:value-of select="nf:convertTime_ADA_unit2UCUM_FHIR($ADAunit)"/>
-            </xsl:when>
-            <xsl:otherwise>
-               <!-- If all else fails: wrap in {} to make it an annotation -->
-               <xsl:value-of select="concat('{', $ADAunit, '}')"/>
-            </xsl:otherwise>
-         </xsl:choose>
-      </xsl:if>
-   </xsl:function>
-   <xd:doc>
-      <xd:desc>Converts ADA time unit 2 UCUM</xd:desc>
-      <xd:param name="ADAtime"/>
-   </xd:doc>
-   <xsl:function name="nf:convertTime_ADA_unit2UCUM"
-                 as="xs:string?">
-      <xsl:param name="ADAtime"
-                 as="xs:string?"/>
-      <xsl:if test="$ADAtime">
-         <xsl:choose>
-            <xsl:when test="$ADAtime = $ada-unit-second">s</xsl:when>
-            <xsl:when test="$ADAtime = $ada-unit-minute">min</xsl:when>
-            <xsl:when test="$ADAtime = $ada-unit-hour">h</xsl:when>
-            <xsl:when test="$ADAtime = $ada-unit-day">d</xsl:when>
-            <xsl:when test="$ADAtime = $ada-unit-week">wk</xsl:when>
-            <xsl:when test="$ADAtime = $ada-unit-month">mo</xsl:when>
-            <xsl:when test="$ADAtime = $ada-unit-year">a</xsl:when>
-            <xsl:otherwise>
-               <!-- If all else fails: simply return the ada value -->
-               <xsl:value-of select="$ADAtime"/>
-            </xsl:otherwise>
-         </xsl:choose>
-      </xsl:if>
-   </xsl:function>
-   <xd:doc>
-      <xd:desc>Converts an ada time unit to the UCUM unit as used in FHIR</xd:desc>
-      <xd:param name="ADAtime">The ada time unit string</xd:param>
-   </xd:doc>
-   <xsl:function name="nf:convertTime_ADA_unit2UCUM_FHIR"
-                 as="xs:string?">
-      <xsl:param name="ADAtime"
-                 as="xs:string?"/>
-      <xsl:if test="$ADAtime">
-         <xsl:choose>
-            <xsl:when test="$ADAtime = $ada-unit-second">s</xsl:when>
-            <xsl:when test="$ADAtime = $ada-unit-minute">min</xsl:when>
-            <xsl:when test="$ADAtime = $ada-unit-hour">h</xsl:when>
-            <xsl:when test="$ADAtime = $ada-unit-day">d</xsl:when>
-            <xsl:when test="$ADAtime = $ada-unit-week">wk</xsl:when>
-            <xsl:when test="$ADAtime = $ada-unit-month">mo</xsl:when>
-            <xsl:when test="$ADAtime = $ada-unit-year">a</xsl:when>
-            <xsl:otherwise>
-               <!-- If all else fails: wrap in {} to make it an annotation -->
-               <xsl:value-of select="concat('{', $ADAtime, '}')"/>
-            </xsl:otherwise>
-         </xsl:choose>
-      </xsl:if>
-   </xsl:function>
-   <xd:doc>
-      <xd:desc>Creates code attributes for Gstd eenheid based on UCUM input</xd:desc>
-      <xd:param name="UCUM">UCUM string</xd:param>
-   </xd:doc>
-   <xsl:template name="UCUM2GstdBasiseenheid">
-      <xsl:param name="UCUM"
-                 as="xs:string?"/>
-      <xsl:choose>
-         <xsl:when test="string-length($UCUM) &gt; 0">
-            <xsl:choose>
-               <xsl:when test="string-length($UCUM2GstdMap[@UCUMCode = normalize-space($UCUM)]/@GstdCode) gt 0">
-                  <xsl:attribute name="code"
-                                 select="$UCUM2GstdMap[@UCUMCode = normalize-space($UCUM)]/@GstdCode"/>
-                  <xsl:attribute name="codeSystem"
-                                 select="$oidGStandaardBST902THES2"/>
-                  <xsl:attribute name="codeSystemName">G-Standaard thesaurus basiseenheden</xsl:attribute>
-                  <xsl:attribute name="displayName"
-                                 select="$UCUM2GstdMap[@UCUMCode = normalize-space($UCUM)]/@GstdDisplayName"/>
-               </xsl:when>
-               <!-- unsupported input value, log message and do nothing -->
-               <xsl:otherwise>
-                  <xsl:call-template name="util:logMessage">
-                     <xsl:with-param name="level"
-                                     select="$logWARN"/>
-                     <xsl:with-param name="msg">Not supported UCUM eenheid, cannot convert to G-standaard basiseenheid: 
-<xsl:value-of select="$UCUM"/>
-                     </xsl:with-param>
-                  </xsl:call-template>
-               </xsl:otherwise>
-            </xsl:choose>
-         </xsl:when>
-         <!-- empty input value, log message and do nothing -->
-         <xsl:otherwise>
-            <xsl:call-template name="util:logMessage">
-               <xsl:with-param name="level"
-                               select="$logWARN"/>
-               <xsl:with-param name="msg">UCUM is an empty string. Not supported to convert to G-standaard basiseenheid.</xsl:with-param>
-            </xsl:call-template>
-         </xsl:otherwise>
-      </xsl:choose>
-   </xsl:template>
    <!--<xsl:output omit-xml-declaration="yes" indent="yes"/>
     <xsl:template match="/">
         <xsl:variable name="term" as="element()*">
@@ -794,4 +322,497 @@
         </xsl:for-each-group>
         </y>
     </xsl:template>-->
+   <!-- ================================================================== -->
+   <xsl:function name="nf:convertTime_UCUM2ADA_unit"
+                 as="xs:string?">
+      <!-- converts UCUM time to ada unit -->
+      <xsl:param name="UCUM-time"
+                 as="xs:string?"/>
+      <xsl:if test="$UCUM-time">
+         <xsl:choose>
+            <xsl:when test="$UCUM-time = 's'">
+               <xsl:value-of select="$ada-unit-second[1]"/>
+            </xsl:when>
+            <xsl:when test="$UCUM-time = 'min'">
+               <xsl:value-of select="$ada-unit-minute[1]"/>
+            </xsl:when>
+            <xsl:when test="$UCUM-time = 'h'">
+               <xsl:value-of select="$ada-unit-hour[1]"/>
+            </xsl:when>
+            <xsl:when test="$UCUM-time = 'd'">
+               <xsl:value-of select="$ada-unit-day[1]"/>
+            </xsl:when>
+            <xsl:when test="$UCUM-time = 'wk'">
+               <xsl:value-of select="$ada-unit-week[1]"/>
+            </xsl:when>
+            <xsl:when test="$UCUM-time = 'mo'">
+               <xsl:value-of select="$ada-unit-month[1]"/>
+            </xsl:when>
+            <xsl:when test="$UCUM-time = 'a'">
+               <xsl:value-of select="$ada-unit-year[1]"/>
+            </xsl:when>
+            <xsl:otherwise>
+               <!-- If all else fails: log message but return the input value -->
+               <xsl:call-template name="util:logMessage">
+                  <xsl:with-param name="level"
+                                  select="$logERROR"/>
+                  <xsl:with-param name="msg">Onbekende ucum tijdseenheid ('
+<xsl:value-of select="$UCUM-time"/>') gevonden. Kan niet converteren naar ada eenheid: input = output.</xsl:with-param>
+               </xsl:call-template>
+               <xsl:value-of select="$UCUM-time"/>
+            </xsl:otherwise>
+         </xsl:choose>
+      </xsl:if>
+   </xsl:function>
+   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!-- Converts an UCUM unit as used in FHIR to ada time unit -->
+   <xsl:function name="nf:convertTime_UCUM_FHIR2ADA_unit"
+                 as="xs:string?">
+      <xsl:param name="UCUMFHIR"
+                 as="xs:string?">
+         <!-- The UCUM unit string -->
+      </xsl:param>
+      <xsl:value-of select="nf:convertTime_UCUM2ADA_unit($UCUMFHIR)"/>
+   </xsl:function>
+   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!-- Return boolean true() or false() on whether or not a UCUM expression is valid expression. -->
+   <xsl:function name="nf:isValidUCUMUnit"
+                 as="xs:boolean">
+      <xsl:param name="unit"
+                 as="xs:string?">
+         <!-- Unit string. empty string will return false -->
+      </xsl:param>
+      <!-- §6 curly braces 
+            1 The full range of characters 33–126 can be used within a pair of curly braces (‘{’ and ‘}’). The material enclosed in curly braces is called annotation.
+            2 Annotations do not contribute to the semantics of the unit but are meaningless by definition. 
+            
+                Therefore, any fully conformant parser must discard all annotations. Parsers of limited conformace should not value annotations in comparison of units.
+            
+            3 Annotations do, however, signify the end of a unit symbol. 
+            4 An annotation without a leading symbol implies the default unit 1 (the unity).
+            5 Curly braces must not be nested. -->
+      <xsl:variable name="prunedUnit"
+                    select="replace($unit, '\{[^\}]*\}', '')"/>
+      <xsl:variable name="constituents"
+                    select="tokenize($prunedUnit, '/')[not(. = '')]"
+                    as="xs:string*"/>
+      <xsl:variable name="validParts"
+                    as="element(part)*">
+         <!-- 1 All expressions of The Unified Code for Units of Measure shall be built from characters of the 7-bit US-ASCII character set exclusively.  -->
+         <xsl:choose>
+            <xsl:when test="matches($unit, '^[&#x9;-]+$')">
+               <!--<part id="1" p="{$unit}">true</part>-->
+            </xsl:when>
+            <xsl:otherwise>
+               <part id="1"
+                     p="{$unit}">false</part>
+            </xsl:otherwise>
+         </xsl:choose>
+         <!-- 2 Terminal unit symbols can consist of all ASCII characters in the range of 33–126 (0x21–0x7E) excluding double quotes (‘"’), 
+                parentheses (‘(’ and ‘)’), plus sign (‘+’'), minus sign (‘-’'), period (‘.’'), solidus (‘/’'), equal sign (‘=’'), square 
+                brackets (‘[’ and ‘]’), and curly braces (‘{’ and ‘}’), which have special meaning.  -->
+         <xsl:choose>
+            <xsl:when test="$prunedUnit = ''"/>
+            <xsl:when test="empty($constituents[matches(., '^[&#34;''\(\)\[\]\.\*\^/=+-]+$')])"/>
+            <xsl:otherwise>
+               <part id="2"
+                     p="{$unit}">false</part>
+            </xsl:otherwise>
+         </xsl:choose>
+         <!-- 3 A terminal unit symbol can not consist of only digits (‘0’–‘9’) because those digit strings are interpreted as positive integer numbers. 
+                However, a symbol “10*” is allowed because it ends with a non-digit allowed to be part of a symbol. -->
+         <xsl:if test="matches($constituents[last()], '^\d+$')">
+            <part id="3"
+                  p="{$unit}">false</part>
+         </xsl:if>
+         <!--<xsl:if test="string-length($unit) gt 0 and $prunedUnit = ''">
+                <part id="4" p="{$unit}">true</part>
+            </xsl:if>-->
+         <!-- split mmol/l into constituents -->
+         <xsl:for-each select="$constituents">
+            <!-- current unit -->
+            <xsl:variable name="cu"
+                          select="."/>
+            <!-- current unit no parentheses -->
+            <xsl:variable name="cu-np"
+                          select="replace($cu, '(^\()|(\)$)', '')"/>
+            <!-- prefix (first char) -->
+            <xsl:variable name="pu"
+                          select="substring($cu-np, 1, 1)"/>
+            <!-- residual unit (after first char) -->
+            <xsl:variable name="ru"
+                          select="substring($cu-np, 2)"/>
+            <!-- prefix (first two chars) -->
+            <xsl:variable name="pu2"
+                          select="substring($cu-np, 1, 2)"/>
+            <!-- residual unit (after first two chars) -->
+            <xsl:variable name="ru2"
+                          select="substring($cu-np, 3)"/>
+            <xsl:choose>
+               <!--<xsl:when test="$docUcumEssence/key('unitcode', $cu)">
+                        <part id="5a" p="{.}">true</part>
+                    </xsl:when>-->
+               <xsl:when test="$docUcumEssence/key('unitcode', $cu-np)">
+                  <!--<part id="5b" p="{.}">true</part>-->
+               </xsl:when>
+               <!-- §4 prefixes 
+                        1 Metric units (cf. §11) may be combinations of a unit symbol with a prefix symbol. 
+                        2 The unit symbol to be combined with the prefix must not itself contain a prefix. Such a prefix-less unit symbol is called unit atom.  -->
+               <xsl:when test="$docUcumEssence/key('prefixcode', $pu) and $docUcumEssence/key('unitcode', $ru)">
+                  <!--<part id="6" p="{.}">true</part>-->
+               </xsl:when>
+               <xsl:when test="$docUcumEssence/key('prefixcode', $pu2) and $docUcumEssence/key('unitcode', $ru2)">
+                  <!--<part id="7" p="{.}">true</part>-->
+               </xsl:when>
+               <!-- Numeric. Simple like 1.73 -->
+               <xsl:when test="matches($cu-np, '^\d+(\.\d)$')">
+                  <!--<part id="8" p="{.}">true</part>-->
+               </xsl:when>
+               <!-- Numeric. Complex like 10*9 -->
+               <xsl:when test="matches($cu-np, '^10\*\d+$')">
+                  <!--<part id="9" p="{.}">true</part>-->
+               </xsl:when>
+               <!-- Numeric. Complex like 10^9 -->
+               <xsl:when test="matches($cu-np, '^10\^\d+$')">
+                  <!--<part id="10" p="{.}">true</part>-->
+               </xsl:when>
+               <xsl:when test="matches($cu-np, '[^\d][23]\)?$')">
+                  <!-- current unit no leading digits -->
+                  <xsl:variable name="cu-nd"
+                                select="replace($cu-np, '^\d+(\.\d*)?', '')"/>
+                  <part id="11"
+                        p="{.}">
+                     <xsl:value-of select="nf:isValidUCUMUnit(replace($cu-nd, '[23]$', ''))"/>
+                  </part>
+               </xsl:when>
+               <xsl:when test="matches($cu-np, '\.')">
+                  <!-- Check each part of the multiplication except decimals/integers -->
+                  <xsl:variable name="npuvalid"
+                                select="                                 for $npuc in tokenize($cu-np, '\.')[not(matches(., '^\d+(\.\d)$'))]                                 return                                     nf:isValidUCUMUnit($npuc)"
+                                as="xs:boolean*"/>
+                  <part id="11"
+                        p="{.}">
+                     <xsl:value-of select="$npuvalid = true()"/>
+                  </part>
+               </xsl:when>
+               <xsl:otherwise>
+                  <part id="99"
+                        p="{.}">false</part>
+               </xsl:otherwise>
+            </xsl:choose>
+         </xsl:for-each>
+      </xsl:variable>
+      <xsl:value-of select="empty($validParts[. = 'false'])"/>
+   </xsl:function>
+   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!-- Converts unit from G-Standaard to UCUM -->
+   <xsl:function name="nf:convertGstdBasiseenheid2UCUM"
+                 as="xs:string*">
+      <xsl:param name="GstdBasiseenheid_code"
+                 as="xs:string?"/>
+      <xsl:choose>
+         <xsl:when test="$GstdBasiseenheid_code castable as xs:integer">
+            <xsl:choose>
+               <!-- 201	AB	ABW	ANTITOXINE B.W.	ABW	ANTITOXINE BINDINGS WAARDE   (ZIE RIV VAD.'81, 16) -->
+               <!-- 202	AE	AE	ANTITOXISCHE EH	AE	ANTITOXISCHE EENHEID         (ZIE RIV VAD.'81, 16) -->
+               <xsl:when test="$GstdBasiseenheid_code = ('201', '202')">1</xsl:when>
+               <!-- 203	BQ	BECQ	BECQUEREL	Bq	BECQUEREL -->
+               <xsl:when test="$GstdBasiseenheid_code = '203'">Bq</xsl:when>
+               <!-- 205	CM	CM	CENTIMETER	cm	CENTIMETER -->
+               <xsl:when test="$GstdBasiseenheid_code = '205'">cm</xsl:when>
+               <!-- 206	C2	CM-2	VIERKANTE CM	cm2	VIERKANTE CENTIMETER -->
+               <xsl:when test="$GstdBasiseenheid_code = '206'">cm2</xsl:when>
+               <!-- 207	D	D	DECIM.POTENTIE	D	DECIMALE POTENTIE -->
+               <xsl:when test="$GstdBasiseenheid_code = '207'">[hp_X]</xsl:when>
+               <!-- 208	DO	DOSI	DOSIS	dosis	DOSIS -->
+               <!-- 211	E	EENH	EENHEID	E	EENHEID -->
+               <!-- 213	FE	FIPE	FIP EENHEID	FIP-E	FIP EENHEID                 (ZIE NED.PH.8.BLZ.836) -->
+               <xsl:when test="$GstdBasiseenheid_code = ('208', '211', '213')">1</xsl:when>
+               <!-- 215	G	GRAM	GRAM	g	GRAM -->
+               <xsl:when test="$GstdBasiseenheid_code = '215'">g</xsl:when>
+               <!-- 217	IE	IE	INTERNAT.EENH.	IE	INTERNATIONALE EENHEID -->
+               <xsl:when test="$GstdBasiseenheid_code = '217'">[iU]</xsl:when>
+               <!-- 218	J	JOUL	JOULE	J	JOULE -->
+               <xsl:when test="$GstdBasiseenheid_code = '218'">J</xsl:when>
+               <!-- 219	KG	KG	KILOGRAM	kg	KILOGRAM -->
+               <xsl:when test="$GstdBasiseenheid_code = '219'">kg</xsl:when>
+               <!-- 221	KM	KIEM	KIEMEN	kiemen	KIEMEN -->
+               <xsl:when test="$GstdBasiseenheid_code = ('221')">1</xsl:when>
+               <!-- 222	L	L	LITER	l	LITER -->
+               <xsl:when test="$GstdBasiseenheid_code = ('222')">l</xsl:when>
+               <!-- 225	M	M	METER	m	METER -->
+               <xsl:when test="$GstdBasiseenheid_code = ('225')">m</xsl:when>
+               <!-- 229	MG	MG	MILLIGRAM	mg	MILLIGRAM -->
+               <xsl:when test="$GstdBasiseenheid_code = '229'">mg</xsl:when>
+               <!-- 231	MI	MMOL	MILLIMOL	mmol	MILLIMOL -->
+               <xsl:when test="$GstdBasiseenheid_code = '231'">mmol</xsl:when>
+               <!-- 233	ML	ML	MILLILITER	ml	MILLILITER -->
+               <xsl:when test="$GstdBasiseenheid_code = '233'">ml</xsl:when>
+               <!-- 234	MM	MM	MILLIMETER	mm	MILLIMETER -->
+               <xsl:when test="$GstdBasiseenheid_code = '234'">mm</xsl:when>
+               <!-- 235	MO	MOL	MOL	mol	MOL                   (ZIE MARTINDALE 28, BLZ XXI) -->
+               <xsl:when test="$GstdBasiseenheid_code = '235'">mol</xsl:when>
+               <!-- 236	M2	M-2	VIERKANTE METER	m2	VIERKANTE METER -->
+               <xsl:when test="$GstdBasiseenheid_code = '236'">m2</xsl:when>
+               <!-- 237	N	N	NORMAAL	N	NORMAAL -->
+               <xsl:when test="$GstdBasiseenheid_code = '237'">1</xsl:when>
+               <!-- 238	NE	NOOE	NOON EENHEID	Noon-E	NOON EENHEID                     (POLLENALLERGEEN) -->
+               <!-- 242	PE	PLOE	PLOUGH EENHEID	Plough-E	PLOUGH EENHEID -->
+               <xsl:when test="$GstdBasiseenheid_code = ('238', '242')">1</xsl:when>
+               <!-- 244	PU	PFU	POCK FORM. UNIT	pfu	POCK/PLAQUE FORMING UNIT -->
+               <xsl:when test="$GstdBasiseenheid_code = '244'">[PFU]</xsl:when>
+               <!-- 245	ST	STUK	STUK	stuk	STUK -->
+               <xsl:when test="$GstdBasiseenheid_code = '245'">1</xsl:when>
+               <!-- 246	CC	CCID	CCID50	CCID50	CELL CULTURE INFECTIVE DOSE 50% (CCID50) -->
+               <xsl:when test="$GstdBasiseenheid_code = '246'">[CCID_50]</xsl:when>
+               <!-- 247	TE	TB-E	TUBERCULIN EENH	TB-E	TUBERCULINE EENHEID -->
+               <xsl:when test="$GstdBasiseenheid_code = '247'">[tb'U]</xsl:when>
+               <!-- 252	UG	UG	MICROGRAM	ug	MICROGRAM -->
+               <xsl:when test="$GstdBasiseenheid_code = '252'">ug</xsl:when>
+               <!-- 253	UK	UKAT	MICROKATAL	uKat	MICROKATAL                  (ZIE NED.PH.8,BLZ 522) -->
+               <xsl:when test="$GstdBasiseenheid_code = '253'">ukat</xsl:when>
+               <!-- 254	UL	UL	MICROLITER	ul	MICROLITER -->
+               <xsl:when test="$GstdBasiseenheid_code = '254'">ul</xsl:when>
+               <!-- 255	UU	USPE	USP EENHEID	USP-E	USP EENHEID,INCL ANSON,ARMOUR,USNF,WALLACE,WAMPOLE -->
+               <xsl:when test="$GstdBasiseenheid_code = '255'">[USP'U]</xsl:when>
+               <!-- 257	WE	WILE	WILSTATTER EENH	Wilst-E	WILLSTATTER EENHEID -->
+               <!-- 290	AH	AHFE	ANTIHEMOF.FAC.E	AHF-E	ANTIHEMOFILIE FACTOR EENHEID -->
+               <!-- 292	BE	BP-E	BRITISH PH.EENH	BP-E	BRITISH PHARMACOPOEIA EENHEID -->
+               <xsl:when test="$GstdBasiseenheid_code = ('257', '290', '292')">1</xsl:when>
+               <!-- 303	DR	DRUP	DRUPPEL	gt	DRUPPEL -->
+               <xsl:when test="$GstdBasiseenheid_code = '303'">[drp]</xsl:when>
+               <!-- 304	LE	LEVE	LEVY EENHEID	Levy-E	LEVY EENHEID          (ZIE MARTINDALE 28, BLZ 654) -->
+               <!-- 305	KE	KIE	KALLID.INACT.EH	KIE	KALLIDINOGENASE INACTIVERENDE EENHEID -->
+               <xsl:when test="$GstdBasiseenheid_code = ('304', '305')">1</xsl:when>
+               <!-- 306	LF	LFEQ	LIMES FLOC.EQUI	Lf	LIMES FLOCCULATIE EQUIVALENT        (ZIE NED.PH.8) -->
+               <xsl:when test="$GstdBasiseenheid_code = '306'">[Lf]</xsl:when>
+               <!-- 308	MK	MK	MILJ.KIEMEN	milj.kiem	MILJOEN KIEMEN (ZIE RIV VADEM.'81 16) -->
+               <xsl:when test="$GstdBasiseenheid_code = '308'">1</xsl:when>
+               <!-- 310	MQ	MBEQ	MEGABECQUEREL	MBq	MEGABECQUEREL          (ZIE MARTINDALE 28,BLZ XXI) -->
+               <xsl:when test="$GstdBasiseenheid_code = '310'">MBq</xsl:when>
+               <!-- 316	NI	NIHE	NIH-EENHEID	NIH-E	NATIONAL INSTITUTE OF HEALTH EENHEID -->
+               <!-- 331	HE	HDBE	HDB-EENHEID	HDB-E	HEPARINOID BAYER EENHEID -->
+               <xsl:when test="$GstdBasiseenheid_code = ('316', '331')">1</xsl:when>
+               <!-- 332	UM	UMOL	MICROMOL	umol	MICROMOL -->
+               <xsl:when test="$GstdBasiseenheid_code = '332'">umol</xsl:when>
+               <!-- 335	CH	CHRE	CRICK-H-R EENH.	CHR-E	CRICK-HARPER-RAPER EENHEID (ZIE INF.M.'84,BLZ 426) -->
+               <!-- 336	CU	CL-E	CLINISCHE EENH.	CL-E	CLINISCHE EENHEID         (ZIE INF.M.1984,BLZ 426) -->
+               <!-- 337	XX	XX	ONBEP. EENHEID	onbepaald	ONBEPAALDE EENHEID -->
+               <!-- 338	CB	CHBE	CHYMOT.BOURN-EH	CHB-E	CHYMOTRYPSINE BOURNONVILLE EENHEID -->
+               <xsl:when test="$GstdBasiseenheid_code = ('335', '336', '337', '338')">1</xsl:when>
+               <!-- 339	QQ	MGML	MG/ML	mg/ml-g	MG/ML NB. ALLEEN TOEGESTAAN BIJ GEIMPR.DEPPER/GAAS -->
+               <xsl:when test="$GstdBasiseenheid_code = ('339')">1</xsl:when>
+               <!-- 340	NK	NKAT	NANOKATAL	nKat	NANOKATAL -->
+               <xsl:when test="$GstdBasiseenheid_code = '340'">nkat</xsl:when>
+               <!-- 341	DE	D-AE	D-ANTIGEEN EENH	DE	D-ANTIGEEN EENHEID  (ZIE RIV VAD.'81,POLIO VACCIN) -->
+               <xsl:when test="$GstdBasiseenheid_code = '341'">[D'ag'U]</xsl:when>
+               <!-- 342	OE	IOE	INT.OPACIT.EENH	IOE	INTERNATIONALE OPACITY EENHEID   (ZIE RIV VAD.'81) -->
+               <xsl:when test="$GstdBasiseenheid_code = '342'">1</xsl:when>
+               <!-- 343	VM	MM2	VIERKANTE MM	mm2	VIERKANTE MILLIMETER -->
+               <xsl:when test="$GstdBasiseenheid_code = '343'">mm2</xsl:when>
+               <!-- 344	ID	ID-E	IVY DOG EENHEID	Ivy dog-E	IVY DOG EENHEID (ZIE MARTINDALE 28 BLZ 521) -->
+               <xsl:when test="$GstdBasiseenheid_code = '344'">1</xsl:when>
+               <!-- 345	ME	ME	MILJ. IE	milj. IE	MILJOEN IE -->
+               <xsl:when test="$GstdBasiseenheid_code = '345'">M[iU]</xsl:when>
+               <!-- 346	AX	AXAE	ANTI-XA-E	AXa-E	ANTIFACTOR-XA-ACTIVITEIT EENHEID -->
+               <xsl:when test="$GstdBasiseenheid_code = '346'">[anti'Xa'U]</xsl:when>
+               <!-- 347	KQ	KBEQ	KILOBECQUEREL	kBq	KILOBECQUEREL -->
+               <xsl:when test="$GstdBasiseenheid_code = '347'">kBq</xsl:when>
+               <!-- 348	GQ	GBQ	GIGABECQUEREL	GBq	GIGABECQUEREL -->
+               <xsl:when test="$GstdBasiseenheid_code = '348'">GBq</xsl:when>
+               <!-- 349	CE	CEL	CELLEN	cellen	CELLEN -->
+               <xsl:when test="$GstdBasiseenheid_code = '349'">1</xsl:when>
+               <!-- 350	IR	RE.I	REACT. INDEX	IR	REACTIVITEITSINDEX (STALLERGENES) -->
+               <xsl:when test="$GstdBasiseenheid_code = '350'">[IR]</xsl:when>
+               <!-- 351	GK	GENK	GEN.KOPIE	gen.k	GENOOMKOPIEËN -->
+               <!-- 352	TG	TGK	TERGENKOP	teragenoomkopieën	TERAGENOOMKOPIEËN -->
+               <xsl:when test="$GstdBasiseenheid_code = ('351', '352')">1</xsl:when>
+               <!-- 353	MU	MPFU	MILJ. PFU	milj. pfu	MILJOEN PLAQUE FORMING UNITS -->
+               <xsl:when test="$GstdBasiseenheid_code = '353'">M[PFU]</xsl:when>
+               <!-- 354	AU	AU	ANTIGEEN-EENH	AU	ANTIGEEN-EENHEID -->
+               <xsl:when test="$GstdBasiseenheid_code = '354'">1</xsl:when>
+               <!-- 356	MD	MIE	MILLI-IE	mIE	MILLI-INTERNATIONALE EENHEID -->
+               <xsl:when test="$GstdBasiseenheid_code = '356'">m[iU]</xsl:when>
+               <!-- 490	VP	VERP	VERPAKKING	verp.	VERPAKKING -->
+               <xsl:when test="$GstdBasiseenheid_code = '490'">1</xsl:when>
+               <!-- 500	CH	CH	CHARRIERE	CHARRIERE	CHARRIERE -->
+               <xsl:when test="$GstdBasiseenheid_code = '500'">[Ch]</xsl:when>
+               <!-- 501	MQ	MBEQ	MEGABEQUEREL	MBq	MEGABEQUEREL -->
+               <xsl:when test="$GstdBasiseenheid_code = '501'">MBq</xsl:when>
+               <!-- 502	C2	CM-2	VIERKANTE CM	cm2	VIERKANTE CENTIMETER -->
+               <xsl:when test="$GstdBasiseenheid_code = '502'">cm2</xsl:when>
+               <!-- 504	FE	FIPE	FIP EENHEID	FIP-E	FIP EENHEID (ZIE NED.PH.8.BLZ.836) -->
+               <xsl:when test="$GstdBasiseenheid_code = '504'">1</xsl:when>
+               <xsl:otherwise>
+                  <xsl:call-template name="util:logMessage">
+                     <xsl:with-param name="level"
+                                     select="$logERROR"/>
+                     <xsl:with-param name="msg">Unsupported G-standaard basiseenheid: "
+<xsl:value-of select="$GstdBasiseenheid_code"/>".</xsl:with-param>
+                  </xsl:call-template>
+                  <xsl:value-of select="$GstdBasiseenheid_code"/>
+               </xsl:otherwise>
+            </xsl:choose>
+         </xsl:when>
+         <xsl:otherwise>
+            <!-- geen integer meegekregen -->
+            <xsl:call-template name="util:logMessage">
+               <xsl:with-param name="level"
+                               select="$logERROR"/>
+               <xsl:with-param name="msg">G-standaard code is not an integer. Unsupported G-standaard basiseenheid: "
+<xsl:value-of select="$GstdBasiseenheid_code"/>".</xsl:with-param>
+            </xsl:call-template>
+            <xsl:value-of select="$GstdBasiseenheid_code"/>
+         </xsl:otherwise>
+      </xsl:choose>
+   </xsl:function>
+   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!-- Converts ADA unit 2 UCUM -->
+   <xsl:function name="nf:convert_ADA_unit2UCUM"
+                 as="xs:string?">
+      <xsl:param name="ADAunit"
+                 as="xs:string?"/>
+      <xsl:if test="$ADAunit">
+         <xsl:choose>
+            <xsl:when test="$ADAunit = $ada-unit-kilo">kg</xsl:when>
+            <xsl:when test="$ADAunit = $ada-unit-gram">g</xsl:when>
+            <xsl:when test="$ADAunit = $ada-unit-cm">cm</xsl:when>
+            <xsl:when test="$ADAunit = $ada-unit-m">m</xsl:when>
+            <xsl:when test="$ADAunit = $ada-unit-liter">l</xsl:when>
+            <xsl:when test="$ADAunit = $ada-unit-dl">dl</xsl:when>
+            <xsl:when test="$ADAunit = $ada-unit-cl">cl</xsl:when>
+            <xsl:when test="$ADAunit = $ada-unit-ml">ml</xsl:when>
+            <xsl:when test="$ADAunit = $ada-unit-ul">ul</xsl:when>
+            <xsl:when test="$ADAunit = $ada-unit-druppel">[drp]</xsl:when>
+            <xsl:when test="$ADAunit = $ada-unit-degrees-celsius">Cel</xsl:when>
+            <xsl:when test="$ADAunit = $ada-unit-pH">[pH]</xsl:when>
+            <xsl:when test="$ADAunit = $ada-unit-mmol-l">mmol/L</xsl:when>
+            <xsl:when test="not(contains(nf:convertTime_ADA_unit2UCUM($ADAunit), 'onbekend'))">
+               <xsl:value-of select="nf:convertTime_ADA_unit2UCUM($ADAunit)"/>
+            </xsl:when>
+            <xsl:otherwise>
+               <!-- let's assume it is a valid UCUM code -->
+               <xsl:value-of select="$ADAunit"/>
+            </xsl:otherwise>
+         </xsl:choose>
+      </xsl:if>
+   </xsl:function>
+   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!-- Converts an ada unit to the UCUM unit as used in FHIR -->
+   <xsl:function name="nf:convert_ADA_unit2UCUM_FHIR"
+                 as="xs:string?">
+      <xsl:param name="ADAunit"
+                 as="xs:string?">
+         <!-- The ada unit string -->
+      </xsl:param>
+      <xsl:if test="$ADAunit">
+         <xsl:choose>
+            <xsl:when test="$ADAunit = $ada-unit-gram">g</xsl:when>
+            <xsl:when test="$ADAunit = $ada-unit-kilo">kg</xsl:when>
+            <xsl:when test="$ADAunit = $ada-unit-cm">cm</xsl:when>
+            <xsl:when test="$ADAunit = $ada-unit-m">m</xsl:when>
+            <xsl:when test="$ADAunit = $ada-unit-mmHg">mm[Hg]</xsl:when>
+            <xsl:when test="$ADAunit = $ada-unit-diopter">[diop]</xsl:when>
+            <xsl:when test="$ADAunit = $ada-unit-prism-diopter">[p'diop]</xsl:when>
+            <xsl:when test="$ADAunit = $ada-unit-degrees">deg</xsl:when>
+            <xsl:when test="nf:isValidUCUMUnit($ADAunit)">
+               <xsl:value-of select="$ADAunit"/>
+            </xsl:when>
+            <xsl:when test="not(contains(nf:convertTime_ADA_unit2UCUM_FHIR($ADAunit), 'onbekend'))">
+               <xsl:value-of select="nf:convertTime_ADA_unit2UCUM_FHIR($ADAunit)"/>
+            </xsl:when>
+            <xsl:otherwise>
+               <!-- If all else fails: wrap in {} to make it an annotation -->
+               <xsl:value-of select="concat('{', $ADAunit, '}')"/>
+            </xsl:otherwise>
+         </xsl:choose>
+      </xsl:if>
+   </xsl:function>
+   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!-- Converts ADA time unit 2 UCUM -->
+   <xsl:function name="nf:convertTime_ADA_unit2UCUM"
+                 as="xs:string?">
+      <xsl:param name="ADAtime"
+                 as="xs:string?"/>
+      <xsl:if test="$ADAtime">
+         <xsl:choose>
+            <xsl:when test="$ADAtime = $ada-unit-second">s</xsl:when>
+            <xsl:when test="$ADAtime = $ada-unit-minute">min</xsl:when>
+            <xsl:when test="$ADAtime = $ada-unit-hour">h</xsl:when>
+            <xsl:when test="$ADAtime = $ada-unit-day">d</xsl:when>
+            <xsl:when test="$ADAtime = $ada-unit-week">wk</xsl:when>
+            <xsl:when test="$ADAtime = $ada-unit-month">mo</xsl:when>
+            <xsl:when test="$ADAtime = $ada-unit-year">a</xsl:when>
+            <xsl:otherwise>
+               <!-- If all else fails: simply return the ada value -->
+               <xsl:value-of select="$ADAtime"/>
+            </xsl:otherwise>
+         </xsl:choose>
+      </xsl:if>
+   </xsl:function>
+   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!-- Converts an ada time unit to the UCUM unit as used in FHIR -->
+   <xsl:function name="nf:convertTime_ADA_unit2UCUM_FHIR"
+                 as="xs:string?">
+      <xsl:param name="ADAtime"
+                 as="xs:string?">
+         <!-- The ada time unit string -->
+      </xsl:param>
+      <xsl:if test="$ADAtime">
+         <xsl:choose>
+            <xsl:when test="$ADAtime = $ada-unit-second">s</xsl:when>
+            <xsl:when test="$ADAtime = $ada-unit-minute">min</xsl:when>
+            <xsl:when test="$ADAtime = $ada-unit-hour">h</xsl:when>
+            <xsl:when test="$ADAtime = $ada-unit-day">d</xsl:when>
+            <xsl:when test="$ADAtime = $ada-unit-week">wk</xsl:when>
+            <xsl:when test="$ADAtime = $ada-unit-month">mo</xsl:when>
+            <xsl:when test="$ADAtime = $ada-unit-year">a</xsl:when>
+            <xsl:otherwise>
+               <!-- If all else fails: wrap in {} to make it an annotation -->
+               <xsl:value-of select="concat('{', $ADAtime, '}')"/>
+            </xsl:otherwise>
+         </xsl:choose>
+      </xsl:if>
+   </xsl:function>
+   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <xsl:template name="UCUM2GstdBasiseenheid">
+      <!-- Creates code attributes for Gstd eenheid based on UCUM input -->
+      <xsl:param name="UCUM"
+                 as="xs:string?">
+         <!-- UCUM string -->
+      </xsl:param>
+      <xsl:choose>
+         <xsl:when test="string-length($UCUM) &gt; 0">
+            <xsl:choose>
+               <xsl:when test="string-length($UCUM2GstdMap[@UCUMCode = normalize-space($UCUM)]/@GstdCode) gt 0">
+                  <xsl:attribute name="code"
+                                 select="$UCUM2GstdMap[@UCUMCode = normalize-space($UCUM)]/@GstdCode"/>
+                  <xsl:attribute name="codeSystem"
+                                 select="$oidGStandaardBST902THES2"/>
+                  <xsl:attribute name="codeSystemName">G-Standaard thesaurus basiseenheden</xsl:attribute>
+                  <xsl:attribute name="displayName"
+                                 select="$UCUM2GstdMap[@UCUMCode = normalize-space($UCUM)]/@GstdDisplayName"/>
+               </xsl:when>
+               <!-- unsupported input value, log message and do nothing -->
+               <xsl:otherwise>
+                  <xsl:call-template name="util:logMessage">
+                     <xsl:with-param name="level"
+                                     select="$logWARN"/>
+                     <xsl:with-param name="msg">Not supported UCUM eenheid, cannot convert to G-standaard basiseenheid: 
+<xsl:value-of select="$UCUM"/>
+                     </xsl:with-param>
+                  </xsl:call-template>
+               </xsl:otherwise>
+            </xsl:choose>
+         </xsl:when>
+         <!-- empty input value, log message and do nothing -->
+         <xsl:otherwise>
+            <xsl:call-template name="util:logMessage">
+               <xsl:with-param name="level"
+                               select="$logWARN"/>
+               <xsl:with-param name="msg">UCUM is an empty string. Not supported to convert to G-standaard basiseenheid.</xsl:with-param>
+            </xsl:call-template>
+         </xsl:otherwise>
+      </xsl:choose>
+   </xsl:template>
 </xsl:stylesheet>

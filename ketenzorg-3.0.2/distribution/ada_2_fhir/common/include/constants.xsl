@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?yatc-distribution-provenance href="YATC-shared/xsl/util/constants.xsl"?>
-<?yatc-distribution-info name="ketenzorg-3.0.2" timestamp="2024-06-28T14:38:20.79+02:00" version="1.4.28"?>
+<?yatc-distribution-info name="ketenzorg-3.0.2" timestamp="2024-11-15T00:15:11.67+01:00" version="1.4.29"?>
 <!-- == Provenance: YATC-shared/xsl/util/constants.xsl == -->
-<!-- == Distribution: ketenzorg-3.0.2; 1.4.28; 2024-06-28T14:38:20.79+02:00 == -->
+<!-- == Distribution: ketenzorg-3.0.2; 1.4.29; 2024-11-15T00:15:11.67+01:00 == -->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -30,6 +30,7 @@
         The full text of the license is available at http://www.gnu.org/copyleft/lesser.html
     -->
    <!-- ================================================================== -->
+   <!-- Some constants depend on the FHIR version used, so this parameter can be used to select either 'STU3' (default) or 'R4' -->
    <xsl:param name="fhirVersion"
               select="'STU3'"/>
    <xsl:variable name="maxLengthFHIRLogicalId"
@@ -168,6 +169,8 @@
    <xsl:variable name="urlBaseNictizProfile">http://nictiz.nl/fhir/StructureDefinition/</xsl:variable>
    <xsl:variable name="urlExtAdministrationAgreementAdditionalInformation">
       <xsl:value-of select="$urlBaseNictizProfile"/>ext-AdministrationAgreement.AdditionalInformation</xsl:variable>
+   <xsl:variable name="urlExtAnatomicalLocationLaterality">
+      <xsl:value-of select="$urlBaseNictizProfile"/>ext-AnatomicalLocation.Laterality</xsl:variable>
    <xsl:variable name="urlExtAsAgreedIndicator">
       <xsl:value-of select="$urlBaseNictizProfile"/>ext-AsAgreedIndicator</xsl:variable>
    <xsl:variable name="urlExtComment">
@@ -186,10 +189,14 @@
       <xsl:value-of select="$urlBaseNictizProfile"/>practitionerrole-reference</xsl:variable>
    <xsl:variable name="urlExtHL7DataAbsentReason">http://hl7.org/fhir/StructureDefinition/data-absent-reason</xsl:variable>
    <xsl:variable name="urlExtHL7NullFlavor">http://hl7.org/fhir/StructureDefinition/iso21090-nullFlavor</xsl:variable>
+   <xsl:variable name="urlExtIso21090ENqualifier">http://hl7.org/fhir/StructureDefinition/iso21090-EN-qualifier</xsl:variable>
+   <xsl:variable name="urlExtIso21090PQtranslation">http://hl7.org/fhir/StructureDefinition/iso21090-PQ-translation</xsl:variable>
    <xsl:variable name="urlExtMedicationAdministration2AgreedDateTime">
       <xsl:value-of select="$urlBaseNictizProfile"/>ext-MedicationAdministration2.AgreedDateTime</xsl:variable>
    <xsl:variable name="urlExtMedicationAdministration2AgreedAmount">
       <xsl:value-of select="$urlBaseNictizProfile"/>ext-MedicationAdministration2.AgreedAmount</xsl:variable>
+   <xsl:variable name="urlExtMedicationAdministration2InjectionPatchSite">
+      <xsl:value-of select="$urlBaseNictizProfile"/>ext-MedicationAdministration2.InjectionPatchSite</xsl:variable>
    <xsl:variable name="urlExtMedicationAdministration2ReasonForDeviation">
       <xsl:value-of select="$urlBaseNictizProfile"/>ext-MedicationAdministration2.ReasonForDeviation</xsl:variable>
    <xsl:variable name="urlExtMedicationAgreementAdditionalInformation">
@@ -200,6 +207,8 @@
       <xsl:value-of select="$urlBaseNictizProfile"/>ext-MedicationAgreement.PeriodOfUse.Condition</xsl:variable>
    <xsl:variable name="urlExtMedicationAgreementRelationMedicationUse">
       <xsl:value-of select="$urlBaseNictizProfile"/>ext-MedicationAgreement.RelationMedicationUse</xsl:variable>
+   <xsl:variable name="urlExtMedicationHypersensitivityIdentifier">
+      <xsl:value-of select="$urlBaseNictizProfile"/>ext-MedicationHypersensitivity.Identifier</xsl:variable>
    <xsl:variable name="urlExtMedicationMedicationDispenseDistributionForm">
       <xsl:value-of select="$urlBaseNictizProfile"/>ext-MedicationDispense.DistributionForm</xsl:variable>
    <xsl:variable name="urlExtMedicationUse2Prescriber">
@@ -216,6 +225,8 @@
       <xsl:value-of select="$urlBaseNictizProfile"/>ext-ResourceCategory</xsl:variable>
    <xsl:variable name="urlExtStoptype">
       <xsl:value-of select="$urlBaseNictizProfile"/>ext-StopType</xsl:variable>
+   <xsl:variable name="urlExtRegistrationDateTime">
+      <xsl:value-of select="$urlBaseNictizProfile"/>ext-RegistrationDateTime</xsl:variable>
    <!-- MP9 2.0.0-bèta version -->
    <xsl:variable name="urlExtTimeInterval-Period">
       <xsl:value-of select="$urlBaseNictizProfile"/>ext-TimeInterval-Period</xsl:variable>
@@ -840,7 +851,7 @@
       <map oid="{$oidZIBWoningType}"
            displayName="ZIB WoningType"/>
       <xsl:choose>
-         <xsl:when test="$fhirVersion='STU3'">
+         <xsl:when test="$fhirVersion = 'STU3'">
             <map oid="{$oidChoiceListOrientation}"
                  uri="http://hl7.org/fhir/choice-list-orientation"
                  displayName="ChoiceListOrientation"/>
@@ -885,6 +896,11 @@
             <map oid="{$oidHL7V3MaritalStatus}"
                  uri="http://hl7.org/fhir/v3/MaritalStatus"
                  displayName="HL7 MaritalStatus"/>
+            <map oid="2.16.840.1.113883.5.1123"
+                 uri="http://hl7.org/fhir/v3/DataOperation"
+                 displayName="HL7 DataOperation"/>
+            <map oid="2.16.840.1.113883.5.33 http://hl7.org/fhir/v3/DocumentCompletion"
+                 displayName="HL7 DocumentCompletion"/>
          </xsl:when>
          <xsl:when test="$fhirVersion = 'R4'">
             <map oid="{$oidChoiceListOrientation}"
@@ -893,9 +909,6 @@
             <map oid="{$oidFHIRObservationCategory}"
                  uri="http://terminology.hl7.org/CodeSystem/observation-category"
                  displayName="ObservationCategory"/>
-            <map oid="{$oidGTIN}"
-                 uri="https://www.gs1.org/gtin"
-                 displayName="GTIN (GS1)"/>
             <map oid="{$oidHL7ActCode}"
                  uri="http://terminology.hl7.org/CodeSystem/v3-ActCode"
                  displayName="HL7 ActCode"/>
@@ -940,6 +953,12 @@
                  displayName="QuestionnaireItemUsageMode Item UI Control Codes"/>
             <map uri="http://terminology.hl7.org/CodeSystem/v2-0078"
                  displayName="HL7 Version 2 Table 0078 v2 Interpretation Codes"/>
+            <map oid="2.16.840.1.113883.5.1123"
+                 uri="http://terminology.hl7.org/CodeSystem/v3-DataOperation"
+                 displayName="HL7 DataOperation"/>
+            <map oid="2.16.840.1.113883.5.33"
+                 uri="http://terminology.hl7.org/CodeSystem/v3-DocumentCompletion"
+                 displayName="HL7 DocumentCompletion"/>
          </xsl:when>
       </xsl:choose>
    </xsl:variable>
@@ -1402,5 +1421,4 @@
    <!-- checks https://hl7.org/fhir/R4/references.html#regex -->
    <xsl:variable name="restRegexR4"
                  as="xs:string">((http|https)://([A-Za-z0-9\-\\\.:%\$]*/)+)?(Account|ActivityDefinition|AdverseEvent|AllergyIntolerance|Appointment|AppointmentResponse|AuditEvent|Basic|Binary|BiologicallyDerivedProduct|BodyStructure|Bundle|CapabilityStatement|CarePlan|CareTeam|CatalogEntry|ChargeItem|ChargeItemDefinition|Claim|ClaimResponse|ClinicalImpression|CodeSystem|Communication|CommunicationRequest|CompartmentDefinition|Composition|ConceptMap|Condition|Consent|Contract|Coverage|CoverageEligibilityRequest|CoverageEligibilityResponse|DetectedIssue|Device|DeviceDefinition|DeviceMetric|DeviceRequest|DeviceUseStatement|DiagnosticReport|DocumentManifest|DocumentReference|EffectEvidenceSynthesis|Encounter|Endpoint|EnrollmentRequest|EnrollmentResponse|EpisodeOfCare|EventDefinition|Evidence|EvidenceVariable|ExampleScenario|ExplanationOfBenefit|FamilyMemberHistory|Flag|Goal|GraphDefinition|Group|GuidanceResponse|HealthcareService|ImagingStudy|Immunization|ImmunizationEvaluation|ImmunizationRecommendation|ImplementationGuide|InsurancePlan|Invoice|Library|Linkage|List|Location|Measure|MeasureReport|Media|Medication|MedicationAdministration|MedicationDispense|MedicationKnowledge|MedicationRequest|MedicationStatement|MedicinalProduct|MedicinalProductAuthorization|MedicinalProductContraindication|MedicinalProductIndication|MedicinalProductIngredient|MedicinalProductInteraction|MedicinalProductManufactured|MedicinalProductPackaged|MedicinalProductPharmaceutical|MedicinalProductUndesirableEffect|MessageDefinition|MessageHeader|MolecularSequence|NamingSystem|NutritionOrder|Observation|ObservationDefinition|OperationDefinition|OperationOutcome|Organization|OrganizationAffiliation|Patient|PaymentNotice|PaymentReconciliation|Person|PlanDefinition|Practitioner|PractitionerRole|Procedure|Provenance|Questionnaire|QuestionnaireResponse|RelatedPerson|RequestGroup|ResearchDefinition|ResearchElementDefinition|ResearchStudy|ResearchSubject|RiskAssessment|RiskEvidenceSynthesis|Schedule|SearchParameter|ServiceRequest|Slot|Specimen|SpecimenDefinition|StructureDefinition|StructureMap|Subscription|Substance|SubstanceNucleicAcid|SubstancePolymer|SubstanceProtein|SubstanceReferenceInformation|SubstanceSourceMaterial|SubstanceSpecification|SupplyDelivery|SupplyRequest|Task|TerminologyCapabilities|TestReport|TestScript|ValueSet|VerificationResult|VisionPrescription)/[A-Za-z0-9\-\.]{1,64}(/_history/[A-Za-z0-9\-\.]{1,64})?</xsl:variable>
-   <!-- ================================================================== -->
 </xsl:stylesheet>

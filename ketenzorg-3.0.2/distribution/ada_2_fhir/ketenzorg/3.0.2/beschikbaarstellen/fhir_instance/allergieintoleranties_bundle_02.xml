@@ -2,7 +2,7 @@
 <Bundle xsi:schemaLocation="http://hl7.org/fhir http://hl7.org/fhir/STU3/fhir-all.xsd"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns="http://hl7.org/fhir">
-   <id value="5470b0b0-351f-11ef-1655-020000000000"/>
+   <id value="7e5fc5c2-a2da-11ef-4277-020000000000"/>
    <type value="searchset"/>
    <total value="2"/>
    <link>
@@ -20,8 +20,7 @@
                <status value="extensions"/>
                <div xmlns="http://www.w3.org/1999/xhtml">
                   <table>
-                     <caption>Allergie/intolerantie. Patiënt: van Anoniempje. Id: 3306010885055 (urn:oid:2.16.840.1.113883.2.4.3.39.6101.51732.10003466.17), Categorie: 
-<span title="neiging tot ongewenste reactie op medicatie en/of drug (419511003 - SNOMED CT)">neiging tot ongewenste reactie op medicatie en/of drug</span>, Status: actief / bevestigd</caption>
+                     <caption>Allergie/intolerantie. Patiënt: van Anoniempje. Id: 3306010885055 (urn:oid:2.16.840.1.113883.2.4.3.39.6101.51732.10003466.17), Categorie: medicatie, Status: actief / bevestigd</caption>
                      <tbody>
                         <tr>
                            <th>Code</th>
@@ -72,7 +71,7 @@
                </coding>
             </code>
             <patient>
-               <reference value="urn:uuid:5470a7a6-351f-11ef-1655-020000000000"/>
+               <reference value="urn:uuid:7e5fe0ee-a2da-11ef-4277-020000000000"/>
                <display value="van Anoniempje"/>
             </patient>
             <onsetDateTime value="2011-08-16"/>
@@ -93,8 +92,7 @@
                <status value="extensions"/>
                <div xmlns="http://www.w3.org/1999/xhtml">
                   <table>
-                     <caption>Allergie/intolerantie. Patiënt: van Anoniempje. Id: 0000593307014888565 (urn:oid:2.16.840.1.113883.2.4.3.39.6101.51732.10003466.17), Categorie: 
-<span title="neiging tot ongewenste reactie op medicatie en/of drug (419511003 - SNOMED CT)">neiging tot ongewenste reactie op medicatie en/of drug</span>, Status: actief / bevestigd</caption>
+                     <caption>Allergie/intolerantie. Patiënt: van Anoniempje. Id: 0000593307014888565 (urn:oid:2.16.840.1.113883.2.4.3.39.6101.51732.10003466.17), Categorie: medicatie, Status: actief / bevestigd</caption>
                      <tbody>
                         <tr>
                            <th>Code</th>
@@ -145,7 +143,7 @@
                </coding>
             </code>
             <patient>
-               <reference value="urn:uuid:5470a7a6-351f-11ef-1655-020000000000"/>
+               <reference value="urn:uuid:7e5fe0ee-a2da-11ef-4277-020000000000"/>
                <display value="van Anoniempje"/>
             </patient>
             <onsetDateTime value="2011-08-16"/>
@@ -156,7 +154,7 @@
       </search>
    </entry>
    <entry>
-      <fullUrl value="urn:uuid:5470a7a6-351f-11ef-1655-020000000000"/>
+      <fullUrl value="urn:uuid:7e5fe0ee-a2da-11ef-4277-020000000000"/>
       <resource>
          <Patient>
             <meta>

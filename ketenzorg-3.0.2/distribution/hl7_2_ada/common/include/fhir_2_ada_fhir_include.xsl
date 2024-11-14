@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?yatc-distribution-provenance href="HL7-mappings/fhir_2_ada/fhir/fhir_2_ada_fhir_include.xsl"?>
-<?yatc-distribution-info name="ketenzorg-3.0.2" timestamp="2024-06-28T14:38:20.79+02:00" version="1.4.28"?>
+<?yatc-distribution-info name="ketenzorg-3.0.2" timestamp="2024-11-15T00:15:11.67+01:00" version="1.4.29"?>
 <!-- == Provenance: HL7-mappings/fhir_2_ada/fhir/fhir_2_ada_fhir_include.xsl == -->
-<!-- == Distribution: ketenzorg-3.0.2; 1.4.28; 2024-06-28T14:38:20.79+02:00 == -->
+<!-- == Distribution: ketenzorg-3.0.2; 1.4.29; 2024-11-15T00:15:11.67+01:00 == -->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -22,7 +22,7 @@
       <xd:param name="value">The FHIR @value</xd:param>
       <xd:param name="codeMap">Array of map elements to be used to map input FHIR codes to output ADA codes.</xd:param>
    </xd:doc>
-   <xsl:template name="code-to-code"
+   <xsl:template name="fhircode-to-adacode"
                  as="attribute()+">
       <xsl:param name="value"
                  as="xs:string"
@@ -591,38 +591,29 @@
    <xd:doc>
       <xd:desc>Formats FHIR date(Time) or ada normal or relativeDate(time) based on input precision</xd:desc>
       <xd:param name="dateTime">Input FHIR date(Time)</xd:param>
-      <xd:param name="precision">Determines the precision of the output. Precision of minutes outputs seconds as '00'</xd:param>
       <xd:param name="dateT">Optional parameter. The T-date for which a relativeDate must be calculated. If not given a Touchstone like parameterised string is outputted</xd:param>
    </xd:doc>
    <xsl:template name="format2ADADate">
       <xsl:param name="dateTime"
                  as="xs:string?"/>
-      <xsl:param name="precision">second</xsl:param>
       <xsl:param name="dateT"
                  as="xs:date?"/>
-      <xsl:variable name="picture"
-                    as="xs:string?">
-         <xsl:choose>
-            <xsl:when test="upper-case($precision) = ('DAY', 'DAG', 'DAYS', 'DAGEN', 'D')">[Y0001]-[M01]-[D01]</xsl:when>
-            <xsl:when test="upper-case($precision) = ('MINUTE', 'MINUUT', 'MINUTES', 'MINUTEN', 'MIN', 'M')">[Y0001]-[M01]-[D01]T[H01]:[m01]:00[Z]</xsl:when>
-            <xsl:otherwise>[Y0001]-[M01]-[D01]T[H01]:[m01]:[s01][Z]</xsl:otherwise>
-         </xsl:choose>
-      </xsl:variable>
+      <xsl:variable name="normDateTime"
+                    as="xs:string?"
+                    select="normalize-space($dateTime)"/>
       <xsl:choose>
-         <xsl:when test="normalize-space($dateTime) castable as xs:dateTime">
-            <xsl:value-of select="format-dateTime(xs:dateTime(nf:add-Amsterdam-timezone-to-dateTimeString(normalize-space($dateTime))), $picture)"/>
+         <xsl:when test="$normDateTime castable as xs:dateTime or $normDateTime castable as xs:date">
+            <xsl:value-of select="$normDateTime"/>
          </xsl:when>
-         <xsl:when test="concat(normalize-space($dateTime), ':00') castable as xs:dateTime">
-            <xsl:value-of select="format-dateTime(xs:dateTime(nf:add-Amsterdam-timezone-to-dateTimeString(concat(normalize-space($dateTime), ':00'))), $picture)"/>
-         </xsl:when>
-         <xsl:when test="normalize-space($dateTime) castable as xs:date">
-            <xsl:value-of select="format-date(xs:date(normalize-space($dateTime)), '[Y0001]-[M01]-[D01]')"/>
+         <!-- fhir also allows partial dates YYYY and YYYY-MM, so fhir does this in the same way as ada -->
+         <xsl:when test="matches($normDateTime, '^\d{4}(\-\d{2})?$')">
+            <xsl:value-of select="$normDateTime"/>
          </xsl:when>
          <!-- there may be a relative date(time) like "${DATE, T, D, -20}T12:34:45+02:00" in the input -->
-         <xsl:when test="matches($dateTime, '\$\{DATE, T, [YMD], ([+\-]\d+(\.\d+)?)\}')">
+         <xsl:when test="matches($normDateTime, '\$\{DATE, T, [YMD], ([+\-]\d+(\.\d+)?)\}')">
             <xsl:variable name="sign">
                <xsl:variable name="temp"
-                             select="replace($dateTime, '\$\{DATE, T, [YMD], (([+\-])\d+(\.\d+)?)\}.*', '$2')"/>
+                             select="replace($normDateTime, '\$\{DATE, T, [YMD], (([+\-])\d+(\.\d+)?)\}.*', '$2')"/>
                <xsl:choose>
                   <xsl:when test="string-length($temp) gt 0">
                      <xsl:value-of select="$temp"/>
@@ -633,7 +624,7 @@
             </xsl:variable>
             <xsl:variable name="amount">
                <xsl:variable name="temp"
-                             select="replace($dateTime, '\$\{DATE, T, [YMD], ([+\-](\d+(\.\d+)?))\}.*', '$2')"/>
+                             select="replace($normDateTime, '\$\{DATE, T, [YMD], ([+\-](\d+(\.\d+)?))\}.*', '$2')"/>
                <xsl:choose>
                   <xsl:when test="string-length($temp) gt 0">
                      <xsl:value-of select="$temp"/>
@@ -644,7 +635,7 @@
             </xsl:variable>
             <xsl:variable name="yearMonthDay">
                <xsl:variable name="temp"
-                             select="replace($dateTime, '\$\{DATE, T, ([YMD]), ([+\-](\d+(\.\d+)?))\}.*', '$1')"/>
+                             select="replace($normDateTime, '\$\{DATE, T, ([YMD]), ([+\-](\d+(\.\d+)?))\}.*', '$1')"/>
                <xsl:choose>
                   <xsl:when test="string-length($temp) gt 0">
                      <xsl:value-of select="$temp"/>
@@ -654,7 +645,7 @@
                </xsl:choose>
             </xsl:variable>
             <xsl:variable name="timePart"
-                          select="replace($dateTime, '\$\{DATE, T, ([YMD]), ([+\-](\d+(\.\d+)?))\}T(.+)[+\-].*', '$5')"/>
+                          select="replace($normDateTime, '\$\{DATE, T, ([YMD]), ([+\-](\d+(\.\d+)?))\}T(.+)[+\-].*', '$5')"/>
             <xsl:variable name="time">
                <xsl:choose>
                   <xsl:when test="string-length($timePart) = 5">
@@ -669,7 +660,7 @@
             <xsl:choose>
                <xsl:when test="$dateT castable as xs:date">
                   <xsl:variable name="newDate"
-                                select="nf:calculate-t-date($dateTime, $dateT)"/>
+                                select="nf:calculate-t-date($normDateTime, $dateT)"/>
                   <xsl:choose>
                      <xsl:when test="$newDate castable as xs:dateTime">
                         <!-- in an ada relative datetime the timezone is not permitted (or known), let's add the timezon -->
@@ -690,11 +681,13 @@
             </xsl:choose>
          </xsl:when>
          <xsl:otherwise>
-            <!-- let's try if the input is HL7 date or dateTime, should not be since input is ada -->
+            <!-- let's try if the input is HL7 date or dateTime, should not be since input is fhir -->
             <xsl:variable name="newDateTime"
-                          select="replace(concat(normalize-space($dateTime), '00000000000000'), '^(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})', '$1-$2-$3T$4:$5:$6')"/>
+                          select="replace(concat($normDateTime, '00000000000000'), '^(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})', '$1-$2-$3T$4:$5:$6')"/>
             <xsl:variable name="newDate"
-                          select="replace(normalize-space($dateTime), '^(\d{4})(\d{2})(\d{2})', '$1-$2-$3')"/>
+                          select="replace($normDateTime, '^(\d{4})(\d{2})(\d{2})', '$1-$2-$3')"/>
+            <xsl:variable name="picture"
+                          as="xs:string?">[Y0001]-[M01]-[D01]T[H01][m01][s01].[f001][Z0001]</xsl:variable>
             <xsl:choose>
                <xsl:when test="$newDateTime castable as xs:dateTime">
                   <xsl:value-of select="format-dateTime(xs:dateTime($newDateTime), $picture)"/>
@@ -703,7 +696,7 @@
                   <xsl:value-of select="format-date(xs:date($newDateTime), '[Y0001]-[M01]-[D01]')"/>
                </xsl:when>
                <xsl:otherwise>
-                  <xsl:value-of select="$dateTime"/>
+                  <xsl:value-of select="$normDateTime"/>
                </xsl:otherwise>
             </xsl:choose>
          </xsl:otherwise>

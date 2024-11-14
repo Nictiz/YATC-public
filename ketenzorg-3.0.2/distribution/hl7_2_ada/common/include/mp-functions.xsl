@@ -1,22 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?yatc-distribution-provenance href="HL7-mappings/util/mp-functions.xsl"?>
-<?yatc-distribution-info name="ketenzorg-3.0.2" timestamp="2024-06-28T14:38:20.79+02:00" version="1.4.28"?>
-<!-- == Provenance: HL7-mappings/util/mp-functions.xsl == -->
-<!-- == Distribution: ketenzorg-3.0.2; 1.4.28; 2024-06-28T14:38:20.79+02:00 == -->
+<?yatc-distribution-provenance href="YATC-shared/xsl/util/mp-functions.xsl"?>
+<?yatc-distribution-info name="ketenzorg-3.0.2" timestamp="2024-11-15T00:15:11.67+01:00" version="1.4.29"?>
+<!-- == Provenance: YATC-shared/xsl/util/mp-functions.xsl == -->
+<!-- == Distribution: ketenzorg-3.0.2; 1.4.29; 2024-11-15T00:15:11.67+01:00 == -->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:f="http://hl7.org/fhir"
                 xmlns:nf="http://www.nictiz.nl/functions"
+                xmlns:yatcs="https://nictiz.nl/ns/YATC-shared"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:nwf="http://www.nictiz.nl/wiki-functions"
                 xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl"
+                xmlns:local="#local.2024020614533854545020100"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+   <!-- ================================================================== -->
+   <!--
+        TBD
+    -->
+   <!-- ================================================================== -->
+   <!--
+        Copyright © Nictiz
+        
+        This program is free software; you can redistribute it and/or modify it under the terms of the
+        GNU Lesser General Public License as published by the Free Software Foundation; either version
+        2.1 of the License, or (at your option) any later version.
+        
+        This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+        without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+        See the GNU Lesser General Public License for more details.
+        
+        The full text of the license is available at http://www.gnu.org/copyleft/lesser.html
+    -->
+   <!-- ================================================================== -->
    <!-- give dateT a value when you need conversion of relative T dates, typically only needed for test instances -->
    <!--    <xsl:param name="dateT" as="xs:date?" select="current-date()"/>-->
    <xsl:param name="dateT"
               as="xs:date?"/>
+   <!-- wether to generate the instruction text based on structured fields. Should be false for real live use  -->
+   <xsl:param name="generateInstructionText"
+              as="xs:boolean?"
+              select="false()"/>
    <!-- mp constants -->
    <xsl:variable name="maCode"
                  as="xs:string*"
@@ -85,12 +110,8 @@
            displayName="definitief gestopt"
            version="907"/>
    </xsl:variable>
-   <xd:doc>
-      <xd:desc>Calculates the start date of a dosage instruction</xd:desc>
-      <xd:param name="startdatum-dosering-1"/>
-      <xd:param name="theDosering"/>
-      <xd:param name="doseerinstructies"/>
-   </xd:doc>
+   <!-- ================================================================== -->
+   <!-- Calculates the start date of a dosage instruction -->
    <xsl:function name="nf:calculate_Doseerinstructie_Startdate"
                  as="xs:date?">
       <xsl:param name="startdatum-dosering-1"
@@ -121,11 +142,7 @@
          </xsl:otherwise>
       </xsl:choose>
    </xsl:function>
-   <xd:doc>
-      <xd:desc/>
-      <xd:param name="inputDuur"/>
-      <xd:param name="eenheid_UCUM"/>
-   </xd:doc>
+   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
    <xsl:function name="nf:calculate_Duur_In_Dagen">
       <xsl:param name="inputDuur"/>
       <xsl:param name="eenheid_UCUM"/>
@@ -148,23 +165,26 @@
          </xsl:otherwise>
       </xsl:choose>
    </xsl:function>
-   <xd:doc>
-      <xd:desc>Outputs a human readable date based on input.</xd:desc>
-      <xd:param name="current-bouwsteen">ada bouwsteen of the input ada instance xml</xd:param>
-      <xd:param name="current-element">the ada xml element in the current bouwsteen that has a date to be converted</xd:param>
-      <xd:param name="output0time">whether or not a time of 00:00 should be outputted in the text.</xd:param>
-      <xd:param name="outputEndtime">whether or not a time of 23:59 should be outputted in the text.</xd:param>
-   </xd:doc>
+   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!-- Outputs a human readable date based on input. -->
    <xsl:function name="nf:output-T-date"
                  as="xs:string?">
       <xsl:param name="current-bouwsteen"
-                 as="element()?"/>
+                 as="element()?">
+         <!-- ada bouwsteen of the input ada instance xml -->
+      </xsl:param>
       <xsl:param name="current-element"
-                 as="element()?"/>
+                 as="element()?">
+         <!-- the ada xml element in the current bouwsteen that has a date to be converted -->
+      </xsl:param>
       <xsl:param name="output0time"
-                 as="xs:boolean?"/>
+                 as="xs:boolean?">
+         <!-- whether or not a time of 00:00 should be outputted in the text. -->
+      </xsl:param>
       <xsl:param name="outputEndtime"
-                 as="xs:boolean?"/>
+                 as="xs:boolean?">
+         <!-- whether or not a time of 23:59 should be outputted in the text. -->
+      </xsl:param>
       <xsl:variable name="string-output"
                     as="xs:string*">
          <xsl:choose>
@@ -187,20 +207,22 @@
       </xsl:variable>
       <xsl:value-of select="normalize-space(string-join($string-output, ''))"/>
    </xsl:function>
-   <xd:doc>
-      <xd:desc>Function to create a nice dosage string based on the structured input.</xd:desc>
-      <xd:param name="inDoseerinstructie">Input ada element doseerinstructie</xd:param>
-      <xd:param name="amount-doseerinstructies">The number of doseerinstructies, this is needed to help create order in the doseringsstring</xd:param>
-      <xd:param name="non-parallel-doseerinstructie">Whether a non-parallel (i.e. with different sequence number) doseerinstructie exists</xd:param>
-   </xd:doc>
+   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!-- Function to create a nice dosage string based on the structured input. -->
    <xsl:function name="nf:dosering-string"
                  as="xs:string">
       <xsl:param name="inDoseerinstructie"
-                 as="element()?"/>
+                 as="element()?">
+         <!-- Input ada element doseerinstructie -->
+      </xsl:param>
       <xsl:param name="amount-doseerinstructies"
-                 as="xs:integer"/>
+                 as="xs:integer">
+         <!-- The number of doseerinstructies, this is needed to help create order in the doseringsstring -->
+      </xsl:param>
       <xsl:param name="non-parallel-doseerinstructie"
-                 as="xs:boolean?"/>
+                 as="xs:boolean?">
+         <!-- Whether a non-parallel (i.e. with different sequence number) doseerinstructie exists -->
+      </xsl:param>
       <xsl:for-each select="$inDoseerinstructie">
          <xsl:variable name="doseerduur-string"
                        as="xs:string*">
@@ -225,7 +247,7 @@
                   <xsl:for-each select="dosering">
                      <xsl:variable name="zo-nodig"
                                    as="xs:string*">
-                        <xsl:value-of select="zo_nodig/criterium/(code | criterium)/@displayName"/>
+                        <xsl:value-of select="zo_nodig/(criterium | criterium/(code | criterium))/@displayName"/>
                      </xsl:variable>
                      <xsl:variable name="frequentie"
                                    select="toedieningsschema/frequentie[.//(@value | @code)]"/>
@@ -319,15 +341,24 @@
                            <xsl:variable name="unitString"
                                          as="xs:string?">
                               <xsl:choose>
-                                 <xsl:when test="$toedieningssnelheid/tijdseenheid/@value ne '1'">
+                                 <!-- previous 3.0-beta.3 structure -->
+                                 <xsl:when test="$toedieningssnelheid[tijdseenheid]/tijdseenheid/@value ne '1'">
                                     <xsl:value-of select="concat($toedieningssnelheid/tijdseenheid/@value, ' ', nwf:unit-string($toedieningssnelheid/tijdseenheid/@value, $toedieningssnelheid/tijdseenheid/@unit))"/>
                                  </xsl:when>
-                                 <xsl:otherwise>
+                                 <xsl:when test="$toedieningssnelheid[tijdseenheid[@value or @unit]]">
                                     <xsl:value-of select="concat('', nwf:unit-string($toedieningssnelheid/tijdseenheid/@value, $toedieningssnelheid/tijdseenheid/@unit))"/>
-                                 </xsl:otherwise>
+                                 </xsl:when>
                               </xsl:choose>
                            </xsl:variable>
-                           <xsl:value-of select="concat(nwf:unit-string(1, $toedieningssnelheid/eenheid/@displayName), ' per ', $unitString)"/>
+                           <xsl:choose>
+                              <xsl:when test="$toedieningssnelheid[not(tijdseenheid)][eenheid[@unit][not(@value) or @value = '1']]">
+                                 <!-- new dataset structure in MP9 3.0.0-beta.3 -->
+                                 <xsl:value-of select="$toedieningssnelheid/eenheid/@unit"/>
+                              </xsl:when>
+                              <xsl:otherwise>
+                                 <xsl:value-of select="concat(nwf:unit-string(1, $toedieningssnelheid/eenheid/@displayName), ' per ', $unitString)"/>
+                              </xsl:otherwise>
+                           </xsl:choose>
                         </xsl:if>
                      </xsl:variable>
                      <xsl:variable name="toedieningsduur"
@@ -412,23 +443,26 @@
          <xsl:value-of select="normalize-space(concat(string-join($doseerduur-string, ' '), ' ', string-join($dosering-string, ' en ')))"/>
       </xsl:for-each>
    </xsl:function>
-   <xd:doc>
-      <xd:desc>Outputs a human readable string for a period with a possible start, duration, end date. The actual dates may be replaced by a configurable "T"-date with an addition of subtraction of a given number of days.</xd:desc>
-      <xd:param name="start-date">start date of the period</xd:param>
-      <xd:param name="periode">duration of the period</xd:param>
-      <xd:param name="end-date">end date of the period</xd:param>
-      <xd:param name="criterium">criterium of the period</xd:param>
-   </xd:doc>
+   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!-- Outputs a human readable string for a period with a possible start, duration, end date. The actual dates may be replaced by a configurable "T"-date with an addition of subtraction of a given number of days. -->
    <xsl:function name="nf:periode-string"
                  as="xs:string?">
       <xsl:param name="start-date"
-                 as="element()?"/>
+                 as="element()?">
+         <!-- start date of the period -->
+      </xsl:param>
       <xsl:param name="periode"
-                 as="element()?"/>
+                 as="element()?">
+         <!-- duration of the period -->
+      </xsl:param>
       <xsl:param name="end-date"
-                 as="element()?"/>
+                 as="element()?">
+         <!-- end date of the period -->
+      </xsl:param>
       <xsl:param name="criterium"
-                 as="element()?"/>
+                 as="element()?">
+         <!-- criterium of the period -->
+      </xsl:param>
       <xsl:variable name="waarde"
                     as="xs:string*">
          <xsl:if test="$start-date[@value]">Vanaf 
@@ -450,14 +484,45 @@
       </xsl:variable>
       <xsl:value-of select="normalize-space(string-join($waarde, ''))"/>
    </xsl:function>
-   <xd:doc>
-      <xd:desc>Generates omschrijving based on structured fields</xd:desc>
-      <xd:param name="gebruiksinstructie">Input ada element for usage instruction</xd:param>
-   </xd:doc>
+   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!-- Create the ext-RenderedDosageInstruction extension from ADA InstructionsForUse. -->
+   <xsl:template name="ext-RenderedDosageInstruction"
+                 mode="ext-RenderedDosageInstruction"
+                 match="gebruiksinstructie"
+                 as="element(f:extension)?">
+      <xsl:param name="in"
+                 as="element()?"
+                 select=".">
+         <!-- The ADA instance to extract the rendered dosage instruction from. 
+            Override for default function in mp-InstructionsForUse so that we can generate instruction text based on structured data. -->
+      </xsl:param>
+      <xsl:for-each select="$in">
+         <xsl:for-each select="omschrijving[@value != '']">
+            <f:extension url="http://nictiz.nl/fhir/StructureDefinition/ext-RenderedDosageInstruction">
+               <f:valueString>
+                  <xsl:attribute name="value">
+                     <xsl:choose>
+                        <xsl:when test="$generateInstructionText">
+                           <xsl:value-of select="nf:gebruiksintructie-string(..)"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                           <xsl:value-of select="@value"/>
+                        </xsl:otherwise>
+                     </xsl:choose>
+                  </xsl:attribute>
+               </f:valueString>
+            </f:extension>
+         </xsl:for-each>
+      </xsl:for-each>
+   </xsl:template>
+   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!-- Generates omschrijving based on structured fields -->
    <xsl:function name="nf:gebruiksintructie-string"
                  as="xs:string?">
       <xsl:param name="gebruiksinstructie"
-                 as="element()?"/>
+                 as="element()?">
+         <!-- Input ada element for usage instruction -->
+      </xsl:param>
       <xsl:for-each select="$gebruiksinstructie">
          <xsl:variable name="amount-doseerinstructies"
                        select="count(doseerinstructie[.//(@value | @code)])"
@@ -468,10 +533,35 @@
          <!-- generate omschrijving using structured fields -->
          <xsl:variable name="theOmschrijving"
                        as="xs:string*">
+            <!-- first the stoptype cancelled -->
+            <xsl:variable name="theStoptype"
+                          select="../(stoptype | medicatieafspraak_stop_type | toedieningsafspraak_stop_type | medicatiegebruik_stop_type | medicatie_gebruik_stop_type | stop_type | wisselend_doseerschema_stop_type)[@code]"/>
+            <xsl:variable name="theGebruiksperiodeStart"
+                          select="../(gebruiksperiode_start | gebruiksperiode/start_datum_tijd)"/>
+            <xsl:variable name="theGebruiksperiodeEnd"
+                          select="../(gebruiksperiode_eind | gebruiksperiode/eind_datum_tijd)"/>
+            <xsl:variable name="cancelledBouwsteen"
+                          select="$stoptypeMap[@stoptype = 'geannuleerd'][@code = $theStoptype/@code][@codeSystem = $theStoptype/@codeSystem] and $theGebruiksperiodeStart/@value = $theGebruiksperiodeEnd/@value"/>
+            <xsl:if test="$cancelledBouwsteen">
+               <xsl:value-of select="concat('Geannuleerd: start niet per ', nf:formatDate(nf:calculate-t-date($theGebruiksperiodeStart/@value, $dateT)))"/>
+            </xsl:if>
+            <!-- gebruiksperiode -->
+            <xsl:variable name="theStoptype"
+                          select="../(stoptype | medicatieafspraak_stop_type | toedieningsafspraak_stop_type | medicatiegebruik_stop_type | medicatie_gebruik_stop_type | stop_type | wisselend_doseerschema_stop_type)[@code]"/>
+            <xsl:variable name="theGebruiksperiodeStart"
+                          select="../(gebruiksperiode_start | gebruiksperiode/start_datum_tijd)"/>
+            <!-- Herhaalperiode cyclisch schema -->
+            <xsl:variable name="theGebruiksperiodeEnd"
+                          select="../(gebruiksperiode_eind | gebruiksperiode/eind_datum_tijd)"/>
+            <xsl:variable name="cancelledBouwsteen"
+                          select="$stoptypeMap[@stoptype = 'geannuleerd'][@code = $theStoptype/@code][@codeSystem = $theStoptype/@codeSystem] and $theGebruiksperiodeStart/@value = $theGebruiksperiodeEnd/@value"/>
+            <xsl:if test="$cancelledBouwsteen">
+               <xsl:value-of select="concat('Geannuleerd: start niet per ', nf:formatDate(nf:calculate-t-date($theGebruiksperiodeStart/@value, $dateT)))"/>
+            </xsl:if>
             <!-- gebruiksperiode -->
             <xsl:variable name="periodeString"
-                          select="nf:periode-string(../(gebruiksperiode_start | gebruiksperiode/start_datum_tijd), ../(gebruiksperiode[@value] | gebruiksperiode/tijds_duur), ../(gebruiksperiode_eind | gebruiksperiode/eind_datum_tijd), ../gebruiksperiode/criterium)"/>
-            <xsl:if test="string-length($periodeString) gt 0">
+                          select="nf:periode-string($theGebruiksperiodeStart, ../(gebruiksperiode[@value] | gebruiksperiode/tijds_duur), $theGebruiksperiodeEnd, ../gebruiksperiode/criterium)"/>
+            <xsl:if test="not($cancelledBouwsteen) and string-length($periodeString) gt 0">
                <xsl:value-of select="$periodeString"/>
             </xsl:if>
             <!-- Herhaalperiode cyclisch schema -->
@@ -525,23 +615,26 @@
                <xsl:value-of>geneesmiddel niet in gebruik</xsl:value-of>
             </xsl:if>
             <!-- en ten slotte hoort het stoptype ook in de omschrijving -->
-            <xsl:for-each select="../(stoptype | medicatieafspraak_stop_type | toedieningsafspraak_stop_type | medicatiegebruik_stop_type | medicatie_gebruik_stop_type | stop_type | wisselend_doseerschema_stop_type)[@code]">
-               <xsl:value-of select="$stoptypeMap[@code = current()/@code][@codeSystem = current()/@codeSystem]/@displayName"/>
-            </xsl:for-each>
+            <xsl:if test="not($cancelledBouwsteen)">
+               <xsl:for-each select="$theStoptype">
+                  <xsl:value-of select="$stoptypeMap[@code = current()/@code][@codeSystem = current()/@codeSystem]/@displayName"/>
+               </xsl:for-each>
+            </xsl:if>
          </xsl:variable>
          <xsl:value-of select="string-join($theOmschrijving, ', ')"/>
       </xsl:for-each>
    </xsl:function>
-   <xd:doc>
-      <xd:desc>Returns a unit string for display purposes, depending on the given unit ánd whether the value is singular or plural</xd:desc>
-      <xd:param name="value">Input param to determine whether to return the singular or plural form for display</xd:param>
-      <xd:param name="unit-in">Input unit string</xd:param>
-   </xd:doc>
+   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!-- Returns a unit string for display purposes, depending on the given unit ánd whether the value is singular or plural -->
    <xsl:function name="nwf:unit-string"
                  as="xs:string?">
-      <xsl:param name="value"/>
+      <xsl:param name="value">
+         <!-- Input param to determine whether to return the singular or plural form for display -->
+      </xsl:param>
       <xsl:param name="unit-in"
-                 as="xs:string?"/>
+                 as="xs:string?">
+         <!-- Input unit string -->
+      </xsl:param>
       <xsl:variable name="unit"
                     select="normalize-space(lower-case($unit-in))"/>
       <xsl:variable name="floatValue"
@@ -589,15 +682,14 @@
          </xsl:otherwise>
       </xsl:choose>
    </xsl:function>
-   <xd:doc>
-      <xd:desc>Takes an inputTime as string and outputs the time in format '14:32' (24 hour clock, hoours and minutes only)</xd:desc>
-      <xd:param name="in">xs:dateTime or xs:time castable string or ada relative datetimestring</xd:param>
-      <xd:return>HH:mm or nothing</xd:return>
-   </xd:doc>
+   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!-- Takes an inputTime as string and outputs the time in format '14:32' (24 hour clock, hoours and minutes only) -->
    <xsl:function name="nf:datetime-2-timestring"
                  as="xs:string?">
       <xsl:param name="in"
-                 as="xs:string?"/>
+                 as="xs:string?">
+         <!-- xs:dateTime or xs:time castable string or ada relative datetimestring -->
+      </xsl:param>
       <xsl:choose>
          <xsl:when test="$in castable as xs:dateTime">
             <xsl:value-of select="format-dateTime(xs:dateTime($in), '[H01]:[m01]')"/>
@@ -631,11 +723,8 @@
          </xsl:otherwise>
       </xsl:choose>
    </xsl:function>
-   <xd:doc>
-      <xd:desc>Returns the xs:time from a xs:dateTime formatted string. Could include timezone.</xd:desc>
-      <xd:param name="xs-datetime"/>
-      <xd:return>xs:time or nothing</xd:return>
-   </xd:doc>
+   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!-- Returns the xs:time from a xs:dateTime formatted string. Could include timezone. -->
    <xsl:function name="nf:getTime"
                  as="xs:time?">
       <xsl:param name="xs-datetime"
@@ -644,14 +733,14 @@
          <xsl:value-of select="xs:time(substring-after($xs-datetime, 'T'))"/>
       </xsl:if>
    </xsl:function>
-   <xd:doc>
-      <xd:desc>Takes an xml date(time) as a string in inputDate and outputs the date in format '3 jun 2018'</xd:desc>
-      <xd:param name="inputDate">xs:date castable string</xd:param>
-   </xd:doc>
+   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!-- Takes an xml date(time) as a string in inputDate and outputs the date in format '3 jun 2018' -->
    <xsl:function name="nf:formatDate"
                  as="xs:string?">
       <xsl:param name="inputDate"
-                 as="xs:string?"/>
+                 as="xs:string?">
+         <!-- xs:date castable string -->
+      </xsl:param>
       <xsl:variable name="date"
                     select="substring($inputDate, 1, 10)"/>
       <!-- Normally you would use format-date() using Dutch language/country, but Saxon-He and Saxon-PE both misbehave and return English month names regardless
@@ -677,20 +766,22 @@
          </xsl:otherwise>
       </xsl:choose>
    </xsl:function>
-   <xd:doc>
-      <xd:desc>Formats ada relativeDate(time) to a display date(Time)</xd:desc>
-      <xd:param name="relativeDate">Input ada relativeDate(Time)</xd:param>
-      <xd:param name="output0time">Whether or not a time of 00:00 should be outputted in the text. Defaults to true.</xd:param>
-      <xd:param name="outputEndtime">Whether or not a time of 23:59 should be outputted in the text.  Defaults to true.</xd:param>
-   </xd:doc>
+   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!-- Formats ada relativeDate(time) to a display date(Time) -->
    <xsl:function name="nf:formatTDate"
                  as="xs:string*">
       <xsl:param name="relativeDate"
-                 as="xs:string?"/>
+                 as="xs:string?">
+         <!-- Input ada relativeDate(Time) -->
+      </xsl:param>
       <xsl:param name="output0time"
-                 as="xs:boolean?"/>
+                 as="xs:boolean?">
+         <!-- Whether or not a time of 00:00 should be outputted in the text. Defaults to true. -->
+      </xsl:param>
       <xsl:param name="outputEndtime"
-                 as="xs:boolean?"/>
+                 as="xs:boolean?">
+         <!-- Whether or not a time of 23:59 should be outputted in the text.  Defaults to true. -->
+      </xsl:param>
       <xsl:choose>
          <!-- double check for expected relative date(time) like "T-50D{12:34:56}" in the input -->
          <xsl:when test="matches($relativeDate, 'T([+\-]\d+(\.\d+)?[YMD])?')">
@@ -743,20 +834,22 @@
          </xsl:otherwise>
       </xsl:choose>
    </xsl:function>
-   <xd:doc>
-      <xd:desc>Return Dutch month name from month number (1-12)</xd:desc>
-      <xd:param name="monthnum">xs:integer month number e.g. from month-from-date()</xd:param>
-      <xd:param name="length">Max length of the name to return. Default 3</xd:param>
-      <xd:param name="case">Casing of the name to return. 'low' (default), 'high', 'firstcap'</xd:param>
-   </xd:doc>
+   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
    <xsl:function name="nf:getDutchMonthName"
                  as="xs:string?">
+      <!-- Return Dutch month name from month number (1-12) -->
       <xsl:param name="monthnum"
-                 as="xs:integer?"/>
+                 as="xs:integer?">
+         <!-- xs:integer month number e.g. from month-from-date() -->
+      </xsl:param>
       <xsl:param name="length"
-                 as="xs:integer?"/>
+                 as="xs:integer?">
+         <!-- Max length of the name to return. Default 3 -->
+      </xsl:param>
       <xsl:param name="case"
-                 as="xs:string"/>
+                 as="xs:string">
+         <!-- Casing of the name to return. 'low' (default), 'high', 'firstcap' -->
+      </xsl:param>
       <xsl:variable name="fullMonthName"
                     as="xs:string?">
          <xsl:choose>
@@ -806,16 +899,15 @@
          </xsl:otherwise>
       </xsl:choose>
    </xsl:function>
-   <xd:doc>
-      <xd:desc>Takes an inputTime as string or time and outputs the time in format ' 14:32' (24 hour clock)</xd:desc>
-      <xd:param name="inputTime"/>
-      <xd:param name="output0time">boolean to either output the time smaller than or equal to 00:00:29 or not. Default = true = output the zero-time</xd:param>
-   </xd:doc>
+   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!-- Takes an inputTime as string or time and outputs the time in format ' 14:32' (24 hour clock) -->
    <xsl:function name="nf:formatTime"
                  as="xs:string?">
       <xsl:param name="inputTime"/>
       <xsl:param name="output0time"
-                 as="xs:boolean?"/>
+                 as="xs:boolean?">
+         <!-- boolean to either output the time smaller than or equal to 00:00:29 or not. Default = true = output the zero-time -->
+      </xsl:param>
       <xsl:if test="$inputTime castable as xs:time">
          <xsl:choose>
             <xsl:when test="not(exists($output0time)) or $output0time">
@@ -827,14 +919,14 @@
          </xsl:choose>
       </xsl:if>
    </xsl:function>
-   <xd:doc>
-      <xd:desc>Returns the most specific G-standaard oid based on a collection of product codes</xd:desc>
-      <xd:param name="productCode">Input param for ada product_code element</xd:param>
-   </xd:doc>
+   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!-- Returns the most specific G-standaard oid based on a collection of product codes -->
    <xsl:function name="nf:get-main-gstd-level"
                  as="xs:string?">
       <xsl:param name="productCode"
-                 as="element()*"/>
+                 as="element()*">
+         <!-- Input param for ada product_code element -->
+      </xsl:param>
       <xsl:choose>
          <xsl:when test="$productCode[@codeSystem = $oidGStandaardZInummer]">
             <xsl:value-of select="$oidGStandaardZInummer"/>

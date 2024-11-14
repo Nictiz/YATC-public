@@ -1,23 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?yatc-distribution-provenance href="HL7-mappings/util/comment.xsl"?>
-<?yatc-distribution-info name="ketenzorg-3.0.2" timestamp="2024-06-28T14:38:20.79+02:00" version="1.4.28"?>
-<!-- == Provenance: HL7-mappings/util/comment.xsl == -->
-<!-- == Distribution: ketenzorg-3.0.2; 1.4.28; 2024-06-28T14:38:20.79+02:00 == -->
-<xsl:stylesheet exclude-result-prefixes="xs"
+<?yatc-distribution-provenance href="YATC-shared/xsl/util/comment.xsl"?>
+<?yatc-distribution-info name="ketenzorg-3.0.2" timestamp="2024-11-15T00:15:11.67+01:00" version="1.4.29"?>
+<!-- == Provenance: YATC-shared/xsl/util/comment.xsl == -->
+<!-- == Distribution: ketenzorg-3.0.2; 1.4.29; 2024-11-15T00:15:11.67+01:00 == -->
+<xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:nf="http://www.nictiz.nl/functions"
                 xmlns:functx="http://www.functx.com"
+                xmlns:yatcs="https://nictiz.nl/ns/YATC-shared"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl">
-   <xd:doc>
-      <xd:desc>Contains generic comment template</xd:desc>
-   </xd:doc>
-   <xd:doc>
-      <xd:desc> copy an element with all of it's contents in comments </xd:desc>
-      <xd:param name="element"/>
-   </xd:doc>
+                xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl"
+                xmlns:local="#local.2024020614533806212470100">
+   <!-- ================================================================== -->
+   <!--
+        Contains generic comment template
+    -->
+   <!-- ================================================================== -->
+   <!--
+        Copyright © Nictiz
+        
+        This program is free software; you can redistribute it and/or modify it under the terms of the
+        GNU Lesser General Public License as published by the Free Software Foundation; either version
+        2.1 of the License, or (at your option) any later version.
+        
+        This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+        without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+        See the GNU Lesser General Public License for more details.
+        
+        The full text of the license is available at http://www.gnu.org/copyleft/lesser.html
+    -->
+   <!-- ================================================================== -->
+   <!-- ================================================================== -->
+   <!--  copy an element with all of it's contents in comments  -->
    <xsl:template name="copyElementInComment">
       <xsl:param name="element"/>
       <xsl:text disable-output-escaping="yes">
@@ -28,9 +44,8 @@
       <xsl:text disable-output-escaping="yes">--&gt;
 </xsl:text>
    </xsl:template>
-   <xd:doc>
-      <xd:desc> copy without comments </xd:desc>
-   </xd:doc>
+   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!--  copy without comments  -->
    <xsl:template name="copyWithoutComments">
       <xsl:copy>
          <xsl:for-each select="@* | *">

@@ -2,7 +2,7 @@
 <Bundle xsi:schemaLocation="http://hl7.org/fhir http://hl7.org/fhir/STU3/fhir-all.xsd"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns="http://hl7.org/fhir">
-   <id value="5690657a-351f-11ef-1321-020000000000"/>
+   <id value="80955ffa-a2da-11ef-1741-020000000000"/>
    <type value="searchset"/>
    <total value="1"/>
    <link>
@@ -82,7 +82,7 @@
                </condition>
             </diagnosis>
             <patient>
-               <reference value="urn:uuid:56905b94-351f-11ef-1321-020000000000"/>
+               <reference value="urn:uuid:80955826-a2da-11ef-1741-020000000000"/>
                <display value="Joris Hansman"/>
             </patient>
             <managingOrganization>
@@ -99,7 +99,7 @@
       </search>
    </entry>
    <entry>
-      <fullUrl value="urn:uuid:56905b94-351f-11ef-1321-020000000000"/>
+      <fullUrl value="urn:uuid:80955826-a2da-11ef-1741-020000000000"/>
       <resource>
          <Patient>
             <meta>
@@ -245,7 +245,7 @@
                </coding>
             </code>
             <subject>
-               <reference value="urn:uuid:56905b94-351f-11ef-1321-020000000000"/>
+               <reference value="urn:uuid:80955826-a2da-11ef-1741-020000000000"/>
                <display value="Joris Hansman"/>
             </subject>
             <onsetDateTime value="2015-08-10"/>

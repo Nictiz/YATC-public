@@ -1,20 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?yatc-distribution-provenance href="HL7-mappings/util/datetime.xsl"?>
-<?yatc-distribution-info name="ketenzorg-3.0.2" timestamp="2024-06-28T14:38:20.79+02:00" version="1.4.28"?>
-<!-- == Provenance: HL7-mappings/util/datetime.xsl == -->
-<!-- == Distribution: ketenzorg-3.0.2; 1.4.28; 2024-06-28T14:38:20.79+02:00 == -->
-<xsl:stylesheet exclude-result-prefixes="xs"
+<?yatc-distribution-provenance href="YATC-shared/xsl/util/datetime.xsl"?>
+<?yatc-distribution-info name="ketenzorg-3.0.2" timestamp="2024-11-15T00:15:11.67+01:00" version="1.4.29"?>
+<!-- == Provenance: YATC-shared/xsl/util/datetime.xsl == -->
+<!-- == Distribution: ketenzorg-3.0.2; 1.4.29; 2024-11-15T00:15:11.67+01:00 == -->
+<xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:util="urn:hl7:utilities"
                 xmlns:nf="http://www.nictiz.nl/functions"
                 xmlns:functx="http://www.functx.com"
+                xmlns:yatcs="https://nictiz.nl/ns/YATC-shared"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl">
-   <xd:doc>
-      <xd:desc>Contains some generic dateTime functions</xd:desc>
-   </xd:doc>
+                xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl"
+                xmlns:local="#local.2024020614533830765970100">
+   <!-- ================================================================== -->
+   <!--
+        TBD
+    -->
+   <!-- ================================================================== -->
+   <!--
+        Copyright © Nictiz
+        
+        This program is free software; you can redistribute it and/or modify it under the terms of the
+        GNU Lesser General Public License as published by the Free Software Foundation; either version
+        2.1 of the License, or (at your option) any later version.
+        
+        This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+        without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+        See the GNU Lesser General Public License for more details.
+        
+        The full text of the license is available at http://www.gnu.org/copyleft/lesser.html
+    -->
+   <!-- ================================================================== -->
    <!-- Uncomment for testing... -->
    <!--<xsl:output indent="yes" omit-xml-declaration="yes"/>
     <xsl:template match="/" exclude-result-prefixes="#all">
@@ -66,14 +84,14 @@
             <x in="T-1D{{24}}"><xsl:value-of select="nf:calculate-t-date('T-1D{25}',$T)"/></x>
         </x>
     </xsl:template>-->
-   <xd:doc>
-      <xd:desc>Convert an ADA timestamp element to an xs:dateTime value, if possible.</xd:desc>
-      <xd:param name="timestamp">The ADA element of type timestamp to convert.</xd:param>
-   </xd:doc>
+   <!-- ================================================================== -->
+   <!-- Convert an ADA timestamp element to an xs:dateTime value, if possible. -->
    <xsl:function name="nf:timestamp-to-dateTime"
                  as="xs:dateTime?">
       <xsl:param name="timestamp"
-                 as="xs:string"/>
+                 as="xs:string">
+         <!-- The ADA element of type timestamp to convert. -->
+      </xsl:param>
       <xsl:choose>
          <xsl:when test="normalize-space($timestamp) castable as xs:dateTime">
             <xsl:value-of select="xs:dateTime(nf:add-Amsterdam-timezone-to-dateTimeString(normalize-space($timestamp)))"/>
@@ -86,13 +104,13 @@
          </xsl:when>
       </xsl:choose>
    </xsl:function>
-   <xd:doc>
-      <xd:desc>Returns true (boolean) if the date or dateTime is in the future. Defaults to false. Input should be a value that is castable to a date or dateTime. Input may be empty which results in the default false value.</xd:desc>
-      <xd:param name="dateOrDt">The ADA date or dateTime.</xd:param>
-   </xd:doc>
+   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!-- Returns true (boolean) if the date or dateTime is in the future. Defaults to false. Input should be a value that is castable to a date or dateTime. Input may be empty which results in the default false value. -->
    <xsl:function name="nf:isFuture"
                  as="xs:boolean">
-      <xsl:param name="dateOrDt"/>
+      <xsl:param name="dateOrDt">
+         <!-- The ADA date or dateTime. -->
+      </xsl:param>
       <xsl:choose>
          <xsl:when test="$dateOrDt castable as xs:date">
             <xsl:value-of select="$dateOrDt &gt; current-date()"/>
@@ -108,19 +126,20 @@
          </xsl:otherwise>
       </xsl:choose>
    </xsl:function>
-   <xd:doc>
-      <xd:desc>Returns true (boolean) if the dateOrDt is in the future compared to relativeDateOrDt. Defaults to false. 
-            Input should be a value that is castable to an XML date or dateTime. Input may be empty or non-parseable which results in the default false value.</xd:desc>
-      <xd:param name="dateOrDt">The ADA date or dateTime which should contain an XML date or dateTime.</xd:param>
-      <xd:param name="relativeDateOrDt">The ada date or dateTime to compare the dateOrDt to. Should contain an XML date or dateTime. 
-            Defaults to current-date(Time) when empty or non-parseable to an XML date(Time).</xd:param>
-   </xd:doc>
+   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!-- Returns true (boolean) if the dateOrDt is in the future compared to relativeDateOrDt. Defaults to false. 
+        Input should be a value that is castable to an XML date or dateTime. Input may be empty or non-parseable which results in the default false value. -->
    <xsl:function name="nf:isFutureRelativeDate"
                  as="xs:boolean">
       <xsl:param name="dateOrDt"
-                 as="xs:string?"/>
+                 as="xs:string?">
+         <!-- The ADA date or dateTime which should contain an XML date or dateTime. -->
+      </xsl:param>
       <xsl:param name="relativeDateOrDt"
-                 as="xs:string?"/>
+                 as="xs:string?">
+         <!-- The ada date or dateTime to compare the dateOrDt to. Should contain an XML date or dateTime. 
+            Defaults to current-date(Time) when empty or non-parseable to an XML date(Time). -->
+      </xsl:param>
       <xsl:choose>
          <xsl:when test="$dateOrDt castable as xs:dateTime">
             <xsl:choose>
@@ -155,13 +174,13 @@
          </xsl:otherwise>
       </xsl:choose>
    </xsl:function>
-   <xd:doc>
-      <xd:desc>Returns true (boolean) if the date or dateTime is in the past. Defaults to false. Input should be a value that is castable to a date or dateTime. Input may be empty which results in the default false value.</xd:desc>
-      <xd:param name="dateOrDt">The ADA date or dateTime which should contain an XML date or dateTime.</xd:param>
-   </xd:doc>
+   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!-- Returns true (boolean) if the date or dateTime is in the past. Defaults to false. Input should be a value that is castable to a date or dateTime. Input may be empty which results in the default false value. -->
    <xsl:function name="nf:isPast"
                  as="xs:boolean">
-      <xsl:param name="dateOrDt"/>
+      <xsl:param name="dateOrDt">
+         <!-- The ADA date or dateTime which should contain an XML date or dateTime. -->
+      </xsl:param>
       <xsl:choose>
          <xsl:when test="$dateOrDt castable as xs:date">
             <xsl:value-of select="$dateOrDt &lt; current-date()"/>
@@ -177,19 +196,20 @@
          </xsl:otherwise>
       </xsl:choose>
    </xsl:function>
-   <xd:doc>
-      <xd:desc>Returns true (boolean) if the dateOrDt is in the past compared to relativeDateOrDt. Defaults to false. 
-            Input should be a value that is castable to an XML date or dateTime. Input may be empty or non-parseable which results in the default false value.</xd:desc>
-      <xd:param name="dateOrDt">The ADA date or dateTime which should contain an XML date or dateTime.</xd:param>
-      <xd:param name="relativeDateOrDt">The ada date or dateTime to compare the dateOrDt to. Should contain an XML date or dateTime. 
-            Defaults to current-date(Time) when empty or non-parseable to an XML date(Time).</xd:param>
-   </xd:doc>
+   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!-- Returns true (boolean) if the dateOrDt is in the past compared to relativeDateOrDt. Defaults to false. 
+        Input should be a value that is castable to an XML date or dateTime. Input may be empty or non-parseable which results in the default false value. -->
    <xsl:function name="nf:isPastRelativeDate"
                  as="xs:boolean">
       <xsl:param name="dateOrDt"
-                 as="xs:string?"/>
+                 as="xs:string?">
+         <!-- The ADA date or dateTime which should contain an XML date or dateTime. -->
+      </xsl:param>
       <xsl:param name="relativeDateOrDt"
-                 as="xs:string?"/>
+                 as="xs:string?">
+         <!-- The ada date or dateTime to compare the dateOrDt to. Should contain an XML date or dateTime. 
+            Defaults to current-date(Time) when empty or non-parseable to an XML date(Time). -->
+      </xsl:param>
       <xsl:choose>
          <xsl:when test="$dateOrDt castable as xs:dateTime">
             <xsl:choose>
@@ -224,14 +244,14 @@
          </xsl:otherwise>
       </xsl:choose>
    </xsl:function>
-   <xd:doc>
-      <xd:desc>Convert an ADA quantity element to an xs:yearMonthDuration or xs:dayTimeDuration value, if possible. If not possible, the output is emptpy</xd:desc>
-      <xd:param name="quantity">The ADA element of type quantity to convert.</xd:param>
-   </xd:doc>
+   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!-- Convert an ADA quantity element to an xs:yearMonthDuration or xs:dayTimeDuration value, if possible. If not possible, the output is emptpy -->
    <xsl:function name="nf:quantity-to-xsDuration"
                  as="xs:duration">
       <xsl:param name="quantity"
-                 as="element()"/>
+                 as="element()">
+         <!-- The ADA element of type quantity to convert. -->
+      </xsl:param>
       <xsl:if test="$quantity/@value castable as xs:float">
          <xsl:choose>
             <xsl:when test="upper-case($quantity/@unit) = ('Y', 'A', 'ANN', 'JAAR', 'JAREN', 'YEAR', 'YEARS')">
@@ -258,14 +278,14 @@
          </xsl:choose>
       </xsl:if>
    </xsl:function>
-   <xd:doc>
-      <xd:desc>Takes input string. If it is a dateTime, it checks if it has a timezone. If it is a dateTime without timezone the appropriate Amsterdam timezone will be set. In all other cases, the input string is returned.</xd:desc>
-      <xd:param name="in">ISO 8601 formatted dateTimeString with or without timezone "yyyy-mm-ddThh:mm:ss" or "yyyy-mm-ddThh:mm:ss[+/-]nn:nn"</xd:param>
-   </xd:doc>
+   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!-- Takes input string. If it is a dateTime, it checks if it has a timezone. If it is a dateTime without timezone the appropriate Amsterdam timezone will be set. In all other cases, the input string is returned. -->
    <xsl:function name="nf:add-Amsterdam-timezone-to-dateTimeString"
                  as="xs:string?">
       <xsl:param name="in"
-                 as="xs:string?"/>
+                 as="xs:string?">
+         <!-- ISO 8601 formatted dateTimeString with or without timezone "yyyy-mm-ddThh:mm:ss" or "yyyy-mm-ddThh:mm:ss[+/-]nn:nn" -->
+      </xsl:param>
       <xsl:choose>
          <xsl:when test="$in castable as xs:dateTime">
             <xsl:value-of select="nf:add-Amsterdam-timezone(xs:dateTime($in))"/>
@@ -281,14 +301,14 @@
          </xsl:otherwise>
       </xsl:choose>
    </xsl:function>
-   <xd:doc>
-      <xd:desc>Add an Amsterdam timezone to an xs:dateTime without one. Return input unaltered otherwise.</xd:desc>
-      <xd:param name="in">xs:dateTime with or without timezone</xd:param>
-   </xd:doc>
+   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!-- Add an Amsterdam timezone to an xs:dateTime without one. Return input unaltered otherwise. -->
    <xsl:function name="nf:add-Amsterdam-timezone"
                  as="xs:dateTime">
       <xsl:param name="in"
-                 as="xs:dateTime"/>
+                 as="xs:dateTime">
+         <!-- xs:dateTime with or without timezone -->
+      </xsl:param>
       <xsl:choose>
          <xsl:when test="empty(timezone-from-dateTime($in))">
             <!-- Since 1996 DST starts last Sunday of March 02:00 and ends last Sunday of October at 03:00/02:00 (clock is set backwards) -->
@@ -319,20 +339,22 @@
          </xsl:otherwise>
       </xsl:choose>
    </xsl:function>
-   <xd:doc>
-      <xd:desc>Calculates a new date, using inDate, operator (plus/minus) an inDuration</xd:desc>
-      <xd:param name="inDate">The ada input date as a string. Should be parseable as xs:date or xs:dateTime. Otherwise no output.</xd:param>
-      <xd:param name="operator">The operator to do the arithmetics with. Should be plus or minus, otherwise no output.</xd:param>
-      <xd:param name="inDuration">The ada duration element, which should be added or subtracted. Must have proper @value and @unit attributes. Otherwise no output.</xd:param>
-   </xd:doc>
+   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!-- Calculates a new date, using inDate, operator (plus/minus) an inDuration -->
    <xsl:function name="nf:calculate-date"
                  as="xs:string?">
       <xsl:param name="inDate"
-                 as="xs:string?"/>
+                 as="xs:string?">
+         <!-- The ada input date as a string. Should be parseable as xs:date or xs:dateTime. Otherwise no output. -->
+      </xsl:param>
       <xsl:param name="operator"
-                 as="xs:string?"/>
+                 as="xs:string?">
+         <!-- The operator to do the arithmetics with. Should be plus or minus, otherwise no output. -->
+      </xsl:param>
       <xsl:param name="inDuration"
-                 as="element()"/>
+                 as="element()">
+         <!-- The ada duration element, which should be added or subtracted. Must have proper @value and @unit attributes. Otherwise no output. -->
+      </xsl:param>
       <xsl:if test="string-length($inDate) gt 0 and not(empty($inDuration)) and $operator = ('plus', 'minus')">
          <xsl:variable name="duration"
                        select="nf:quantity-to-xsDuration($inDuration)"/>
@@ -362,20 +384,18 @@
          </xsl:if>
       </xsl:if>
    </xsl:function>
-   <xd:doc>
-      <xd:desc>Converts a T-12D{12:34:56} like string into a proper XML date or dateTime</xd:desc>
-      <xd:param name="in">The input string to be converted</xd:param>
-      <xd:param name="inputDateT"
-                as="xs:date">The T date (if applicable) that 
-<xd:ref name="in"
-                 type="parameter"/> is relative to</xd:param>
-   </xd:doc>
+   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!-- Converts a T-12D{12:34:56} like string into a proper XML date or dateTime -->
    <xsl:function name="nf:calculate-t-date"
                  as="xs:string?">
       <xsl:param name="in"
-                 as="xs:string?"/>
+                 as="xs:string?">
+         <!-- The input string to be converted -->
+      </xsl:param>
       <xsl:param name="inputDateT"
-                 as="xs:date?"/>
+                 as="xs:date?">
+         <!-- The T date (if applicable) that  is relative to -->
+      </xsl:param>
       <xsl:choose>
          <xsl:when test="(starts-with($in, 'T') or starts-with($in, 'DOB')) and $inputDateT castable as xs:date">
             <xsl:variable name="sign"
@@ -467,11 +487,8 @@
          </xsl:otherwise>
       </xsl:choose>
    </xsl:function>
-   <xd:doc>
-      <xd:desc>Returns the xs:time from a xs:dateTime formatted string. Could include timezone.</xd:desc>
-      <xd:param name="xs-datetime"/>
-      <xd:return>xs:time or nothing</xd:return>
-   </xd:doc>
+   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!-- Returns the xs:time from a xs:dateTime formatted string. Could include timezone. -->
    <xsl:function name="nf:getTime"
                  as="xs:time?">
       <xsl:param name="xs-datetime"
@@ -480,14 +497,14 @@
          <xsl:value-of select="xs:time(substring-after($xs-datetime, 'T'))"/>
       </xsl:if>
    </xsl:function>
-   <xd:doc>
-      <xd:desc>Returns day of week of a certain date as integer. Sunday = 0, Saturday = 6.</xd:desc>
-      <xd:param name="date">xs:date for which the day of week needs to be returned</xd:param>
-   </xd:doc>
+   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!-- Returns day of week of a certain date as integer. Sunday = 0, Saturday = 6. -->
    <xsl:function name="functx:day-of-week"
                  as="xs:integer?">
       <xsl:param name="date"
-                 as="xs:date?"/>
+                 as="xs:date?">
+         <!-- xs:date for which the day of week needs to be returned -->
+      </xsl:param>
       <xsl:if test="not(empty($date))">
          <!--<xsl:variable name="ancientSunday" select="xs:date('1901-01-06')"/>-->
          <xsl:variable name="ancientSunday"
@@ -502,14 +519,14 @@
          </xsl:choose>
       </xsl:if>
    </xsl:function>
-   <xd:doc>
-      <xd:desc>Returns YEAR, MONTH, DAY, HOUR, MINUTE, SECOND or MILLISECOND depending on input string. Empty input -&gt; no output.</xd:desc>
-      <xd:param name="in">input ada (vague) (relative) date(time)</xd:param>
-   </xd:doc>
+   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!-- Returns YEAR, MONTH, DAY, HOUR, MINUTE, SECOND or MILLISECOND depending on input string. Empty input -> no output. -->
    <xsl:function name="nf:determine_date_precision_from_ada_datetime"
                  as="xs:string?">
       <xsl:param name="in"
-                 as="xs:string?"/>
+                 as="xs:string?">
+         <!-- input ada (vague) (relative) date(time) -->
+      </xsl:param>
       <xsl:for-each select="string-length($in) gt 0">
          <xsl:choose>
             <xsl:when test="(starts-with($in, 'T') or starts-with($in, 'DOB'))">

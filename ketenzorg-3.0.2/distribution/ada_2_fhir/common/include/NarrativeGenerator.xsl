@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?yatc-distribution-provenance href="YATC-shared/xsl/util/NarrativeGenerator.xsl"?>
-<?yatc-distribution-info name="ketenzorg-3.0.2" timestamp="2024-06-28T14:38:20.79+02:00" version="1.4.28"?>
+<?yatc-distribution-info name="ketenzorg-3.0.2" timestamp="2024-11-15T00:15:11.67+01:00" version="1.4.29"?>
 <!-- == Provenance: YATC-shared/xsl/util/NarrativeGenerator.xsl == -->
-<!-- == Distribution: ketenzorg-3.0.2; 1.4.28; 2024-06-28T14:38:20.79+02:00 == -->
+<!-- == Distribution: ketenzorg-3.0.2; 1.4.29; 2024-11-15T00:15:11.67+01:00 == -->
 <xsl:stylesheet version="2.0"
                 exclude-result-prefixes="#all"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -38,89 +38,12 @@
               select="'true'"/>
    <xsl:param name="util:textlangDefault"
               select="'nl-nl'"/>
-   <!-- Main entry template to call -->
-   <!-- Helper template for attributes, text, proocessing-instructions and comment. Copy as-is -->
-   <!-- ***************** -->
-   <!-- Resources Section -->
-   <!-- ***************** -->
-   <!-- Binary derives from Resource, not DomainResource-->
-   <!--<xsl:template match="f:Binary" mode="createNarrative">
-        <xsl:variable name="textLang" select="(f:language/@value, $util:textlangDefault)[1]"/>
-        <text xmlns="http://hl7.org/fhir">
-            <status value="extensions"/>
-            <div xmlns="http://www.w3.org/1999/xhtml">
-                <div>
-                    <b>
-                        <xsl:call-template name="util:getLocalizedString">
-                            <xsl:with-param name="key">Binary</xsl:with-param>
-                            <xsl:with-param name="textLang" select="$textLang"/>
-                        </xsl:call-template>
-                    </b>
-                    <xsl:text> - </xsl:text>
-                    <xsl:call-template name="doDT_Code">
-                        <xsl:with-param name="in" select="f:contentType"/>
-                    </xsl:call-template>
-                </div>
-                <xsl:if test="f:securityContext">
-                    <div>
-                        <xsl:call-template name="doDT_Reference">
-                            <xsl:with-param name="in" select="f:securityContext"/>
-                        </xsl:call-template>
-                    </div>
-                </xsl:if>
-            </div>
-        </text>
+   <!--<xsl:output indent="yes" omit-xml-declaration="yes"/>
+    <xsl:template match="/">
+        <xsl:apply-templates mode="addNarrative"/>
     </xsl:template>-->
-   <!-- ***************** -->
-   <!-- Datatypes Section -->
-   <!-- ***************** -->
-   <!-- https://www.hl7.org/fhir/STU3/valueset-units-of-time.html -->
-   <!-- Take month number 1, 2, 3, ... and return localized month name January, February, March, ... format-dateTime() and format-date() usually don't have those -->
-   <!-- https://www.hl7.org/fhir/STU3/valueset-days-of-week.html -->
-   <!-- AWE, allow for more than one input -->
-   <!-- https://www.hl7.org/fhir/STU3/valueset-days-of-week.html -->
-   <!-- https://www.hl7.org/fhir/STU3/valueset-allergy-clinical-status.html -->
-   <!-- https://www.hl7.org/fhir/STU3/valueset-appointmentstatus.html -->
-   <!-- https://www.hl7.org/fhir/STU3/valueset-care-plan-status.html -->
-   <!-- https://www.hl7.org/fhir/STU3/valueset-care-plan-activity-status.html -->
-   <!-- https://www.hl7.org/fhir/STU3/valueset-care-team-status.html -->
-   <!-- https://www.hl7.org/fhir/STU3/valueset-condition-clinical.html -->
-   <!-- https://www.hl7.org/fhir/STU3/valueset-condition-ver-status.html -->
-   <!-- https://www.hl7.org/fhir/STU3/valueset-consent-state-codes.html -->
-   <!-- https://www.hl7.org/fhir/STU3/valueset-device-status.html -->
-   <!-- https://www.hl7.org/fhir/STU3/valueset-device-statement-status.html -->
-   <!-- https://www.hl7.org/fhir/STU3/valueset-episode-of-care-status.html -->
-   <!-- https://www.hl7.org/fhir/STU3/valueset-event-status.html -->
-   <!-- https://www.hl7.org/fhir/STU3/valueset-flag-status.html -->
-   <!-- https://www.hl7.org/fhir/STU3/valueset-fm-status.html -->
-   <!-- https://www.hl7.org/fhir/STU3/valueset-goal-status.html -->
-   <!-- https://www.hl7.org/fhir/STU3/valueset-immunization-status.html -->
-   <!-- https://www.hl7.org/fhir/STU3/valueset-observation-status.html -->
-   <!-- https://www.hl7.org/fhir/STU3/valueset-questionnaire-answers-status.html -->
-   <!-- https://www.hl7.org/fhir/STU3/valueset-list-status.html -->
-   <!-- https://www.hl7.org/fhir/STU3/valueset-nutrition-request-status.html -->
-   <!-- https://www.hl7.org/fhir/STU3/valueset-slotstatus.html -->
-   <!-- https://www.hl7.org/fhir/STU3/valueset-specimen-status.html -->
-   <!-- http://hl7.org/fhir/STU3/valueset-task-status.html -->
-   <!-- https://www.hl7.org/fhir/STU3/valueset-care-plan-intent.html -->
-   <!-- https://www.hl7.org/fhir/STU3/valueset-request-intent.html -->
-   <!-- https://www.hl7.org/fhir/STU3/valueset-administrative-gender.html -->
-   <!--http://hl7.org/fhir/STU3/valueset-document-relationship-type.html-->
-   <!-- https://www.hl7.org/fhir/STU3/valueset-list-mode.html -->
-   <!-- https://www.hl7.org/fhir/STU3/valueset-data-absent-reason.html -->
-   <!-- https://www.hl7.org/fhir/STU3/v3/NullFlavor/vs.html -->
-   <!-- https://www.hl7.org/fhir/STU3/valueset-contact-point-use.html -->
-   <!-- https://www.hl7.org/fhir/STU3/valueset-contact-point-use.html 
-    use   : home | work | temp | old | mobile - purpose of this contact point
-    system: phone | fax | email | pager | url | sms | other
-    -->
-   <!-- http://hl7.org/fhir/STU3/valueset-address-use.html -->
-   <!-- http://hl7.org/fhir/STU3/valueset-postal-address-use.html -->
-   <!-- https://www.hl7.org/fhir/STU3/valueset-address-type.html -->
-   <!-- https://www.hl7.org/fhir/STU3/valueset-request-priority.html -->
-   <!-- https://www.hl7.org/fhir/STU3/valueset-medication-statement-taken.html -->
-   <!-- http://hl7.org/fhir/STU3/v3/TimingEvent/cs.html -->
    <!-- ================================================================== -->
+   <!-- Main entry template to call -->
    <xsl:template name="addNarrative"
                  match="*"
                  mode="addNarrative">
@@ -157,6 +80,12 @@
                                     mode="addNarrative"/>
             </xsl:copy>
          </xsl:when>
+         <xsl:when test="self::f:Bundle">
+            <xsl:copy>
+               <xsl:apply-templates select="@* | node()"
+                                    mode="addNarrative"/>
+            </xsl:copy>
+         </xsl:when>
          <!-- This is any other element. It might be a resource or a child of one that potentially leads to a supported resource like in a Bundle or List. Must be a FHIR resource or element to throw a warning. -->
          <xsl:otherwise>
             <xsl:if test="matches(local-name(), '^[A-Z]') and not(local-name() = ('Bundle', 'Binary')) and namespace-uri() = 'http://hl7.org/fhir'">
@@ -177,11 +106,15 @@
       </xsl:choose>
    </xsl:template>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!-- Helper template for attributes, text, proocessing-instructions and comment. Copy as-is -->
    <xsl:template match="@* | text() | processing-instruction() | comment()"
                  mode="addNarrative">
       <xsl:copy xml:space="preserve"/>
    </xsl:template>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!-- ***************** -->
+   <!-- Resources Section -->
+   <!-- ***************** -->
    <xsl:template match="f:AllergyIntolerance"
                  mode="createNarrative">
       <xsl:variable name="textLang"
@@ -215,23 +148,25 @@
                   </tfoot>
                </xsl:if>
                <tbody>
-                  <tr>
-                     <th>
-                        <xsl:call-template name="util:getLocalizedString">
-                           <xsl:with-param name="key">code</xsl:with-param>
-                           <xsl:with-param name="textLang"
-                                           select="$textLang"/>
-                        </xsl:call-template>
-                     </th>
-                     <td>
-                        <xsl:call-template name="doDT_CodeableConcept">
-                           <xsl:with-param name="in"
-                                           select="f:code"/>
-                           <xsl:with-param name="textLang"
-                                           select="$textLang"/>
-                        </xsl:call-template>
-                     </td>
-                  </tr>
+                  <xsl:if test="f:code">
+                     <tr>
+                        <th>
+                           <xsl:call-template name="util:getLocalizedString">
+                              <xsl:with-param name="key">code</xsl:with-param>
+                              <xsl:with-param name="textLang"
+                                              select="$textLang"/>
+                           </xsl:call-template>
+                        </th>
+                        <td>
+                           <xsl:call-template name="doDT_CodeableConcept">
+                              <xsl:with-param name="in"
+                                              select="f:code"/>
+                              <xsl:with-param name="textLang"
+                                              select="$textLang"/>
+                           </xsl:call-template>
+                        </td>
+                     </tr>
+                  </xsl:if>
                   <xsl:if test="f:asserter | f:assertedDate">
                      <tr>
                         <th>
@@ -375,7 +310,7 @@
                                              <xsl:text>
                                              </xsl:text>
                                           </xsl:if>
-                                          <xsl:call-template name="doDT_Code">
+                                          <xsl:call-template name="getLocalizedSeverity">
                                              <xsl:with-param name="in"
                                                              select="f:severity"/>
                                              <xsl:with-param name="textLang"
@@ -826,6 +761,35 @@
       </text>
    </xsl:template>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!-- Binary derives from Resource, not DomainResource-->
+   <!--<xsl:template match="f:Binary" mode="createNarrative">
+        <xsl:variable name="textLang" select="(f:language/@value, $util:textlangDefault)[1]"/>
+        <text xmlns="http://hl7.org/fhir">
+            <status value="extensions"/>
+            <div xmlns="http://www.w3.org/1999/xhtml">
+                <div>
+                    <b>
+                        <xsl:call-template name="util:getLocalizedString">
+                            <xsl:with-param name="key">Binary</xsl:with-param>
+                            <xsl:with-param name="textLang" select="$textLang"/>
+                        </xsl:call-template>
+                    </b>
+                    <xsl:text> - </xsl:text>
+                    <xsl:call-template name="doDT_Code">
+                        <xsl:with-param name="in" select="f:contentType"/>
+                    </xsl:call-template>
+                </div>
+                <xsl:if test="f:securityContext">
+                    <div>
+                        <xsl:call-template name="doDT_Reference">
+                            <xsl:with-param name="in" select="f:securityContext"/>
+                        </xsl:call-template>
+                    </div>
+                </xsl:if>
+            </div>
+        </text>
+    </xsl:template>-->
+   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
    <xsl:template match="f:CarePlan"
                  mode="createNarrative">
       <xsl:variable name="textLang"
@@ -1205,7 +1169,7 @@
                                                         as="element()*">
                                              <xsl:for-each select="f:progress">
                                                 <li>
-                                                   <xsl:call-template name="doDT_Reference">
+                                                   <xsl:call-template name="doDT_Annotation">
                                                       <xsl:with-param name="in"
                                                                       select="."/>
                                                       <xsl:with-param name="textLang"
@@ -1944,7 +1908,7 @@
                      <tr>
                         <th>
                            <xsl:call-template name="util:getLocalizedString">
-                              <xsl:with-param name="key">encompassingEncounter</xsl:with-param>
+                              <xsl:with-param name="key">Encounter</xsl:with-param>
                               <xsl:with-param name="textLang"
                                               select="$textLang"/>
                            </xsl:call-template>
@@ -2006,7 +1970,7 @@
                      <tr>
                         <th>
                            <xsl:call-template name="util:getLocalizedString">
-                              <xsl:with-param name="key">typeCode-CST</xsl:with-param>
+                              <xsl:with-param name="key">custodian</xsl:with-param>
                               <xsl:with-param name="textLang"
                                               select="$textLang"/>
                            </xsl:call-template>
@@ -4124,7 +4088,7 @@
                                  </xsl:call-template>
                                  <xsl:call-template name="doDT_DateTime">
                                     <xsl:with-param name="in"
-                                                    select="f:issued"/>
+                                                    select="."/>
                                     <xsl:with-param name="textLang"
                                                     select="$textLang"/>
                                  </xsl:call-template>
@@ -5302,7 +5266,7 @@
                      <tr>
                         <th>
                            <xsl:call-template name="util:getLocalizedString">
-                              <xsl:with-param name="key">encompassingEncounter</xsl:with-param>
+                              <xsl:with-param name="key">Encounter</xsl:with-param>
                               <xsl:with-param name="textLang"
                                               select="$textLang"/>
                            </xsl:call-template>
@@ -9447,7 +9411,7 @@
                                  </xsl:call-template>
                                  <xsl:text>)</xsl:text>
                               </xsl:when>
-                              <xsl:when test="f:extension[@url = 'http://nictiz.nl/fhir/StructureDefinition/zib-MedicationUse-AsAgreedIndicator']/valueBoolean/@value = 'falsse'">
+                              <xsl:when test="f:extension[@url = 'http://nictiz.nl/fhir/StructureDefinition/zib-MedicationUse-AsAgreedIndicator']/valueBoolean/@value = 'false'">
                                  <xsl:text> (</xsl:text>
                                  <xsl:call-template name="util:getLocalizedString">
                                     <xsl:with-param name="key">Not Taken As Agreed</xsl:with-param>
@@ -14006,6 +13970,14 @@
                                      select="': '"/>
                   </xsl:call-template>
                   <xsl:choose>
+                     <xsl:when test="self::f:AllergyIntolerance/f:category">
+                        <xsl:call-template name="getLocalizedAllergyIntoleranceCategory">
+                           <xsl:with-param name="in"
+                                           select="f:category"/>
+                           <xsl:with-param name="textLang"
+                                           select="$textLang"/>
+                        </xsl:call-template>
+                     </xsl:when>
                      <xsl:when test="f:category[@value]">
                         <xsl:call-template name="doDT_Code">
                            <xsl:with-param name="in"
@@ -14385,6 +14357,9 @@
       </xsl:if>
    </xsl:template>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!-- ***************** -->
+   <!-- Datatypes Section -->
+   <!-- ***************** -->
    <xsl:template name="doDT">
       <xsl:param name="baseName"
                  select="'value'"
@@ -14670,6 +14645,8 @@
                      </xsl:with-param>
                   </xsl:call-template>
                   <xsl:value-of select="concat(local-name(), ' TODO')"/>
+                  <xsl:text> - </xsl:text>
+                  <xsl:value-of select="string-join(ancestor-or-self::*/local-name(), '/')"/>
                </xsl:otherwise>
             </xsl:choose>
          </xsl:variable>
@@ -15356,7 +15333,7 @@
                            <xsl:value-of select="concat('mailto:', normalize-space(f:value/@value))"/>
                         </xsl:when>
                         <xsl:when test="f:system/@value = ('phone', 'fax', 'pager', 'sms')">
-                           <xsl:value-of select="concat('tel:', translate(normalize-space(f:value/@value), ' ', ''))"/>
+                           <xsl:value-of select="concat('tel:', replace(normalize-space(f:value/@value), '\s', ''))"/>
                         </xsl:when>
                      </xsl:choose>
                   </xsl:variable>
@@ -15410,7 +15387,7 @@
                                         select="$util:textlangDefault"/>
                      </xsl:call-template>
                   </xsl:variable>
-                  <xsl:value-of select="format-date($date, concat('[D] ',$monthName,' [Y0001]'))"/>
+                  <xsl:value-of select="format-date($date, concat('[D] ', $monthName, ' [Y0001]'))"/>
                </xsl:when>
                <xsl:when test="@value">
                   <xsl:value-of select="@value"/>
@@ -15466,7 +15443,7 @@
                                         select="$util:textlangDefault"/>
                      </xsl:call-template>
                   </xsl:variable>
-                  <xsl:value-of select="format-dateTime($date, concat('[H01]:[m01]:[s01], [D] ',$monthName,' [Y0001]'))"/>
+                  <xsl:value-of select="format-dateTime($date, concat('[H01]:[m01]:[s01], [D] ', $monthName, ' [Y0001]'))"/>
                </xsl:when>
                <xsl:when test="@value castable as xs:date">
                   <xsl:variable name="date"
@@ -15480,7 +15457,7 @@
                                         select="$util:textlangDefault"/>
                      </xsl:call-template>
                   </xsl:variable>
-                  <xsl:value-of select="format-date($date, concat('[D] ',$monthName,' [Y0001]'))"/>
+                  <xsl:value-of select="format-date($date, concat('[D] ', $monthName, ' [Y0001]'))"/>
                </xsl:when>
                <xsl:when test="@value">
                   <xsl:value-of select="@value"/>
@@ -16297,7 +16274,7 @@
                   </xsl:variable>
                   <xsl:choose>
                      <xsl:when test="$start = $end">
-                        <xsl:value-of select="format-dateTime($start, concat('[H01]:[m01]:[s01], [D] ',$monthNameStart,' [Y0001]'))"/>
+                        <xsl:value-of select="format-dateTime($start, concat('[H01]:[m01]:[s01], [D] ', $monthNameStart, ' [Y0001]'))"/>
                      </xsl:when>
                      <xsl:when test="$Y-Match and $M-Match and $D-Match">
                         <xsl:variable name="starttime"
@@ -16305,16 +16282,16 @@
                         <xsl:variable name="endtime"
                                       select="format-dateTime($end, $i18n_timepicture)"/>
                         <xsl:variable name="st"
-                                      select="                                         if (matches($starttime, '^\d{2}:\d{2}:00') and matches($endtime, '^\d{2}:\d{2}:00')) then                                             replace($starttime, '^(\d{2}:\d{2}):00(.*)', '$1$2')                                         else                                             $starttime"/>
+                                      select="                                     if (matches($starttime, '^\d{2}:\d{2}:00') and matches($endtime, '^\d{2}:\d{2}:00')) then                                         replace($starttime, '^(\d{2}:\d{2}):00(.*)', '$1$2')                                     else                                         $starttime"/>
                         <xsl:variable name="et"
-                                      select="                                         if ($starttime = $st) then                                             $endtime                                         else                                             replace($endtime, '^(\d{2}:\d{2}):00(.*)', '$1$2')"/>
-                        <xsl:value-of select="concat($st, ' - ', $et, $i18n_on, format-dateTime($start, concat('[D] ',$monthNameEnd,' [Y0001]')))"/>
+                                      select="                                     if ($starttime = $st) then                                         $endtime                                     else                                         replace($endtime, '^(\d{2}:\d{2}):00(.*)', '$1$2')"/>
+                        <xsl:value-of select="concat($st, ' - ', $et, $i18n_on, format-dateTime($start, concat('[D] ', $monthNameEnd, ' [Y0001]')))"/>
                      </xsl:when>
                      <xsl:otherwise>
                         <xsl:variable name="startdate"
-                                      select="format-dateTime($start, concat('[D] ',$monthNameStart,' [Y0001]'))"/>
+                                      select="format-dateTime($start, concat('[D] ', $monthNameStart, ' [Y0001]'))"/>
                         <xsl:variable name="enddate"
-                                      select="format-dateTime($end, concat('[D] ',$monthNameEnd,' [Y0001]'))"/>
+                                      select="format-dateTime($end, concat('[D] ', $monthNameEnd, ' [Y0001]'))"/>
                         <xsl:variable name="starttime"
                                       select="format-dateTime($start, $i18n_timepicture)"/>
                         <xsl:variable name="endtime"
@@ -16354,13 +16331,13 @@
                   </xsl:variable>
                   <xsl:choose>
                      <xsl:when test="$start = $end">
-                        <xsl:value-of select="format-date($start, concat('[D] ',$monthNameStart,' [Y0001]'))"/>
+                        <xsl:value-of select="format-date($start, concat('[D] ', $monthNameStart, ' [Y0001]'))"/>
                      </xsl:when>
                      <xsl:otherwise>
                         <xsl:variable name="startdate"
-                                      select="format-date($start, concat('[D] ',$monthNameStart,' [Y0001]'))"/>
+                                      select="format-date($start, concat('[D] ', $monthNameStart, ' [Y0001]'))"/>
                         <xsl:variable name="enddate"
-                                      select="format-date($end, concat('[D] ',$monthNameEnd,' [Y0001]'))"/>
+                                      select="format-date($end, concat('[D] ', $monthNameEnd, ' [Y0001]'))"/>
                         <xsl:value-of select="concat($startdate, ' - ', $enddate)"/>
                      </xsl:otherwise>
                   </xsl:choose>
@@ -16828,8 +16805,9 @@
       <xsl:for-each select="$in">
          <xsl:variable name="str">
             <xsl:choose>
+               <!-- Seconds must be provided due to schema type constraints but may be zero-filled and may be ignored at receiver discretion -->
                <xsl:when test="@value">
-                  <xsl:value-of select="@value"/>
+                  <xsl:value-of select="replace(@value, ':00$', '')"/>
                </xsl:when>
                <xsl:when test="f:extension[@url = 'http://hl7.org/fhir/StructureDefinition/data-absent-reason']">
                   <xsl:call-template name="getLocalizedDataAbsentReason">
@@ -17436,6 +17414,7 @@
       </xsl:choose>
    </xsl:template>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!-- https://www.hl7.org/fhir/STU3/valueset-units-of-time.html -->
    <xsl:template name="getLocalizedUnitsOfTime">
       <xsl:param name="plural"
                  as="xs:boolean"/>
@@ -17468,6 +17447,7 @@
       </xsl:choose>
    </xsl:template>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!-- Take month number 1, 2, 3, ... and return localized month name January, February, March, ... format-dateTime() and format-date() usually don't have those -->
    <xsl:template name="getLocalizedMonthOfTheYear"
                  as="xs:string?">
       <xsl:param name="in"
@@ -17566,6 +17546,7 @@
       </xsl:choose>
    </xsl:template>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!-- AWE, allow for more than one input -->
    <xsl:template name="getLocalizedDaysOfWeek">
       <xsl:param name="in"
                  as="element()*"/>
@@ -17639,6 +17620,7 @@
       <xsl:value-of select="string-join($out, ', ')"/>
    </xsl:template>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!-- https://www.hl7.org/fhir/STU3/valueset-days-of-week.html -->
    <xsl:template name="getLocalizedEventTiming">
       <xsl:param name="in"
                  as="element()?"/>
@@ -17663,6 +17645,29 @@
       </xsl:choose>
    </xsl:template>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!-- https://www.hl7.org/fhir/STU3/valueset-allergy-clinical-status.html -->
+   <!-- https://www.hl7.org/fhir/STU3/valueset-appointmentstatus.html -->
+   <!-- https://www.hl7.org/fhir/STU3/valueset-care-plan-status.html -->
+   <!-- https://www.hl7.org/fhir/STU3/valueset-care-plan-activity-status.html -->
+   <!-- https://www.hl7.org/fhir/STU3/valueset-care-team-status.html -->
+   <!-- https://www.hl7.org/fhir/STU3/valueset-condition-clinical.html -->
+   <!-- https://www.hl7.org/fhir/STU3/valueset-condition-ver-status.html -->
+   <!-- https://www.hl7.org/fhir/STU3/valueset-consent-state-codes.html -->
+   <!-- https://www.hl7.org/fhir/STU3/valueset-device-status.html -->
+   <!-- https://www.hl7.org/fhir/STU3/valueset-device-statement-status.html -->
+   <!-- https://www.hl7.org/fhir/STU3/valueset-episode-of-care-status.html -->
+   <!-- https://www.hl7.org/fhir/STU3/valueset-event-status.html -->
+   <!-- https://www.hl7.org/fhir/STU3/valueset-flag-status.html -->
+   <!-- https://www.hl7.org/fhir/STU3/valueset-fm-status.html -->
+   <!-- https://www.hl7.org/fhir/STU3/valueset-goal-status.html -->
+   <!-- https://www.hl7.org/fhir/STU3/valueset-immunization-status.html -->
+   <!-- https://www.hl7.org/fhir/STU3/valueset-observation-status.html -->
+   <!-- https://www.hl7.org/fhir/STU3/valueset-questionnaire-answers-status.html -->
+   <!-- https://www.hl7.org/fhir/STU3/valueset-list-status.html -->
+   <!-- https://www.hl7.org/fhir/STU3/valueset-nutrition-request-status.html -->
+   <!-- https://www.hl7.org/fhir/STU3/valueset-slotstatus.html -->
+   <!-- https://www.hl7.org/fhir/STU3/valueset-specimen-status.html -->
+   <!-- http://hl7.org/fhir/STU3/valueset-task-status.html -->
    <xsl:template name="getLocalizedStatus">
       <xsl:param name="in"
                  as="element()?"/>
@@ -17670,10 +17675,28 @@
                  as="xs:string"
                  required="yes"/>
       <xsl:choose>
-         <xsl:when test="                     $in/@value = (                     'aborted',                     'accepted',                     'achieved',                     'active',                     'ahead-of-target',                     'amended',                     'arrived',                     'available',                     'booked',                     'busy',                     'busy-tentative',                     'busy-unavailable',                     'behind-target',                     'cancelled',                     'completed',                     'confirmed',                     'corrected',                     'current',                     'differential',                     'draft',                     'entered-in-error',                     'failed',                     'final',                     'finished',                     'free',                     'fulfilled',                     'in-progress',                     'inactive',                     'intended',                     'noshow',                     'not-started',                     'on-hold',                     'on-target',                     'onhold',                     'pending',                     'planned',                     'preliminary',                     'preparation',                     'proposed',                     'provisional',                     'ready',                     'rejected',                     'recurrence',                     'refuted',                     'registered',                     'remission',                     'requested',                     'resolved',                     'retired',                     'scheduled',                     'stopped',                     'superseded',                     'suspended',                     'sustaining',                     'unavailable',                     'unconfirmed',                     'unknown',                     'unsatisfactory',                     'waitlist'                     )">
+         <xsl:when test="                     $in/@value = (                     'aborted',                     'accepted',                     'achieved',                     'active',                     'ahead-of-target',                     'amended',                     'arrived',                     'available',                     'booked',                     'busy',                     'busy-tentative',                     'busy-unavailable',                     'behind-target',                     'cancelled',                     'completed',                     'confirmed',                     'corrected',                     'current',                     'differential',                     'draft',                     'entered-in-error',                     'failed',                     'final',                     'finished',                     'free',                     'fulfilled',                     'in-progress',                     'inactive',                     'intended',                     'noshow',                     'not-started',                     'on-hold',                     'on-target',                     'onhold',                     'pending',                     'planned',                     'preliminary',                     'preparation',                     'presumed',                     'proposed',                     'provisional',                     'ready',                     'rejected',                     'recurrence',                     'refuted',                     'registered',                     'remission',                     'requested',                     'resolved',                     'retired',                     'scheduled',                     'stopped',                     'superseded',                     'suspended',                     'sustaining',                     'unavailable',                     'unconfirmed',                     'unknown',                     'unsatisfactory',                     'waitlist'                     )">
             <xsl:call-template name="util:getLocalizedString">
                <xsl:with-param name="key"
                                select="concat('status-', $in/@value)"/>
+            </xsl:call-template>
+         </xsl:when>
+         <!-- AllergyIntolerance.clinicalStatus and AllergyIntolerance.verificationStatus are examples of CodeableConcept as of R4 -->
+         <xsl:when test="$in[f:coding | f:text]">
+            <xsl:call-template name="doDT_CodeableConcept">
+               <xsl:with-param name="in"
+                               select="$in"/>
+               <xsl:with-param name="textLang"
+                               select="$textLang"/>
+            </xsl:call-template>
+         </xsl:when>
+         <!-- If a status were to be a Coding, it would have a system, code or display -->
+         <xsl:when test="$in[f:system | f:code | f:display]">
+            <xsl:call-template name="doDT_Coding">
+               <xsl:with-param name="in"
+                               select="$in"/>
+               <xsl:with-param name="textLang"
+                               select="$textLang"/>
             </xsl:call-template>
          </xsl:when>
          <xsl:otherwise>
@@ -17687,6 +17710,8 @@
       </xsl:choose>
    </xsl:template>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!-- https://www.hl7.org/fhir/STU3/valueset-care-plan-intent.html -->
+   <!-- https://www.hl7.org/fhir/STU3/valueset-request-intent.html -->
    <xsl:template name="getLocalizedIntent">
       <xsl:param name="in"
                  as="element()?"/>
@@ -17735,6 +17760,7 @@
       </xsl:choose>
    </xsl:template>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!-- https://www.hl7.org/fhir/STU3/valueset-administrative-gender.html -->
    <xsl:template name="getLocalizedAdministrativeGender">
       <xsl:param name="in"
                  as="element()?"/>
@@ -17781,6 +17807,7 @@
       </xsl:choose>
    </xsl:template>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!--http://hl7.org/fhir/STU3/valueset-document-relationship-type.html-->
    <xsl:template name="getLocalizedDocumentRelationshipType">
       <xsl:param name="in"
                  as="element()?"/>
@@ -17827,6 +17854,7 @@
       </xsl:choose>
    </xsl:template>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!-- https://www.hl7.org/fhir/STU3/valueset-list-mode.html -->
    <xsl:template name="getLocalizedListMode">
       <xsl:param name="in"
                  as="element()?"/>
@@ -17851,6 +17879,7 @@
       </xsl:choose>
    </xsl:template>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!-- https://www.hl7.org/fhir/STU3/valueset-data-absent-reason.html -->
    <xsl:template name="getLocalizedDataAbsentReason">
       <xsl:param name="in"
                  as="element()?"/>
@@ -17872,6 +17901,7 @@
       </i>
    </xsl:template>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!-- https://www.hl7.org/fhir/STU3/v3/NullFlavor/vs.html -->
    <xsl:template name="getLocalizedNullFlavor">
       <xsl:param name="in"
                  as="element()?"/>
@@ -17893,6 +17923,7 @@
       </i>
    </xsl:template>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!-- https://www.hl7.org/fhir/STU3/valueset-contact-point-use.html -->
    <xsl:template name="getLocalizedContactPointSystem">
       <xsl:param name="in"
                  as="element()?"/>
@@ -17946,6 +17977,10 @@
       </xsl:choose>
    </xsl:template>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!-- https://www.hl7.org/fhir/STU3/valueset-contact-point-use.html 
+    use   : home | work | temp | old | mobile - purpose of this contact point
+    system: phone | fax | email | pager | url | sms | other
+    -->
    <xsl:template name="getLocalizedContactPointUse">
       <xsl:param name="in"
                  as="element()*"/>
@@ -18028,6 +18063,7 @@
       </xsl:choose>
    </xsl:template>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!-- http://hl7.org/fhir/STU3/valueset-address-use.html -->
    <xsl:template name="getLocalizedAddressUse">
       <xsl:param name="in"
                  as="element()?"/>
@@ -18074,6 +18110,7 @@
       </xsl:choose>
    </xsl:template>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!-- http://hl7.org/fhir/STU3/valueset-postal-address-use.html -->
    <xsl:template name="getLocalizedPostalAddressUse">
       <xsl:param name="in"
                  as="element()?"/>
@@ -18172,6 +18209,7 @@
       </xsl:choose>
    </xsl:template>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!-- https://www.hl7.org/fhir/STU3/valueset-address-type.html -->
    <xsl:template name="getLocalizedAddressType">
       <xsl:param name="in"
                  as="element()?"/>
@@ -18217,6 +18255,54 @@
       </xsl:choose>
    </xsl:template>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!-- https://www.hl7.org/fhir/STU3/valueset-allergy-intolerance-category.html -->
+   <xsl:template name="getLocalizedAllergyIntoleranceCategory">
+      <xsl:param name="in"
+                 as="element()?"/>
+      <xsl:param name="textLang"
+                 as="xs:string"
+                 required="yes"/>
+      <xsl:choose>
+         <xsl:when test="$in/@value = 'food'">
+            <xsl:call-template name="util:getLocalizedString">
+               <xsl:with-param name="key">AllergyIntoleranceCategory-food</xsl:with-param>
+               <xsl:with-param name="textLang"
+                               select="$textLang"/>
+            </xsl:call-template>
+         </xsl:when>
+         <xsl:when test="$in/@value = 'medication'">
+            <xsl:call-template name="util:getLocalizedString">
+               <xsl:with-param name="key">AllergyIntoleranceCategory-medication</xsl:with-param>
+               <xsl:with-param name="textLang"
+                               select="$textLang"/>
+            </xsl:call-template>
+         </xsl:when>
+         <xsl:when test="$in/@value = 'environment'">
+            <xsl:call-template name="util:getLocalizedString">
+               <xsl:with-param name="key">AllergyIntoleranceCategory-environment</xsl:with-param>
+               <xsl:with-param name="textLang"
+                               select="$textLang"/>
+            </xsl:call-template>
+         </xsl:when>
+         <xsl:when test="$in/@value = 'biologic'">
+            <xsl:call-template name="util:getLocalizedString">
+               <xsl:with-param name="key">AllergyIntoleranceCategory-biologic</xsl:with-param>
+               <xsl:with-param name="textLang"
+                               select="$textLang"/>
+            </xsl:call-template>
+         </xsl:when>
+         <xsl:otherwise>
+            <xsl:call-template name="doDT_Code">
+               <xsl:with-param name="in"
+                               select="$in"/>
+               <xsl:with-param name="textLang"
+                               select="$textLang"/>
+            </xsl:call-template>
+         </xsl:otherwise>
+      </xsl:choose>
+   </xsl:template>
+   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!-- https://www.hl7.org/fhir/STU3/valueset-request-priority.html -->
    <xsl:template name="getLocalizedRequestPriority">
       <xsl:param name="in"
                  as="element()?"/>
@@ -18241,6 +18327,7 @@
       </xsl:choose>
    </xsl:template>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!-- https://www.hl7.org/fhir/STU3/valueset-medication-statement-taken.html -->
    <xsl:template name="getLocalizedMedicationStatementTaken">
       <xsl:param name="in"
                  as="element()?"/>
@@ -18287,6 +18374,7 @@
       </xsl:choose>
    </xsl:template>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!-- http://hl7.org/fhir/STU3/v3/TimingEvent/cs.html -->
    <xsl:template name="getLocalizedTimingEvent">
       <xsl:param name="in"
                  as="element()?"/>
@@ -18314,6 +18402,86 @@
          </xsl:when>
          <xsl:otherwise>
             <xsl:call-template name="doDT_CodeableConcept">
+               <xsl:with-param name="in"
+                               select="$in"/>
+               <xsl:with-param name="textLang"
+                               select="$textLang"/>
+            </xsl:call-template>
+         </xsl:otherwise>
+      </xsl:choose>
+   </xsl:template>
+   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!-- https://www.hl7.org/fhir/STU3/valueset-allergy-intolerance-criticality.html -->
+   <xsl:template name="getLocalizedCriticality">
+      <xsl:param name="in"
+                 as="element()?"/>
+      <xsl:param name="textLang"
+                 as="xs:string"
+                 required="yes"/>
+      <xsl:choose>
+         <xsl:when test="$in/@value = 'low'">
+            <xsl:call-template name="util:getLocalizedString">
+               <xsl:with-param name="key">criticalitylow</xsl:with-param>
+               <xsl:with-param name="textLang"
+                               select="$textLang"/>
+            </xsl:call-template>
+         </xsl:when>
+         <xsl:when test="$in/@value = 'high'">
+            <xsl:call-template name="util:getLocalizedString">
+               <xsl:with-param name="key">criticalityhigh</xsl:with-param>
+               <xsl:with-param name="textLang"
+                               select="$textLang"/>
+            </xsl:call-template>
+         </xsl:when>
+         <xsl:when test="$in/@value = 'unable-to-assess'">
+            <xsl:call-template name="util:getLocalizedString">
+               <xsl:with-param name="key">criticalityunable-to-assess</xsl:with-param>
+               <xsl:with-param name="textLang"
+                               select="$textLang"/>
+            </xsl:call-template>
+         </xsl:when>
+         <xsl:otherwise>
+            <xsl:call-template name="doDT_Code">
+               <xsl:with-param name="in"
+                               select="$in"/>
+               <xsl:with-param name="textLang"
+                               select="$textLang"/>
+            </xsl:call-template>
+         </xsl:otherwise>
+      </xsl:choose>
+   </xsl:template>
+   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!-- https://www.hl7.org/fhir/STU3/valueset-reaction-event-severity.html -->
+   <xsl:template name="getLocalizedSeverity">
+      <xsl:param name="in"
+                 as="element()?"/>
+      <xsl:param name="textLang"
+                 as="xs:string"
+                 required="yes"/>
+      <xsl:choose>
+         <xsl:when test="$in/@value = 'mild'">
+            <xsl:call-template name="util:getLocalizedString">
+               <xsl:with-param name="key">severity-mild</xsl:with-param>
+               <xsl:with-param name="textLang"
+                               select="$textLang"/>
+            </xsl:call-template>
+         </xsl:when>
+         <xsl:when test="$in/@value = 'moderate'">
+            <xsl:call-template name="util:getLocalizedString">
+               <xsl:with-param name="key">severity-moderate</xsl:with-param>
+               <xsl:with-param name="textLang"
+                               select="$textLang"/>
+            </xsl:call-template>
+         </xsl:when>
+         <xsl:when test="$in/@value = 'severe'">
+            <xsl:call-template name="util:getLocalizedString">
+               <xsl:with-param name="key">severity-severe</xsl:with-param>
+               <xsl:with-param name="textLang"
+                               select="$textLang"/>
+            </xsl:call-template>
+         </xsl:when>
+         <xsl:otherwise>
+            <xsl:call-template name="doDT_Code">
                <xsl:with-param name="in"
                                select="$in"/>
                <xsl:with-param name="textLang"

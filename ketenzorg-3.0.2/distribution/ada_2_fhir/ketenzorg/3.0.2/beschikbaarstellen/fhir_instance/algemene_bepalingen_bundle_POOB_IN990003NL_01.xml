@@ -2,13 +2,169 @@
 <Bundle xsi:schemaLocation="http://hl7.org/fhir http://hl7.org/fhir/STU3/fhir-all.xsd"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns="http://hl7.org/fhir">
-   <id value="53812b12-351f-11ef-7151-020000000000"/>
+   <id value="7d57f78a-a2da-11ef-6540-020000000000"/>
    <type value="searchset"/>
-   <total value="19"/>
+   <total value="21"/>
    <link>
       <relation value="self"/>
       <url value="http://dummy.nictiz.nl/dummyquery"/>
    </link>
+   <entry>
+      <fullUrl value="https://example.org/fhir/Observation/2.16.840.1.113883.2.4.3.39.6101.64740.90001234.22-647660"/>
+      <resource>
+         <Observation>
+            <id value="2.16.840.1.113883.2.4.3.39.6101.64740.90001234.22-647660"/>
+            <meta>
+               <profile value="http://nictiz.nl/fhir/StructureDefinition/gp-DiagnosticResult"/>
+            </meta>
+            <text>
+               <status value="extensions"/>
+               <div xmlns="http://www.w3.org/1999/xhtml">
+                  <table>
+                     <caption>Observatie/bepaling. Subject: J. XXX_Cevat. Id: 647660 (urn:oid:2.16.840.1.113883.2.4.3.39.6101.64740.90001234.22), Status: definitief</caption>
+                     <tbody>
+                        <tr>
+                           <th>Context</th>
+                           <td colspan="2">Contact ID: 2116503 2.16.840.1.113883.2.4.3.39.6101.62128.90012345.4 (Id: 2116503 (urn:oid:2.16.840.1.113883.2.4.3.39.6101.62128.90012345.4))</td>
+                        </tr>
+                        <tr>
+                           <th>Bepalingdatum/tijd</th>
+                           <td colspan="2">28 februari 2024</td>
+                        </tr>
+                        <tr>
+                           <th>Code</th>
+                           <th>Waarde</th>
+                           <th>Referentiewaarden</th>
+                        </tr>
+                        <tr>
+                           <td>
+                              <span title="4DKL angstscore (2811 - nhg-tabel-45-diagnostische-bepalingen)">4DKL angstscore</span>
+                           </td>
+                           <td>0</td>
+                           <td>
+                              <div>
+                                 <span title="Normal Range (normal - referencerange-meaning)">Normal Range</span> 0.00 - 3.00</div>
+                           </td>
+                        </tr>
+                     </tbody>
+                  </table>
+               </div>
+            </text>
+            <identifier>
+               <system value="urn:oid:2.16.840.1.113883.2.4.3.39.6101.64740.90001234.22"/>
+               <value value="647660"/>
+            </identifier>
+            <status value="final"/>
+            <code>
+               <coding>
+                  <system value="https://referentiemodel.nhg.org/tabellen/nhg-tabel-45-diagnostische-bepalingen"/>
+                  <version value="v41"/>
+                  <code value="2811"/>
+                  <display value="4DKL angstscore"/>
+               </coding>
+            </code>
+            <subject>
+               <reference value="urn:uuid:7d580582-a2da-11ef-6540-020000000000"/>
+               <display value="J. XXX_Cevat"/>
+            </subject>
+            <context>
+               <identifier>
+                  <system value="urn:oid:2.16.840.1.113883.2.4.3.39.6101.62128.90012345.4"/>
+                  <value value="2116503"/>
+               </identifier>
+               <display value="Contact ID: 2116503 2.16.840.1.113883.2.4.3.39.6101.62128.90012345.4"/>
+            </context>
+            <effectiveDateTime value="2024-02-28"/>
+            <valueBoolean value="0"/>
+            <referenceRange>
+               <low>
+                  <value value="0.00"/>
+               </low>
+               <high>
+                  <value value="3.00"/>
+               </high>
+               <type>
+                  <coding>
+                     <system value="http://hl7.org/fhir/referencerange-meaning"/>
+                     <code value="normal"/>
+                     <display value="Normal Range"/>
+                  </coding>
+               </type>
+            </referenceRange>
+         </Observation>
+      </resource>
+      <search>
+         <mode value="match"/>
+      </search>
+   </entry>
+   <entry>
+      <fullUrl value="https://example.org/fhir/Observation/2.16.840.1.113883.2.4.3.39.6101.64740.90001234.22-647659"/>
+      <resource>
+         <Observation>
+            <id value="2.16.840.1.113883.2.4.3.39.6101.64740.90001234.22-647659"/>
+            <meta>
+               <profile value="http://nictiz.nl/fhir/StructureDefinition/gp-DiagnosticResult"/>
+            </meta>
+            <text>
+               <status value="extensions"/>
+               <div xmlns="http://www.w3.org/1999/xhtml">
+                  <table>
+                     <caption>Observatie/bepaling. Subject: J. XXX_Cevat. Id: 647659 (urn:oid:2.16.840.1.113883.2.4.3.39.6101.64740.90001234.22), Status: definitief</caption>
+                     <tbody>
+                        <tr>
+                           <th>Context</th>
+                           <td>Contact ID: 1139712 2.16.840.1.113883.2.4.3.39.6101.64740.90001234.4 (Id: 1139712 (urn:oid:2.16.840.1.113883.2.4.3.39.6101.64740.90001234.4))</td>
+                        </tr>
+                        <tr>
+                           <th>Bepalingdatum/tijd</th>
+                           <td>26 juli 2024</td>
+                        </tr>
+                        <tr>
+                           <th>Code</th>
+                           <th>Waarde</th>
+                        </tr>
+                        <tr>
+                           <td>
+                              <span title="alcoholgebruik (1591 - nhg-tabel-45-diagnostische-bepalingen)">alcoholgebruik</span>
+                           </td>
+                           <td>0</td>
+                        </tr>
+                     </tbody>
+                  </table>
+               </div>
+            </text>
+            <identifier>
+               <system value="urn:oid:2.16.840.1.113883.2.4.3.39.6101.64740.90001234.22"/>
+               <value value="647659"/>
+            </identifier>
+            <status value="final"/>
+            <code>
+               <coding>
+                  <system value="https://referentiemodel.nhg.org/tabellen/nhg-tabel-45-diagnostische-bepalingen"/>
+                  <version value="v42"/>
+                  <code value="1591"/>
+                  <display value="alcoholgebruik"/>
+               </coding>
+            </code>
+            <subject>
+               <reference value="urn:uuid:7d580582-a2da-11ef-6540-020000000000"/>
+               <display value="J. XXX_Cevat"/>
+            </subject>
+            <context>
+               <identifier>
+                  <system value="urn:oid:2.16.840.1.113883.2.4.3.39.6101.64740.90001234.4"/>
+                  <value value="1139712"/>
+               </identifier>
+               <display value="Contact ID: 1139712 2.16.840.1.113883.2.4.3.39.6101.64740.90001234.4"/>
+            </context>
+            <effectiveDateTime value="2024-07-26"/>
+            <valueBoolean value="0"/>
+         </Observation>
+      </resource>
+      <search>
+         <mode value="match"/>
+      </search>
+   </entry>
    <entry>
       <fullUrl value="https://example.org/fhir/Observation/2.16.840.1.113883.2.4.3.111.19.1-MedMijHG-AlgBep-C12-01"/>
       <resource>
@@ -73,7 +229,7 @@
                </coding>
             </code>
             <subject>
-               <reference value="urn:uuid:53813856-351f-11ef-7151-020000000000"/>
+               <reference value="urn:uuid:7d580582-a2da-11ef-6540-020000000000"/>
                <display value="J. XXX_Cevat"/>
             </subject>
             <context>
@@ -160,7 +316,7 @@
                </coding>
             </code>
             <subject>
-               <reference value="urn:uuid:53813856-351f-11ef-7151-020000000000"/>
+               <reference value="urn:uuid:7d580582-a2da-11ef-6540-020000000000"/>
                <display value="J. XXX_Cevat"/>
             </subject>
             <context>
@@ -242,7 +398,7 @@
                </coding>
             </code>
             <subject>
-               <reference value="urn:uuid:53813856-351f-11ef-7151-020000000000"/>
+               <reference value="urn:uuid:7d580582-a2da-11ef-6540-020000000000"/>
                <display value="J. XXX_Cevat"/>
             </subject>
             <context>
@@ -329,7 +485,7 @@
                </coding>
             </code>
             <subject>
-               <reference value="urn:uuid:53813856-351f-11ef-7151-020000000000"/>
+               <reference value="urn:uuid:7d580582-a2da-11ef-6540-020000000000"/>
                <display value="J. XXX_Cevat"/>
             </subject>
             <context>
@@ -416,7 +572,7 @@
                </coding>
             </code>
             <subject>
-               <reference value="urn:uuid:53813856-351f-11ef-7151-020000000000"/>
+               <reference value="urn:uuid:7d580582-a2da-11ef-6540-020000000000"/>
                <display value="J. XXX_Cevat"/>
             </subject>
             <context>
@@ -489,7 +645,7 @@
                </coding>
             </code>
             <subject>
-               <reference value="urn:uuid:53813856-351f-11ef-7151-020000000000"/>
+               <reference value="urn:uuid:7d580582-a2da-11ef-6540-020000000000"/>
                <display value="J. XXX_Cevat"/>
             </subject>
             <context>
@@ -562,7 +718,7 @@
                </coding>
             </code>
             <subject>
-               <reference value="urn:uuid:53813856-351f-11ef-7151-020000000000"/>
+               <reference value="urn:uuid:7d580582-a2da-11ef-6540-020000000000"/>
                <display value="J. XXX_Cevat"/>
             </subject>
             <context>
@@ -635,7 +791,7 @@
                </coding>
             </code>
             <subject>
-               <reference value="urn:uuid:53813856-351f-11ef-7151-020000000000"/>
+               <reference value="urn:uuid:7d580582-a2da-11ef-6540-020000000000"/>
                <display value="J. XXX_Cevat"/>
             </subject>
             <context>
@@ -708,7 +864,7 @@
                </coding>
             </code>
             <subject>
-               <reference value="urn:uuid:53813856-351f-11ef-7151-020000000000"/>
+               <reference value="urn:uuid:7d580582-a2da-11ef-6540-020000000000"/>
                <display value="J. XXX_Cevat"/>
             </subject>
             <context>
@@ -781,7 +937,7 @@
                </coding>
             </code>
             <subject>
-               <reference value="urn:uuid:53813856-351f-11ef-7151-020000000000"/>
+               <reference value="urn:uuid:7d580582-a2da-11ef-6540-020000000000"/>
                <display value="J. XXX_Cevat"/>
             </subject>
             <context>
@@ -854,7 +1010,7 @@
                </coding>
             </code>
             <subject>
-               <reference value="urn:uuid:53813856-351f-11ef-7151-020000000000"/>
+               <reference value="urn:uuid:7d580582-a2da-11ef-6540-020000000000"/>
                <display value="J. XXX_Cevat"/>
             </subject>
             <context>
@@ -941,7 +1097,7 @@
                </coding>
             </code>
             <subject>
-               <reference value="urn:uuid:53813856-351f-11ef-7151-020000000000"/>
+               <reference value="urn:uuid:7d580582-a2da-11ef-6540-020000000000"/>
                <display value="J. XXX_Cevat"/>
             </subject>
             <context>
@@ -1028,7 +1184,7 @@
                </coding>
             </code>
             <subject>
-               <reference value="urn:uuid:53813856-351f-11ef-7151-020000000000"/>
+               <reference value="urn:uuid:7d580582-a2da-11ef-6540-020000000000"/>
                <display value="J. XXX_Cevat"/>
             </subject>
             <context>
@@ -1115,7 +1271,7 @@
                </coding>
             </code>
             <subject>
-               <reference value="urn:uuid:53813856-351f-11ef-7151-020000000000"/>
+               <reference value="urn:uuid:7d580582-a2da-11ef-6540-020000000000"/>
                <display value="J. XXX_Cevat"/>
             </subject>
             <context>
@@ -1204,7 +1360,7 @@
                </coding>
             </code>
             <subject>
-               <reference value="urn:uuid:53813856-351f-11ef-7151-020000000000"/>
+               <reference value="urn:uuid:7d580582-a2da-11ef-6540-020000000000"/>
                <display value="J. XXX_Cevat"/>
             </subject>
             <context>
@@ -1292,7 +1448,7 @@
                </coding>
             </code>
             <subject>
-               <reference value="urn:uuid:53813856-351f-11ef-7151-020000000000"/>
+               <reference value="urn:uuid:7d580582-a2da-11ef-6540-020000000000"/>
                <display value="J. XXX_Cevat"/>
             </subject>
             <context>
@@ -1358,14 +1514,14 @@
                </coding>
             </code>
             <subject>
-               <reference value="urn:uuid:53813856-351f-11ef-7151-020000000000"/>
+               <reference value="urn:uuid:7d580582-a2da-11ef-6540-020000000000"/>
                <display value="J. XXX_Cevat"/>
             </subject>
             <effectiveDateTime value="2020-10-21"/>
             <performer>
                <extension url="http://nictiz.nl/fhir/StructureDefinition/practitionerrole-reference">
                   <valueReference>
-                     <reference value="urn:uuid:5381212f-351f-11ef-7151-020000000000"/>
+                     <reference value="urn:uuid:7d57f58e-a2da-11ef-6540-020000000000"/>
                      <display value="Responsible Party"/>
                   </valueReference>
                </extension>
@@ -1427,14 +1583,14 @@
                </coding>
             </code>
             <subject>
-               <reference value="urn:uuid:53813856-351f-11ef-7151-020000000000"/>
+               <reference value="urn:uuid:7d580582-a2da-11ef-6540-020000000000"/>
                <display value="J. XXX_Cevat"/>
             </subject>
             <effectiveDateTime value="2020-10-21"/>
             <performer>
                <extension url="http://nictiz.nl/fhir/StructureDefinition/practitionerrole-reference">
                   <valueReference>
-                     <reference value="urn:uuid:5381212f-351f-11ef-7151-020000000000"/>
+                     <reference value="urn:uuid:7d57f58e-a2da-11ef-6540-020000000000"/>
                      <display value="Responsible Party"/>
                   </valueReference>
                </extension>
@@ -1480,9 +1636,7 @@
                            <td>110 mm[Hg]</td>
                            <td>
                               <div>
-                                 <span title="Normal Range (normal - referencerange-meaning)">Normal Range</span>
-
- - 140 mm[Hg]</div>
+                                 <span title="Normal Range (normal - referencerange-meaning)">Normal Range</span>  - 140 mm[Hg]</div>
                            </td>
                         </tr>
                      </tbody>
@@ -1503,14 +1657,14 @@
                </coding>
             </code>
             <subject>
-               <reference value="urn:uuid:53813856-351f-11ef-7151-020000000000"/>
+               <reference value="urn:uuid:7d580582-a2da-11ef-6540-020000000000"/>
                <display value="J. XXX_Cevat"/>
             </subject>
             <effectiveDateTime value="2020-10-21"/>
             <performer>
                <extension url="http://nictiz.nl/fhir/StructureDefinition/practitionerrole-reference">
                   <valueReference>
-                     <reference value="urn:uuid:5381212f-351f-11ef-7151-020000000000"/>
+                     <reference value="urn:uuid:7d57f58e-a2da-11ef-6540-020000000000"/>
                      <display value="Responsible Party"/>
                   </valueReference>
                </extension>
@@ -1550,7 +1704,7 @@
       </search>
    </entry>
    <entry>
-      <fullUrl value="urn:uuid:53813856-351f-11ef-7151-020000000000"/>
+      <fullUrl value="urn:uuid:7d580582-a2da-11ef-6540-020000000000"/>
       <resource>
          <Patient>
             <meta>
@@ -1687,7 +1841,7 @@
       </search>
    </entry>
    <entry>
-      <fullUrl value="urn:uuid:5381212f-351f-11ef-7151-020000000000"/>
+      <fullUrl value="urn:uuid:7d57f58e-a2da-11ef-6540-020000000000"/>
       <resource>
          <PractitionerRole>
             <meta>

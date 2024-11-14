@@ -1,77 +1,113 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?yatc-distribution-provenance href="HL7-mappings/util/utilities.xsl"?>
-<?yatc-distribution-info name="ketenzorg-3.0.2" timestamp="2024-06-28T14:38:20.79+02:00" version="1.4.28"?>
-<!-- == Provenance: HL7-mappings/util/utilities.xsl == -->
-<!-- == Distribution: ketenzorg-3.0.2; 1.4.28; 2024-06-28T14:38:20.79+02:00 == -->
-<xsl:stylesheet exclude-result-prefixes="xs xd util hl7 fhir"
+<?yatc-distribution-provenance href="YATC-shared/xsl/util/utilities.xsl"?>
+<?yatc-distribution-info name="ketenzorg-3.0.2" timestamp="2024-11-15T00:15:11.67+01:00" version="1.4.29"?>
+<!-- == Provenance: YATC-shared/xsl/util/utilities.xsl == -->
+<!-- == Distribution: ketenzorg-3.0.2; 1.4.29; 2024-11-15T00:15:11.67+01:00 == -->
+<xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:hl7="urn:hl7-org:v3"
                 xmlns:fhir="http://hl7.org/fhir"
                 xmlns:util="urn:hl7:utilities"
+                xmlns:yatcs="https://nictiz.nl/ns/YATC-shared"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl">
-   <xd:doc scope="stylesheet">
-      <xd:desc>
-         <xd:p>
-            <xd:b>Created on:</xd:b> May 11, 2017</xd:p>
-         <xd:p>
-            <xd:b>Author:</xd:b> ahenket</xd:p>
-         <xd:p/>
-      </xd:desc>
-   </xd:doc>
-   <xd:doc>
-      <xd:desc>
-         <xd:p>Vocabulary file containing language dependant strings such as labels</xd:p>
-      </xd:desc>
-   </xd:doc>
+                xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl"
+                xmlns:local="#local.2024020614533912723390100">
+   <!-- ================================================================== -->
+   <!--
+        
+            Created on: May 11, 2017
+            Author: ahenket
+    -->
+   <!-- ================================================================== -->
+   <!--
+        Copyright © Nictiz
+        
+        This program is free software; you can redistribute it and/or modify it under the terms of the
+        GNU Lesser General Public License as published by the Free Software Foundation; either version
+        2.1 of the License, or (at your option) any later version.
+        
+        This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+        without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+        See the GNU Lesser General Public License for more details.
+        
+        The full text of the license is available at http://www.gnu.org/copyleft/lesser.html
+    -->
+   <!-- ================================================================== -->
+   <!-- Vocabulary file containing language dependant strings such as labels -->
    <xsl:param name="util:vocFile"
               select="'utilities-l10n.xml'"/>
-   <xd:doc>
-      <xd:desc>
-         <xd:p>Cache language dependant strings</xd:p>
-      </xd:desc>
-   </xd:doc>
+   <!-- Cache language dependant strings -->
    <xsl:variable name="util:vocMessages"
                  select="doc($util:vocFile)"/>
-   <xd:doc>
-      <xd:desc>
-         <xd:p>Default language for retrieval of language dependant strings such as labels, e.g. 'en-US'. This is the fallback language in case the string is not available in the actual language.</xd:p>
-      </xd:desc>
-   </xd:doc>
+   <!-- Default language for retrieval of language dependant strings such as labels, e.g. 'en-US'. This is the fallback language in case the string is not available in the actual language. -->
    <xsl:param name="util:textlangDefault"
               select="'en-US'"/>
-   <xd:doc>
-      <xd:desc>Index the translation file for performance</xd:desc>
-   </xd:doc>
+   <!-- Index the translation file for performance -->
    <xsl:key name="util-i18nkey"
             match="translation"
             use="@key"/>
-   <xd:doc>
-      <xd:desc>
-         <xd:p>Retrieves a language dependant string from our 
-<xd:ref name="vocFile"
-                    type="parameter">language file</xd:ref> such as a label based on a key. Returns string based on 
-<xd:ref name="textLang"
-                    type="parameter">textLang</xd:ref>, 
-<xd:ref name="textLangDefault"
-                    type="parameter">textLangDefault</xd:ref>, the first two characters of the textLangDefault, e.g. 'en' in 'en-US' and finally if all else fails just the key text.</xd:p>
-      </xd:desc>
-      <xd:param name="pre">Some text or space to prefix our string with</xd:param>
-      <xd:param name="key">The key to find our text with</xd:param>
-      <xd:param name="post">Some text like a colon or space to postfix our text with</xd:param>
-      <xd:param name="textLang">Actual language for retrieval of language dependant strings such as labels, e.g. 'en-US'. Unless supplied, this is taken from the ClinicalDocument/language/@code attribute or first FHIR language element, or in case that is not present from 
-<xd:ref name="textlangDefault"
-                 type="parameter">textlangDefault</xd:ref>.</xd:param>
-   </xd:doc>
+   <xsl:param name="logLevel"
+              select="$logINFO"
+              as="xs:string"/>
+   <!-- provide a mapping from string logLevel to numeric value -->
+   <xsl:variable name="logALL"
+                 select="'ALL'"/>
+   <xsl:variable name="logDEBUG"
+                 select="'DEBUG'"/>
+   <xsl:variable name="logINFO"
+                 select="'INFO'"/>
+   <xsl:variable name="logWARN"
+                 select="'WARN'"/>
+   <xsl:variable name="logERROR"
+                 select="'ERROR'"/>
+   <xsl:variable name="logFATAL"
+                 select="'FATAL'"/>
+   <xsl:variable name="logOFF"
+                 select="'OFF'"/>
+   <xsl:variable name="logLevelMap"
+                 as="element(level)*">
+      <level name="{$logALL}"
+             int="6"
+             desc="The ALL has the lowest possible rank and is intended to turn on all logging."/>
+      <level name="{$logDEBUG}"
+             int="5"
+             desc="The DEBUG Level designates fine-grained informational events that are most useful to debug an application."/>
+      <level name="{$logINFO}"
+             int="4"
+             desc="The INFO level designates informational messages that highlight the progress of the application at coarse-grained level."/>
+      <level name="{$logWARN}"
+             int="3"
+             desc="The WARN level designates potentially harmful situations."/>
+      <level name="{$logERROR}"
+             int="2"
+             desc="The ERROR level designates error events that might still allow the application to continue running."/>
+      <level name="{$logFATAL}"
+             int="1"
+             desc="The FATAL level designates very severe error events that will presumably lead the application to abort."/>
+      <level name="{$logOFF}"
+             int="0"
+             desc="The OFF level has the highest possible rank and is intended to turn off logging."/>
+   </xsl:variable>
+   <xsl:variable name="util:chkdLogLevel"
+                 select="if ($logLevelMap[@name = $logLevel]) then $logLevel else $logINFO"/>
+   <!-- ================================================================== -->
+   <!-- Retrieves a language dependant string from our language file such as a label based on a key. Returns string based on textLang, textLangDefault, the first two characters of the textLangDefault, e.g. 'en' in 'en-US' and finally if all else fails just the key text. -->
    <xsl:template name="util:getLocalizedString">
       <xsl:param name="pre"
-                 select="''"/>
-      <xsl:param name="key"/>
+                 select="''">
+         <!-- Some text or space to prefix our string with -->
+      </xsl:param>
+      <xsl:param name="key">
+         <!-- The key to find our text with -->
+      </xsl:param>
       <xsl:param name="post"
-                 select="''"/>
+                 select="''">
+         <!-- Some text like a colon or space to postfix our text with -->
+      </xsl:param>
       <xsl:param name="textLang">
+         <!-- Actual language for retrieval of language dependant strings such as labels, e.g. 'en-US'. Unless supplied, this is taken from the ClinicalDocument/language/@code attribute or first FHIR language element, or in case that is not present from textlangDefault. -->
          <xsl:choose>
             <xsl:when test="ancestor-or-self::hl7:ClinicalDocument/hl7:languageCode/@code">
                <xsl:value-of select="ancestor-or-self::hl7:ClinicalDocument/hl7:languageCode/@code"/>
@@ -139,38 +175,32 @@
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
-   <xd:doc>
-      <xd:desc>
-         <xd:p>Converts Latin characters in input to lower case and returns the result</xd:p>
-      </xd:desc>
-      <xd:param name="data">Input string</xd:param>
-   </xd:doc>
+   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!-- Converts Latin characters in input to lower case and returns the result -->
    <xsl:template name="util:caseDown">
-      <xsl:param name="data"/>
+      <xsl:param name="data">
+         <!-- Input string -->
+      </xsl:param>
       <xsl:if test="$data">
          <xsl:value-of select="lower-case($data)"/>
       </xsl:if>
    </xsl:template>
-   <xd:doc>
-      <xd:desc>
-         <xd:p>Converts Latin characters in input to upper case and returns the result</xd:p>
-      </xd:desc>
-      <xd:param name="data">Input string</xd:param>
-   </xd:doc>
+   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!--  Converts Latin characters in input to upper case and returns the result -->
    <xsl:template name="util:caseUp">
-      <xsl:param name="data"/>
+      <xsl:param name="data">
+         <!-- Input string -->
+      </xsl:param>
       <xsl:if test="$data">
          <xsl:value-of select="translate($data,'abcdefghijklmnopqrstuvwxyz', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ')"/>
       </xsl:if>
    </xsl:template>
-   <xd:doc>
-      <xd:desc>
-         <xd:p>Converts first character in input to upper case if it is a Latin character and returns the result</xd:p>
-      </xd:desc>
-      <xd:param name="data">Input string</xd:param>
-   </xd:doc>
+   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!--  Converts first character in input to upper case if it is a Latin character and returns the result -->
    <xsl:template name="util:firstCharCaseUp">
-      <xsl:param name="data"/>
+      <xsl:param name="data">
+         <!-- Input string -->
+      </xsl:param>
       <xsl:if test="$data">
          <xsl:call-template name="util:caseUp">
             <xsl:with-param name="data"
@@ -179,20 +209,20 @@
          <xsl:value-of select="substring($data,2)"/>
       </xsl:if>
    </xsl:template>
-   <xd:doc>
-      <xd:desc>
-         <xd:p>Tokenize based on delimiters, or if no delimiter do character tokenization</xd:p>
-      </xd:desc>
-      <xd:param name="string">String to tokenize</xd:param>
-      <xd:param name="delimiters">Optional delimiter string</xd:param>
-      <xd:param name="prefix">Optional prefix for every 'array' item</xd:param>
-   </xd:doc>
+   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!--  Tokenize based on delimiters, or if no delimiter do character tokenization -->
    <xsl:template name="util:tokenize">
       <xsl:param name="string"
-                 select="''"/>
+                 select="''">
+         <!-- String to tokenize -->
+      </xsl:param>
       <xsl:param name="delimiters"
-                 select="' '"/>
-      <xsl:param name="prefix"/>
+                 select="' '">
+         <!-- Optional delimiter string -->
+      </xsl:param>
+      <xsl:param name="prefix">
+         <!-- Optional prefix for every 'array' item -->
+      </xsl:param>
       <xsl:choose>
          <xsl:when test="not($string)"/>
          <xsl:when test="not($delimiters)">
@@ -215,16 +245,15 @@
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
-   <xd:doc>
-      <xd:desc>
-         <xd:p>Tokenize every character</xd:p>
-      </xd:desc>
-      <xd:param name="string">String to tokenize</xd:param>
-      <xd:param name="prefix">Optional prefix for every 'array' item</xd:param>
-   </xd:doc>
+   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!-- Tokenize every character -->
    <xsl:template name="util:_tokenize-characters">
-      <xsl:param name="string"/>
-      <xsl:param name="prefix"/>
+      <xsl:param name="string">
+         <!-- String to tokenize -->
+      </xsl:param>
+      <xsl:param name="prefix">
+         <!-- Optional prefix for every 'array' item -->
+      </xsl:param>
       <xsl:if test="$string">
          <xsl:call-template name="util:getLocalizedString">
             <xsl:with-param name="key"
@@ -238,18 +267,18 @@
          </xsl:call-template>
       </xsl:if>
    </xsl:template>
-   <xd:doc>
-      <xd:desc>
-         <xd:p>Tokenize based on delimiters</xd:p>
-      </xd:desc>
-      <xd:param name="string">String to tokenize</xd:param>
-      <xd:param name="delimiters">Required delimiter string</xd:param>
-      <xd:param name="prefix">Optional prefix for every 'array' item</xd:param>
-   </xd:doc>
+   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!-- Tokenize based on delimiters -->
    <xsl:template name="util:_tokenize-delimiters">
-      <xsl:param name="string"/>
-      <xsl:param name="delimiters"/>
-      <xsl:param name="prefix"/>
+      <xsl:param name="string">
+         <!-- String to tokenize -->
+      </xsl:param>
+      <xsl:param name="delimiters">
+         <!-- Required delimiter string -->
+      </xsl:param>
+      <xsl:param name="prefix">
+         <!-- Optional prefix for every 'array' item -->
+      </xsl:param>
       <xsl:variable name="delimiter"
                     select="substring($delimiters, 1, 1)"/>
       <xsl:choose>
@@ -293,65 +322,23 @@
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
-   <xsl:param name="logLevel"
-              select="$logINFO"
-              as="xs:string"/>
-   <!-- provide a mapping from string logLevel to numeric value -->
-   <xsl:variable name="logALL"
-                 select="'ALL'"/>
-   <xsl:variable name="logDEBUG"
-                 select="'DEBUG'"/>
-   <xsl:variable name="logINFO"
-                 select="'INFO'"/>
-   <xsl:variable name="logWARN"
-                 select="'WARN'"/>
-   <xsl:variable name="logERROR"
-                 select="'ERROR'"/>
-   <xsl:variable name="logFATAL"
-                 select="'FATAL'"/>
-   <xsl:variable name="logOFF"
-                 select="'OFF'"/>
-   <xsl:variable name="logLevelMap"
-                 as="element(level)*">
-      <level name="{$logALL}"
-             int="6"
-             desc="The ALL has the lowest possible rank and is intended to turn on all logging."/>
-      <level name="{$logDEBUG}"
-             int="5"
-             desc="The DEBUG Level designates fine-grained informational events that are most useful to debug an application."/>
-      <level name="{$logINFO}"
-             int="4"
-             desc="The INFO level designates informational messages that highlight the progress of the application at coarse-grained level."/>
-      <level name="{$logWARN}"
-             int="3"
-             desc="The WARN level designates potentially harmful situations."/>
-      <level name="{$logERROR}"
-             int="2"
-             desc="The ERROR level designates error events that might still allow the application to continue running."/>
-      <level name="{$logFATAL}"
-             int="1"
-             desc="The FATAL level designates very severe error events that will presumably lead the application to abort."/>
-      <level name="{$logOFF}"
-             int="0"
-             desc="The OFF level has the highest possible rank and is intended to turn off logging."/>
-   </xsl:variable>
-   <xsl:variable name="util:chkdLogLevel"
-                 select="if ($logLevelMap[@name = $logLevel]) then $logLevel else $logINFO"/>
-   <xd:doc>
-      <xd:desc>Emit message text if the level of the message is smaller than or equal to logLevel </xd:desc>
-      <xd:param name="msg">The message to emit</xd:param>
-      <xd:param name="level">The level this should be emitted at</xd:param>
-      <xd:param name="terminate">Terminate after emitting</xd:param>
-   </xd:doc>
+   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
    <xsl:template name="util:logMessage">
+      <!-- Emit message text if the level of the message is smaller than or equal to logLevel  -->
       <xsl:param name="msg"
-                 as="item()*"/>
+                 as="item()*">
+         <!-- The message to emit -->
+      </xsl:param>
       <xsl:param name="level"
                  select="$logINFO"
-                 as="xs:string"/>
+                 as="xs:string">
+         <!-- The level this should be emitted at -->
+      </xsl:param>
       <xsl:param name="terminate"
                  select="false()"
-                 as="xs:boolean"/>
+                 as="xs:boolean">
+         <!-- Terminate after emitting -->
+      </xsl:param>
       <xsl:variable name="term"
                     select="if ($terminate) then 'yes' else 'no'"/>
       <xsl:variable name="currLevel"

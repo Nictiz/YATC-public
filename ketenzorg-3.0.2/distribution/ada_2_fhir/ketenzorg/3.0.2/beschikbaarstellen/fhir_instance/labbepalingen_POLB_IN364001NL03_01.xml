@@ -2,7 +2,7 @@
 <Bundle xsi:schemaLocation="http://hl7.org/fhir http://hl7.org/fhir/STU3/fhir-all.xsd"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns="http://hl7.org/fhir">
-   <id value="56b1a168-351f-11ef-9293-020000000000"/>
+   <id value="80b6fc28-a2da-11ef-1117-020000000000"/>
    <type value="searchset"/>
    <total value="7"/>
    <link>
@@ -80,7 +80,7 @@
                </coding>
             </code>
             <subject>
-               <reference value="urn:uuid:56b1a9b6-351f-11ef-9293-020000000000"/>
+               <reference value="urn:uuid:80b6e02c-a2da-11ef-1117-020000000000"/>
                <display value="E. XXX_Zegers"/>
             </subject>
             <context>
@@ -136,9 +136,7 @@
                            <td>97 %</td>
                            <td>
                               <div>
-                                 <span title="Normal Range (normal - referencerange-meaning)">Normal Range</span>
-
-95 % - 99 %</div>
+                                 <span title="Normal Range (normal - referencerange-meaning)">Normal Range</span> 95 % - 99 %</div>
                            </td>
                         </tr>
                      </tbody>
@@ -176,7 +174,7 @@
                </coding>
             </code>
             <subject>
-               <reference value="urn:uuid:56b1a9b6-351f-11ef-9293-020000000000"/>
+               <reference value="urn:uuid:80b6e02c-a2da-11ef-1117-020000000000"/>
                <display value="E. XXX_Zegers"/>
             </subject>
             <effectiveDateTime value="2019-01-30"/>
@@ -280,7 +278,7 @@
                </coding>
             </code>
             <subject>
-               <reference value="urn:uuid:56b1a9b6-351f-11ef-9293-020000000000"/>
+               <reference value="urn:uuid:80b6e02c-a2da-11ef-1117-020000000000"/>
                <display value="E. XXX_Zegers"/>
             </subject>
             <effectiveDateTime value="2019-02-03"/>
@@ -329,9 +327,7 @@
                            <td>4.5 mmol/L</td>
                            <td>
                               <div>
-                                 <span title="Normal Range (normal - referencerange-meaning)">Normal Range</span>
-
-4 mmol/L - 8 mmol/L</div>
+                                 <span title="Normal Range (normal - referencerange-meaning)">Normal Range</span> 4 mmol/L - 8 mmol/L</div>
                            </td>
                         </tr>
                      </tbody>
@@ -369,7 +365,7 @@
                </coding>
             </code>
             <subject>
-               <reference value="urn:uuid:56b1a9b6-351f-11ef-9293-020000000000"/>
+               <reference value="urn:uuid:80b6e02c-a2da-11ef-1117-020000000000"/>
                <display value="E. XXX_Zegers"/>
             </subject>
             <effectiveDateTime value="2019-02-05"/>
@@ -438,9 +434,7 @@
                            <td>95 %</td>
                            <td>
                               <div>
-                                 <span title="Normal Range (normal - referencerange-meaning)">Normal Range</span>
-
-95 % - 99 %</div>
+                                 <span title="Normal Range (normal - referencerange-meaning)">Normal Range</span> 95 % - 99 %</div>
                            </td>
                         </tr>
                      </tbody>
@@ -478,7 +472,7 @@
                </coding>
             </code>
             <subject>
-               <reference value="urn:uuid:56b1a9b6-351f-11ef-9293-020000000000"/>
+               <reference value="urn:uuid:80b6e02c-a2da-11ef-1117-020000000000"/>
                <display value="E. XXX_Zegers"/>
             </subject>
             <effectiveDateTime value="2019-02-02"/>
@@ -551,9 +545,7 @@
                            </td>
                            <td>
                               <div>
-                                 <span title="Normal Range (normal - referencerange-meaning)">Normal Range</span>
-
-95 % - 99 %</div>
+                                 <span title="Normal Range (normal - referencerange-meaning)">Normal Range</span> 95 % - 99 %</div>
                            </td>
                         </tr>
                      </tbody>
@@ -591,7 +583,7 @@
                </coding>
             </code>
             <subject>
-               <reference value="urn:uuid:56b1a9b6-351f-11ef-9293-020000000000"/>
+               <reference value="urn:uuid:80b6e02c-a2da-11ef-1117-020000000000"/>
                <display value="E. XXX_Zegers"/>
             </subject>
             <effectiveDateTime value="2019-02-02"/>
@@ -700,7 +692,7 @@
                </coding>
             </code>
             <subject>
-               <reference value="urn:uuid:56b1a9b6-351f-11ef-9293-020000000000"/>
+               <reference value="urn:uuid:80b6e02c-a2da-11ef-1117-020000000000"/>
                <display value="E. XXX_Zegers"/>
             </subject>
             <effectiveDateTime value="2019-02-03"/>
@@ -712,7 +704,7 @@
       </search>
    </entry>
    <entry>
-      <fullUrl value="urn:uuid:56b1a9b6-351f-11ef-9293-020000000000"/>
+      <fullUrl value="urn:uuid:80b6e02c-a2da-11ef-1117-020000000000"/>
       <resource>
          <Patient>
             <meta>
@@ -833,7 +825,7 @@
       </search>
    </entry>
    <entry>
-      <fullUrl value="urn:uuid:56b1a9ae-351f-11ef-9293-020000000000"/>
+      <fullUrl value="urn:uuid:80b6e024-a2da-11ef-1117-020000000000"/>
       <resource>
          <Organization>
             <meta>
@@ -861,7 +853,7 @@
       </search>
    </entry>
    <entry>
-      <fullUrl value="urn:uuid:56b1a9eb-351f-11ef-9293-020000000000"/>
+      <fullUrl value="urn:uuid:80b6e061-a2da-11ef-1117-020000000000"/>
       <resource>
          <PractitionerRole>
             <meta>

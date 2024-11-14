@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?yatc-distribution-provenance href="YATC-shared/xsl/util/units.xsl"?>
-<?yatc-distribution-info name="ketenzorg-3.0.2" timestamp="2024-06-28T14:38:20.79+02:00" version="1.4.28"?>
+<?yatc-distribution-info name="ketenzorg-3.0.2" timestamp="2024-11-15T00:15:11.67+01:00" version="1.4.29"?>
 <!-- == Provenance: YATC-shared/xsl/util/units.xsl == -->
-<!-- == Distribution: ketenzorg-3.0.2; 1.4.28; 2024-06-28T14:38:20.79+02:00 == -->
+<!-- == Distribution: ketenzorg-3.0.2; 1.4.29; 2024-11-15T00:15:11.67+01:00 == -->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -365,9 +365,9 @@
       </xsl:if>
    </xsl:function>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!-- Converts an UCUM unit as used in FHIR to ada time unit -->
    <xsl:function name="nf:convertTime_UCUM_FHIR2ADA_unit"
                  as="xs:string?">
-      <!-- Converts an UCUM unit as used in FHIR to ada time unit -->
       <xsl:param name="UCUMFHIR"
                  as="xs:string?">
          <!-- The UCUM unit string -->
@@ -375,9 +375,9 @@
       <xsl:value-of select="nf:convertTime_UCUM2ADA_unit($UCUMFHIR)"/>
    </xsl:function>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!-- Return boolean true() or false() on whether or not a UCUM expression is valid expression. -->
    <xsl:function name="nf:isValidUCUMUnit"
                  as="xs:boolean">
-      <!-- Return boolean true() or false() on whether or not a UCUM expression is valid expression. -->
       <xsl:param name="unit"
                  as="xs:string?">
          <!-- Unit string. empty string will return false -->
@@ -505,11 +505,11 @@
       <xsl:value-of select="empty($validParts[. = 'false'])"/>
    </xsl:function>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!-- Converts unit from G-Standaard to UCUM -->
    <xsl:function name="nf:convertGstdBasiseenheid2UCUM"
                  as="xs:string*">
-      <!-- Converts unit from G-Standaard to UCUM -->
       <xsl:param name="GstdBasiseenheid_code"
-                 as="xs:string"/>
+                 as="xs:string?"/>
       <xsl:choose>
          <xsl:when test="$GstdBasiseenheid_code castable as xs:integer">
             <xsl:choose>
@@ -643,20 +643,33 @@
                <xsl:when test="$GstdBasiseenheid_code = '502'">cm2</xsl:when>
                <!-- 504	FE	FIPE	FIP EENHEID	FIP-E	FIP EENHEID (ZIE NED.PH.8.BLZ.836) -->
                <xsl:when test="$GstdBasiseenheid_code = '504'">1</xsl:when>
-               <xsl:otherwise>Unsupported G-standaard basiseenheid: 
-<xsl:value-of select="$GstdBasiseenheid_code"/>
+               <xsl:otherwise>
+                  <xsl:call-template name="util:logMessage">
+                     <xsl:with-param name="level"
+                                     select="$logERROR"/>
+                     <xsl:with-param name="msg">Unsupported G-standaard basiseenheid: "
+<xsl:value-of select="$GstdBasiseenheid_code"/>".</xsl:with-param>
+                  </xsl:call-template>
+                  <xsl:value-of select="$GstdBasiseenheid_code"/>
                </xsl:otherwise>
             </xsl:choose>
          </xsl:when>
          <xsl:otherwise>
-            <!-- geen integer meegekregen --> G-standaard code is not an integer. Unsupported G-standaard basiseenheid: "
-<xsl:value-of select="$GstdBasiseenheid_code"/>". </xsl:otherwise>
+            <!-- geen integer meegekregen -->
+            <xsl:call-template name="util:logMessage">
+               <xsl:with-param name="level"
+                               select="$logERROR"/>
+               <xsl:with-param name="msg">G-standaard code is not an integer. Unsupported G-standaard basiseenheid: "
+<xsl:value-of select="$GstdBasiseenheid_code"/>".</xsl:with-param>
+            </xsl:call-template>
+            <xsl:value-of select="$GstdBasiseenheid_code"/>
+         </xsl:otherwise>
       </xsl:choose>
    </xsl:function>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!-- Converts ADA unit 2 UCUM -->
    <xsl:function name="nf:convert_ADA_unit2UCUM"
                  as="xs:string?">
-      <!-- Converts ADA unit 2 UCUM -->
       <xsl:param name="ADAunit"
                  as="xs:string?"/>
       <xsl:if test="$ADAunit">
@@ -685,9 +698,9 @@
       </xsl:if>
    </xsl:function>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!-- Converts an ada unit to the UCUM unit as used in FHIR -->
    <xsl:function name="nf:convert_ADA_unit2UCUM_FHIR"
                  as="xs:string?">
-      <!-- Converts an ada unit to the UCUM unit as used in FHIR -->
       <xsl:param name="ADAunit"
                  as="xs:string?">
          <!-- The ada unit string -->
@@ -716,9 +729,9 @@
       </xsl:if>
    </xsl:function>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!-- Converts ADA time unit 2 UCUM -->
    <xsl:function name="nf:convertTime_ADA_unit2UCUM"
                  as="xs:string?">
-      <!-- Converts ADA time unit 2 UCUM -->
       <xsl:param name="ADAtime"
                  as="xs:string?"/>
       <xsl:if test="$ADAtime">
@@ -738,9 +751,9 @@
       </xsl:if>
    </xsl:function>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!-- Converts an ada time unit to the UCUM unit as used in FHIR -->
    <xsl:function name="nf:convertTime_ADA_unit2UCUM_FHIR"
                  as="xs:string?">
-      <!-- Converts an ada time unit to the UCUM unit as used in FHIR -->
       <xsl:param name="ADAtime"
                  as="xs:string?">
          <!-- The ada time unit string -->

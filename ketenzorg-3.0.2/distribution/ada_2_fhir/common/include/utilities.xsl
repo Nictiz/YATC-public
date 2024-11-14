@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?yatc-distribution-provenance href="YATC-shared/xsl/util/utilities.xsl"?>
-<?yatc-distribution-info name="ketenzorg-3.0.2" timestamp="2024-06-28T14:38:20.79+02:00" version="1.4.28"?>
+<?yatc-distribution-info name="ketenzorg-3.0.2" timestamp="2024-11-15T00:15:11.67+01:00" version="1.4.29"?>
 <!-- == Provenance: YATC-shared/xsl/util/utilities.xsl == -->
-<!-- == Distribution: ketenzorg-3.0.2; 1.4.28; 2024-06-28T14:38:20.79+02:00 == -->
+<!-- == Distribution: ketenzorg-3.0.2; 1.4.29; 2024-11-15T00:15:11.67+01:00 == -->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -19,8 +19,6 @@
         
             Created on: May 11, 2017
             Author: ahenket
-            
-        
     -->
    <!-- ================================================================== -->
    <!--
@@ -37,12 +35,16 @@
         The full text of the license is available at http://www.gnu.org/copyleft/lesser.html
     -->
    <!-- ================================================================== -->
+   <!-- Vocabulary file containing language dependant strings such as labels -->
    <xsl:param name="util:vocFile"
               select="'utilities-l10n.xml'"/>
+   <!-- Cache language dependant strings -->
    <xsl:variable name="util:vocMessages"
                  select="doc($util:vocFile)"/>
+   <!-- Default language for retrieval of language dependant strings such as labels, e.g. 'en-US'. This is the fallback language in case the string is not available in the actual language. -->
    <xsl:param name="util:textlangDefault"
               select="'en-US'"/>
+   <!-- Index the translation file for performance -->
    <xsl:key name="util-i18nkey"
             match="translation"
             use="@key"/>
@@ -91,10 +93,8 @@
    <xsl:variable name="util:chkdLogLevel"
                  select="if ($logLevelMap[@name = $logLevel]) then $logLevel else $logINFO"/>
    <!-- ================================================================== -->
+   <!-- Retrieves a language dependant string from our language file such as a label based on a key. Returns string based on textLang, textLangDefault, the first two characters of the textLangDefault, e.g. 'en' in 'en-US' and finally if all else fails just the key text. -->
    <xsl:template name="util:getLocalizedString">
-      <!-- 
-            Retrieves a language dependant string from our language file such as a label based on a key. Returns string based on textLang, textLangDefault, the first two characters of the textLangDefault, e.g. 'en' in 'en-US' and finally if all else fails just the key text.
-         -->
       <xsl:param name="pre"
                  select="''">
          <!-- Some text or space to prefix our string with -->
@@ -176,10 +176,8 @@
       </xsl:choose>
    </xsl:template>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!-- Converts Latin characters in input to lower case and returns the result -->
    <xsl:template name="util:caseDown">
-      <!-- 
-            Converts Latin characters in input to lower case and returns the result
-         -->
       <xsl:param name="data">
          <!-- Input string -->
       </xsl:param>
@@ -188,10 +186,8 @@
       </xsl:if>
    </xsl:template>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!--  Converts Latin characters in input to upper case and returns the result -->
    <xsl:template name="util:caseUp">
-      <!-- 
-            Converts Latin characters in input to upper case and returns the result
-         -->
       <xsl:param name="data">
          <!-- Input string -->
       </xsl:param>
@@ -200,10 +196,8 @@
       </xsl:if>
    </xsl:template>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!--  Converts first character in input to upper case if it is a Latin character and returns the result -->
    <xsl:template name="util:firstCharCaseUp">
-      <!-- 
-            Converts first character in input to upper case if it is a Latin character and returns the result
-         -->
       <xsl:param name="data">
          <!-- Input string -->
       </xsl:param>
@@ -216,10 +210,8 @@
       </xsl:if>
    </xsl:template>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!--  Tokenize based on delimiters, or if no delimiter do character tokenization -->
    <xsl:template name="util:tokenize">
-      <!-- 
-            Tokenize based on delimiters, or if no delimiter do character tokenization
-         -->
       <xsl:param name="string"
                  select="''">
          <!-- String to tokenize -->
@@ -254,10 +246,8 @@
       </xsl:choose>
    </xsl:template>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!-- Tokenize every character -->
    <xsl:template name="util:_tokenize-characters">
-      <!-- 
-            Tokenize every character
-         -->
       <xsl:param name="string">
          <!-- String to tokenize -->
       </xsl:param>
@@ -278,10 +268,8 @@
       </xsl:if>
    </xsl:template>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!-- Tokenize based on delimiters -->
    <xsl:template name="util:_tokenize-delimiters">
-      <!-- 
-            Tokenize based on delimiters
-         -->
       <xsl:param name="string">
          <!-- String to tokenize -->
       </xsl:param>

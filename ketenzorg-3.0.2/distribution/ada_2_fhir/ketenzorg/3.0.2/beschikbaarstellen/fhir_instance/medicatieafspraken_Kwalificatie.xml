@@ -2,7 +2,7 @@
 <Bundle xsi:schemaLocation="http://hl7.org/fhir http://hl7.org/fhir/STU3/fhir-all.xsd"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns="http://hl7.org/fhir">
-   <id value="56f544e0-351f-11ef-1082-020000000000"/>
+   <id value="80fc5232-a2da-11ef-1471-020000000000"/>
    <type value="searchset"/>
    <total value="7"/>
    <link>
@@ -123,7 +123,7 @@
                <display value="PANTOPRAZOL TABLET MSR 40MG"/>
             </medicationReference>
             <subject>
-               <reference value="urn:uuid:56f537fa-351f-11ef-1082-020000000000"/>
+               <reference value="urn:uuid:80fc497a-a2da-11ef-1471-020000000000"/>
                <display value="E. XXX_Zegers"/>
             </subject>
             <context>
@@ -138,7 +138,7 @@
                <agent>
                   <extension url="http://nictiz.nl/fhir/StructureDefinition/practitionerrole-reference">
                      <valueReference>
-                        <reference value="urn:uuid:56f53844-351f-11ef-1082-020000000000"/>
+                        <reference value="urn:uuid:80fc49c4-a2da-11ef-1471-020000000000"/>
                         <display value="Huisarts 1 || Huisarts || Tést Zorginstelling 04"/>
                      </valueReference>
                   </extension>
@@ -155,7 +155,7 @@
                <text value="Volgens afspraak"/>
             </reasonCode>
             <reasonReference>
-               <reference value="urn:uuid:56f52c55-351f-11ef-1082-020000000000"/>
+               <reference value="urn:uuid:80fc4091-a2da-11ef-1471-020000000000"/>
                <display value="Maagpijn"/>
             </reasonReference>
             <dosageInstruction>
@@ -254,9 +254,7 @@
 <span title="Zo nodig (1137 - nhg-tabel-25-gebruiksvoorschrift#aanvullend-numeriek)">Zo nodig</span>
                               </div>
                               <div>Timing: 
-<div>4 dag, 0.1667
-
-dagen. Tijden zo precies mogelijk aanhouden</div>
+<div>4 dag, 0.1667 dagen. Tijden zo precies mogelijk aanhouden</div>
                               </div>
                               <div>Zo nodig: 
 <span title="zo nodig (1137 - nhg-tabel-25-gebruiksvoorschrift#aanvullend-numeriek)">zo nodig</span>
@@ -304,7 +302,7 @@ dagen. Tijden zo precies mogelijk aanhouden</div>
                <display value="PARACETAMOL TABLET  500MG"/>
             </medicationReference>
             <subject>
-               <reference value="urn:uuid:56f537fa-351f-11ef-1082-020000000000"/>
+               <reference value="urn:uuid:80fc497a-a2da-11ef-1471-020000000000"/>
                <display value="E. XXX_Zegers"/>
             </subject>
             <context>
@@ -319,7 +317,7 @@ dagen. Tijden zo precies mogelijk aanhouden</div>
                <agent>
                   <extension url="http://nictiz.nl/fhir/StructureDefinition/practitionerrole-reference">
                      <valueReference>
-                        <reference value="urn:uuid:56f53844-351f-11ef-1082-020000000000"/>
+                        <reference value="urn:uuid:80fc49c4-a2da-11ef-1471-020000000000"/>
                         <display value="Huisarts 1 || Huisarts || Tést Zorginstelling 04"/>
                      </valueReference>
                   </extension>
@@ -336,7 +334,7 @@ dagen. Tijden zo precies mogelijk aanhouden</div>
                <text value="Volgens afspraak"/>
             </reasonCode>
             <reasonReference>
-               <reference value="urn:uuid:56f52ccc-351f-11ef-1082-020000000000"/>
+               <reference value="urn:uuid:80fc4108-a2da-11ef-1471-020000000000"/>
                <display value="Emfyseem/COPD"/>
             </reasonReference>
             <dosageInstruction>
@@ -446,9 +444,7 @@ dagen. Tijden zo precies mogelijk aanhouden</div>
                               <div>Volgnummer: 1</div>
                               <div>Tekst: 2 keer per dag 1 inhalatie</div>
                               <div>Timing: 
-<div>29 dag, 0.5
-
-dagen. Tijden zo precies mogelijk aanhouden</div>
+<div>29 dag, 0.5 dagen. Tijden zo precies mogelijk aanhouden</div>
                               </div>
                               <div>Toedieningsweg: 
 <span title="INHALATIE (62 - G-Standaard thesaurus subtabel 0007)">INHALATIE</span>
@@ -493,7 +489,7 @@ dagen. Tijden zo precies mogelijk aanhouden</div>
                <display value="FLUTICASON INHALATIEPOEDER 250UG/DO 60DO DISKUS"/>
             </medicationReference>
             <subject>
-               <reference value="urn:uuid:56f537fa-351f-11ef-1082-020000000000"/>
+               <reference value="urn:uuid:80fc497a-a2da-11ef-1471-020000000000"/>
                <display value="E. XXX_Zegers"/>
             </subject>
             <context>
@@ -508,7 +504,7 @@ dagen. Tijden zo precies mogelijk aanhouden</div>
                <agent>
                   <extension url="http://nictiz.nl/fhir/StructureDefinition/practitionerrole-reference">
                      <valueReference>
-                        <reference value="urn:uuid:56f53844-351f-11ef-1082-020000000000"/>
+                        <reference value="urn:uuid:80fc49c4-a2da-11ef-1471-020000000000"/>
                         <display value="Huisarts 1 || Huisarts || Tést Zorginstelling 04"/>
                      </valueReference>
                   </extension>
@@ -525,7 +521,7 @@ dagen. Tijden zo precies mogelijk aanhouden</div>
                <text value="Volgens afspraak"/>
             </reasonCode>
             <reasonReference>
-               <reference value="urn:uuid:56f52ccc-351f-11ef-1082-020000000000"/>
+               <reference value="urn:uuid:80fc4108-a2da-11ef-1471-020000000000"/>
                <display value="Emfyseem/COPD"/>
             </reasonReference>
             <dosageInstruction>
@@ -621,9 +617,7 @@ dagen. Tijden zo precies mogelijk aanhouden</div>
                               <div>Volgnummer: 1</div>
                               <div>Tekst: 3 keer per dag 1 tablet</div>
                               <div>Timing: 
-<div>6 dag, 0.3333
-
-dagen. Tijden zo precies mogelijk aanhouden</div>
+<div>6 dag, 0.3333 dagen. Tijden zo precies mogelijk aanhouden</div>
                               </div>
                               <div>Toedieningsweg: 
 <span title="ORAAL (9 - G-Standaard thesaurus subtabel 0007)">ORAAL</span>
@@ -668,7 +662,7 @@ dagen. Tijden zo precies mogelijk aanhouden</div>
                <display value="AMOXICILLINE/CLAVULAANZUUR TABLET 500/125MG"/>
             </medicationReference>
             <subject>
-               <reference value="urn:uuid:56f537fa-351f-11ef-1082-020000000000"/>
+               <reference value="urn:uuid:80fc497a-a2da-11ef-1471-020000000000"/>
                <display value="E. XXX_Zegers"/>
             </subject>
             <context>
@@ -683,7 +677,7 @@ dagen. Tijden zo precies mogelijk aanhouden</div>
                <agent>
                   <extension url="http://nictiz.nl/fhir/StructureDefinition/practitionerrole-reference">
                      <valueReference>
-                        <reference value="urn:uuid:56f53844-351f-11ef-1082-020000000000"/>
+                        <reference value="urn:uuid:80fc49c4-a2da-11ef-1471-020000000000"/>
                         <display value="Huisarts 1 || Huisarts || Tést Zorginstelling 04"/>
                      </valueReference>
                   </extension>
@@ -700,7 +694,7 @@ dagen. Tijden zo precies mogelijk aanhouden</div>
                <text value="Volgens afspraak"/>
             </reasonCode>
             <reasonReference>
-               <reference value="urn:uuid:56f52ccc-351f-11ef-1082-020000000000"/>
+               <reference value="urn:uuid:80fc4108-a2da-11ef-1471-020000000000"/>
                <display value="Emfyseem/COPD"/>
             </reasonReference>
             <dosageInstruction>
@@ -796,9 +790,7 @@ dagen. Tijden zo precies mogelijk aanhouden</div>
                               <div>Volgnummer: 1</div>
                               <div>Tekst: 3 tot 4 keer per dag 1 inhalatie</div>
                               <div>Timing: 
-<div>3 maal, max frequentie 4 maal per 1.0
-
-dagen</div>
+<div>3 maal, max frequentie 4 maal per 1.0 dagen</div>
                               </div>
                               <div>Toedieningsweg: 
 <span title="INHALATIE (62 - G-Standaard thesaurus subtabel 0007)">INHALATIE</span>
@@ -842,7 +834,7 @@ dagen</div>
                <display value="SALBUTAMOL INHALATIEPOEDER 100UG/DO PATR 200DO"/>
             </medicationReference>
             <subject>
-               <reference value="urn:uuid:56f537fa-351f-11ef-1082-020000000000"/>
+               <reference value="urn:uuid:80fc497a-a2da-11ef-1471-020000000000"/>
                <display value="E. XXX_Zegers"/>
             </subject>
             <context>
@@ -857,7 +849,7 @@ dagen</div>
                <agent>
                   <extension url="http://nictiz.nl/fhir/StructureDefinition/practitionerrole-reference">
                      <valueReference>
-                        <reference value="urn:uuid:56f53844-351f-11ef-1082-020000000000"/>
+                        <reference value="urn:uuid:80fc49c4-a2da-11ef-1471-020000000000"/>
                         <display value="Huisarts 1 || Huisarts || Tést Zorginstelling 04"/>
                      </valueReference>
                   </extension>
@@ -874,7 +866,7 @@ dagen</div>
                <text value="Volgens afspraak"/>
             </reasonCode>
             <reasonReference>
-               <reference value="urn:uuid:56f52ccc-351f-11ef-1082-020000000000"/>
+               <reference value="urn:uuid:80fc4108-a2da-11ef-1471-020000000000"/>
                <display value="Emfyseem/COPD"/>
             </reasonReference>
             <dosageInstruction>
@@ -1008,7 +1000,7 @@ dagen</div>
                <display value="DESLORATADINE TABLET 5MG"/>
             </medicationReference>
             <subject>
-               <reference value="urn:uuid:56f537fa-351f-11ef-1082-020000000000"/>
+               <reference value="urn:uuid:80fc497a-a2da-11ef-1471-020000000000"/>
                <display value="E. XXX_Zegers"/>
             </subject>
             <context>
@@ -1023,7 +1015,7 @@ dagen</div>
                <agent>
                   <extension url="http://nictiz.nl/fhir/StructureDefinition/practitionerrole-reference">
                      <valueReference>
-                        <reference value="urn:uuid:56f53844-351f-11ef-1082-020000000000"/>
+                        <reference value="urn:uuid:80fc49c4-a2da-11ef-1471-020000000000"/>
                         <display value="Huisarts 1 || Huisarts || Tést Zorginstelling 04"/>
                      </valueReference>
                   </extension>
@@ -1040,7 +1032,7 @@ dagen</div>
                <text value="Volgens afspraak"/>
             </reasonCode>
             <reasonReference>
-               <reference value="urn:uuid:56f52eb9-351f-11ef-1082-020000000000"/>
+               <reference value="urn:uuid:80fc42f5-a2da-11ef-1471-020000000000"/>
                <display value="Hooikoorts/allergische rhinitis"/>
             </reasonReference>
             <dosageInstruction>
@@ -1181,7 +1173,7 @@ dagen</div>
                <display value="CARBASALAATCALCIUM BRUISTABLET 100MG"/>
             </medicationReference>
             <subject>
-               <reference value="urn:uuid:56f537fa-351f-11ef-1082-020000000000"/>
+               <reference value="urn:uuid:80fc497a-a2da-11ef-1471-020000000000"/>
                <display value="E. XXX_Zegers"/>
             </subject>
             <context>
@@ -1196,7 +1188,7 @@ dagen</div>
                <agent>
                   <extension url="http://nictiz.nl/fhir/StructureDefinition/practitionerrole-reference">
                      <valueReference>
-                        <reference value="urn:uuid:56f53844-351f-11ef-1082-020000000000"/>
+                        <reference value="urn:uuid:80fc49c4-a2da-11ef-1471-020000000000"/>
                         <display value="Huisarts 1 || Huisarts || Tést Zorginstelling 04"/>
                      </valueReference>
                   </extension>
@@ -1213,7 +1205,7 @@ dagen</div>
                <text value="Volgens afspraak"/>
             </reasonCode>
             <reasonReference>
-               <reference value="urn:uuid:56f52f30-351f-11ef-1082-020000000000"/>
+               <reference value="urn:uuid:80fc436c-a2da-11ef-1471-020000000000"/>
                <display value="Boezemfibrilleren/-fladderen"/>
             </reasonReference>
             <dosageInstruction>
@@ -1255,7 +1247,7 @@ dagen</div>
       </search>
    </entry>
    <entry>
-      <fullUrl value="urn:uuid:56f537fa-351f-11ef-1082-020000000000"/>
+      <fullUrl value="urn:uuid:80fc497a-a2da-11ef-1471-020000000000"/>
       <resource>
          <Patient>
             <meta>
@@ -1503,7 +1495,7 @@ dagen</div>
       </search>
    </entry>
    <entry>
-      <fullUrl value="urn:uuid:56f53844-351f-11ef-1082-020000000000"/>
+      <fullUrl value="urn:uuid:80fc49c4-a2da-11ef-1471-020000000000"/>
       <resource>
          <PractitionerRole>
             <meta>
@@ -1852,7 +1844,7 @@ dagen</div>
       </search>
    </entry>
    <entry>
-      <fullUrl value="urn:uuid:56f52c55-351f-11ef-1082-020000000000"/>
+      <fullUrl value="urn:uuid:80fc4091-a2da-11ef-1471-020000000000"/>
       <resource>
          <Condition>
             <meta>
@@ -1883,7 +1875,7 @@ dagen</div>
                </coding>
             </code>
             <subject>
-               <reference value="urn:uuid:56f537fa-351f-11ef-1082-020000000000"/>
+               <reference value="urn:uuid:80fc497a-a2da-11ef-1471-020000000000"/>
                <display value="E. XXX_Zegers"/>
             </subject>
          </Condition>
@@ -1893,7 +1885,7 @@ dagen</div>
       </search>
    </entry>
    <entry>
-      <fullUrl value="urn:uuid:56f52ccc-351f-11ef-1082-020000000000"/>
+      <fullUrl value="urn:uuid:80fc4108-a2da-11ef-1471-020000000000"/>
       <resource>
          <Condition>
             <meta>
@@ -1924,7 +1916,7 @@ dagen</div>
                </coding>
             </code>
             <subject>
-               <reference value="urn:uuid:56f537fa-351f-11ef-1082-020000000000"/>
+               <reference value="urn:uuid:80fc497a-a2da-11ef-1471-020000000000"/>
                <display value="E. XXX_Zegers"/>
             </subject>
          </Condition>
@@ -1934,7 +1926,7 @@ dagen</div>
       </search>
    </entry>
    <entry>
-      <fullUrl value="urn:uuid:56f52eb9-351f-11ef-1082-020000000000"/>
+      <fullUrl value="urn:uuid:80fc42f5-a2da-11ef-1471-020000000000"/>
       <resource>
          <Condition>
             <meta>
@@ -1965,7 +1957,7 @@ dagen</div>
                </coding>
             </code>
             <subject>
-               <reference value="urn:uuid:56f537fa-351f-11ef-1082-020000000000"/>
+               <reference value="urn:uuid:80fc497a-a2da-11ef-1471-020000000000"/>
                <display value="E. XXX_Zegers"/>
             </subject>
          </Condition>
@@ -1975,7 +1967,7 @@ dagen</div>
       </search>
    </entry>
    <entry>
-      <fullUrl value="urn:uuid:56f52f30-351f-11ef-1082-020000000000"/>
+      <fullUrl value="urn:uuid:80fc436c-a2da-11ef-1471-020000000000"/>
       <resource>
          <Condition>
             <meta>
@@ -2006,7 +1998,7 @@ dagen</div>
                </coding>
             </code>
             <subject>
-               <reference value="urn:uuid:56f537fa-351f-11ef-1082-020000000000"/>
+               <reference value="urn:uuid:80fc497a-a2da-11ef-1471-020000000000"/>
                <display value="E. XXX_Zegers"/>
             </subject>
          </Condition>

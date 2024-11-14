@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?yatc-distribution-provenance href="YATC-shared/xsl/util/uuid.xsl"?>
-<?yatc-distribution-info name="ketenzorg-3.0.2" timestamp="2024-06-28T14:38:20.79+02:00" version="1.4.28"?>
+<?yatc-distribution-info name="ketenzorg-3.0.2" timestamp="2024-11-15T00:15:11.67+01:00" version="1.4.29"?>
 <!-- == Provenance: YATC-shared/xsl/util/uuid.xsl == -->
-<!-- == Distribution: ketenzorg-3.0.2; 1.4.28; 2024-06-28T14:38:20.79+02:00 == -->
+<!-- == Distribution: ketenzorg-3.0.2; 1.4.29; 2024-11-15T00:15:11.67+01:00 == -->
 <xsl:stylesheet version="2.0"
                 exclude-result-prefixes="#all"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -45,9 +45,9 @@
    <xsl:variable name="_clock"
                  select="generate-id(uuid:_get-node())"/>
    <!-- ================================================================== -->
+   <!-- generates uuid -->
    <xsl:function name="uuid:get-uuid"
                  as="xs:string*">
-      <!-- generates uuid -->
       <xsl:param name="node">
          <!-- xml node to generate uuid for -->
       </xsl:param>
@@ -57,9 +57,8 @@
                     select="lower-case(substring($ts, 8, 8)), lower-case(substring($ts, 4, 4)), lower-case(string-join((uuid:get-uuid-version(), substring($ts, 1, 3)), '')), lower-case(uuid:generate-clock-id()), lower-case(uuid:get-network-node())"/>
    </xsl:function>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!--  internal aux. fu with saxon, this creates a more-unique result with generate-id then when just using a variable containing a node  -->
    <xsl:function name="uuid:_get-node">
-      <!--  internal aux. fu with saxon, this creates a more-unique result with generate-id then when just using a variable containing 
-            a node  -->
       <xsl:comment/>
    </xsl:function>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
@@ -70,9 +69,9 @@
       <xsl:sequence select="xs:integer(replace(generate-id($node), '\D', ''))"/>
    </xsl:function>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!--  internal fu for returning hex digits only  -->
    <xsl:function name="uuid:_hex-only"
                  as="xs:string">
-      <!--  internal fu for returning hex digits only  -->
       <xsl:param name="string"/>
       <xsl:param name="count"/>
       <xsl:sequence select="substring(replace($string, '[^0-9a-fA-F]', ''), 1, $count)"/>
@@ -83,21 +82,21 @@
       <xsl:sequence select="uuid:_hex-only($_clock, 4)"/>
    </xsl:function>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!--  returns the network node, this one is 'random', but must be the same within calls. The least-significant bit must be 
+        '1' when it is not a real MAC address (in this case it is set to '1')  -->
    <xsl:function name="uuid:get-network-node"
                  as="xs:string">
-      <!--  returns the network node, this one is 'random', but must be the same within calls. The least-significant bit must be 
-            '1' when it is not a real MAC address (in this case it is set to '1')  -->
       <xsl:sequence select="uuid:_hex-only($macAddress, 12)"/>
    </xsl:function>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!--  returns version, for timestamp uuids, this is "1"  -->
    <xsl:function name="uuid:get-uuid-version"
                  as="xs:string">
-      <!--  returns version, for timestamp uuids, this is "1"  -->
       <xsl:sequence select="'1'"/>
    </xsl:function>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!--  Generates a timestamp of the amount of 100 nanosecond intervals from 15 October 1582, in UTC time.  -->
    <xsl:function name="uuid:generate-timestamp">
-      <!--  Generates a timestamp of the amount of 100 nanosecond intervals from 15 October 1582, in UTC time.  -->
       <xsl:param name="node"/>
       <!-- date calculation automatically goes correct when you add the timezone information, in this case that is UTC. -->
       <xsl:variable name="duration-from-1582"
@@ -112,8 +111,8 @@
       <xsl:sequence select="(days-from-duration($duration-from-1582) * 24 * 60 * 60 + hours-from-duration($duration-from-1582) * 60 * 60 + minutes-from-duration($duration-from-1582) * 60 + seconds-from-duration($duration-from-1582)) * 1000 * 10000 + $random-offset"/>
    </xsl:function>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <!--  simple non-generalized function to convert from timestamp to hex  -->
    <xsl:function name="uuid:ts-to-hex">
-      <!--  simple non-generalized function to convert from timestamp to hex  -->
       <xsl:param name="dec-val"/>
       <xsl:value-of separator=""
                     select="     for $i in 1 to 15     return      (0 to 9, tokenize('A B C D E F', ' '))[$dec-val idiv xs:integer(math:power(16, 15 - $i)) mod 16 + 1]"/>

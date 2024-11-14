@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?yatc-distribution-provenance href="YATC-shared/xsl/util/ada.xsl"?>
-<?yatc-distribution-info name="ketenzorg-3.0.2" timestamp="2024-06-28T14:38:20.79+02:00" version="1.4.28"?>
+<?yatc-distribution-info name="ketenzorg-3.0.2" timestamp="2024-11-15T00:15:11.67+01:00" version="1.4.29"?>
 <!-- == Provenance: YATC-shared/xsl/util/ada.xsl == -->
-<!-- == Distribution: ketenzorg-3.0.2; 1.4.28; 2024-06-28T14:38:20.79+02:00 == -->
+<!-- == Distribution: ketenzorg-3.0.2; 1.4.29; 2024-11-15T00:15:11.67+01:00 == -->
 <xsl:stylesheet version="2.0"
                 exclude-result-prefixes="#all"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -35,9 +35,9 @@
    <!-- ================================================================== -->
    <!-- shared stuff for ada handling -->
    <!-- ================================================================== -->
+   <!-- Resolves an ada reference element (an element without subelements) to the element with contents it references to -->
    <xsl:function name="naf:resolve-ada-reference"
                  as="element()?">
-      <!-- Resolves an ada reference element (an element without subelements) to the element with contents it references to -->
       <xsl:param name="in"
                  as="element()?">
          <!-- The ada reference element -->

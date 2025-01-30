@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- == Provenance: YATC-internal/ada-2-fhir-r4/env/mp/9.3.0/payload/2.0.0-beta.6/mp-MedicationAdministration2.xsl == -->
-<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.8; 2025-01-29T16:34:00.62+01:00 == -->
+<!-- == Provenance: HL7-mappings/ada_2_fhir-r4/mp/9.3.0/payload/2.0.0-beta.5/mp-MedicationAdministration2.xsl == -->
+<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.8; 2025-01-29T18:25:49.35+01:00 == -->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -239,22 +239,6 @@
                   </xsl:if>
                </xsl:otherwise>
             </xsl:choose>
-            <!-- relatie_wisselend_doseerschema -->
-            <!-- MP9 dataset -->
-            <!-- MP-1606 from MP9.3 beta.4 relatie_wisselend_doseersschema is a slice in supportingInformation and nolonger in request-->
-            <xsl:for-each select="relatie_wisselend_doseerschema/identificatie[@value | @root | @nullFlavor]">
-               <!-- mp9 dataset -->
-               <supportingInformation>
-                  <type value="MedicationRequest"/>
-                  <identifier>
-                     <xsl:call-template name="id-to-Identifier">
-                        <xsl:with-param name="in"
-                                        select="current()[@value | @root | @nullFlavor]"/>
-                     </xsl:call-template>
-                  </identifier>
-                  <display value="relatie naar wisselend doseersschema met identificatie: {string-join((./@value, ./@root), ' || ')}"/>
-               </supportingInformation>
-            </xsl:for-each>
             <xsl:choose>
                <xsl:when test="toedienings_datum_tijd[@value]">
                   <effectiveDateTime>
@@ -308,16 +292,47 @@
             </xsl:for-each>
             <!-- request -->
             <!-- relatie_medicatieafspraak -->
+            <!-- relatie_wisselend_doseerschema -->
             <xsl:choose>
                <xsl:when test="relatie_medicatieafspraak/identificatie[@value | @root | @nullFlavor]">
                   <!-- MP9 dataset -->
                   <xsl:for-each select="relatie_medicatieafspraak/identificatie[@value | @root | @nullFlavor]">
                      <request>
+                        <extension url="http://nictiz.nl/fhir/StructureDefinition/ext-ResourceCategory">
+                           <valueCodeableConcept>
+                              <coding>
+                                 <system value="{$oidMap[@oid=$oidSNOMEDCT]/@uri}"/>
+                                 <code value="{$maCodeMP920}"/>
+                                 <display value="voorschrijven"/>
+                              </coding>
+                           </valueCodeableConcept>
+                        </extension>
                         <type value="MedicationRequest"/>
                         <identifier>
                            <xsl:call-template name="id-to-Identifier"/>
                         </identifier>
                         <display value="relatie naar medicatieafspraak met identificatie: {string-join((@value, @root), ' || ')}"/>
+                     </request>
+                  </xsl:for-each>
+               </xsl:when>
+               <xsl:when test="relatie_wisselend_doseerschema/identificatie[@value | @root | @nullFlavor]">
+                  <!-- MP9 dataset -->
+                  <xsl:for-each select="relatie_wisselend_doseerschema/identificatie[@value | @root | @nullFlavor]">
+                     <request>
+                        <extension url="http://nictiz.nl/fhir/StructureDefinition/ext-ResourceCategory">
+                           <valueCodeableConcept>
+                              <coding>
+                                 <system value="{$oidMap[@oid=$oidSNOMEDCT]/@uri}"/>
+                                 <code value="{$wdsCode}"/>
+                                 <display value="optimaliseren van dosering van medicatie"/>
+                              </coding>
+                           </valueCodeableConcept>
+                        </extension>
+                        <type value="MedicationRequest"/>
+                        <identifier>
+                           <xsl:call-template name="id-to-Identifier"/>
+                        </identifier>
+                        <display value="relatie naar wisselend doseerschema met identificatie: {string-join((@value, @root), ' || ')}"/>
                      </request>
                   </xsl:for-each>
                </xsl:when>

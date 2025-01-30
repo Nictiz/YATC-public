@@ -1,22 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- == Provenance: HL7-mappings/fhir_2_ada-r4/mp/9.3.0/payload/2.0.0-beta.1/mp-voorstel.xsl == -->
-<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.8; 2025-01-29T16:34:00.62+01:00 == -->
+<!-- == Provenance: YATC-internal/fhir-2-ada-r4/env/mp/9.3.0/payload/2.0.0-beta.1/mp-voorstel.xsl == -->
+<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.8; 2025-01-29T18:25:49.35+01:00 == -->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:f="http://hl7.org/fhir"
                 xmlns:nf="http://www.nictiz.nl/functions"
+                xmlns:yatcs="https://nictiz.nl/ns/YATC-shared"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl"
                 xmlns:local="urn:fhir:stu3:functions">
+   <!-- ================================================================== -->
+   <!--
+        TBD
+    -->
+   <!-- ================================================================== -->
+   <!--
+        Copyright © Nictiz
+        
+        This program is free software; you can redistribute it and/or modify it under the terms of the
+        GNU Lesser General Public License as published by the Free Software Foundation; either version
+        2.1 of the License, or (at your option) any later version.
+        
+        This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+        without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+        See the GNU Lesser General Public License for more details.
+        
+        The full text of the license is available at http://www.gnu.org/copyleft/lesser.html
+    -->
+   <!-- ================================================================== -->
    <xsl:output indent="yes"
                omit-xml-declaration="yes"/>
-   <xd:doc>
-      <xd:desc>Base template for the main interaction.</xd:desc>
-   </xd:doc>
+   <!-- ================================================================== -->
    <xsl:template match="f:MedicationRequest[f:intent/@value = 'plan']"
                  mode="mp-voorstel">
+      <!-- Base template for the main interaction. -->
       <voorstel>
          <xsl:for-each select="f:identifier">
             <xsl:call-template name="Identifier-to-identificatie"/>

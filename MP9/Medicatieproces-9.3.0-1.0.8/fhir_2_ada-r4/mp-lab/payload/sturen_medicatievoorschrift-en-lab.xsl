@@ -1,13 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- == Provenance: HL7-mappings/fhir_2_ada-r4/mp-lab/payload/sturen_medicatievoorschrift-en-lab.xsl == -->
-<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.8; 2025-01-29T16:34:00.62+01:00 == -->
-<xsl:stylesheet exclude-result-prefixes="xs"
+<!-- == Provenance: YATC-internal/fhir-2-ada-r4/env/mp-lab/payload/sturen_medicatievoorschrift-en-lab.xsl == -->
+<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.8; 2025-01-29T18:25:49.35+01:00 == -->
+<xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:xs="http://www.w3.org/2001/XMLSchema">
+                xmlns:yatcs="https://nictiz.nl/ns/YATC-shared"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                xmlns:local="#local.2024112611123982877560100">
+   <!-- ================================================================== -->
+   <!--
+        TBD
+    -->
+   <!-- ================================================================== -->
+   <!--
+        Copyright © Nictiz
+        
+        This program is free software; you can redistribute it and/or modify it under the terms of the
+        GNU Lesser General Public License as published by the Free Software Foundation; either version
+        2.1 of the License, or (at your option) any later version.
+        
+        This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+        without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+        See the GNU Lesser General Public License for more details.
+        
+        The full text of the license is available at http://www.gnu.org/copyleft/lesser.html
+    -->
+   <!-- ================================================================== -->
    <xsl:import href="../../mp/9.3.0/sturen_medicatievoorschrift/payload/sturen_medicatievoorschrift_2_ada.xsl"/>
    <xsl:import href="../../../common/includes/sturen_laboratoriumresultaten_2_ada.xsl"/>
+   <!-- ================================================================== -->
    <xsl:template match="/">
       <xsl:variable name="data"
                     as="element()*">

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- == Provenance: HL7-mappings/hl7_2_ada/zibs2020/payload/uni-Gebruiksinstructie.xsl == -->
-<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.8; 2025-01-29T16:34:00.62+01:00 == -->
+<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.8; 2025-01-29T18:25:49.35+01:00 == -->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -15,7 +15,7 @@
                 xmlns:uuid="http://www.uuid.org"
                 xmlns:local="urn:fhir:stu3:functions"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-   <xsl:import href="fhir_2_ada_fhir_include-d913e283.xsl"/>
+   <xsl:import href="fhir_2_ada_fhir_include-d620e120.xsl"/>
    <xsl:output method="xml"
                indent="yes"/>
    <xsl:strip-space elements="*"/>

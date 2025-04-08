@@ -9546,6 +9546,11 @@
         <value lang="en-us">When</value>
         <value lang="nl-nl">Wanneer</value>
     </translation>
+    <translation key="What">
+        <comment>As in: What</comment>
+        <value lang="en-us">What</value>
+        <value lang="nl-nl">Wat</value>
+    </translation>
     <translation key="Jurisdiction">
         <comment>As in: Jurisdiction</comment>
         <value lang="en-us">Jurisdiction</value>

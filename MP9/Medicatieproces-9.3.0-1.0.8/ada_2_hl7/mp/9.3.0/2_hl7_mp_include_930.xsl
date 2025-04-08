@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- == Provenance: YATC-internal/ada-2-hl7/env/mp/9.3.0/2_hl7_mp_include_930.xsl == -->
-<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.8; 2025-04-07T14:39:48.07+02:00 == -->
+<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.8; 2025-04-08T17:27:28.82+02:00 == -->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -37,11 +37,11 @@
     -->
    <!-- ================================================================== -->
    <xsl:import href="../../../common/includes/2_hl7_mp_include.xsl"/>
-   <xsl:import href="../../../common/includes/ada2hl7_all-zibs-d539e255.xsl"/>
+   <xsl:import href="../../../common/includes/ada2hl7_all-zibs-d551e262.xsl"/>
    <!-- these imports are needed to handle the FHIR Timing datatype in HL7v3 substanceAdministration -->
    <xsl:import href="../../../common/includes/mp-functions-fhir.xsl"/>
    <xsl:import href="../../../common/includes/mp-functions-hl7v3-fhir.xsl"/>
-   <xsl:import href="../../../ada-2-fhir-r4/env/mp/9.3.0/payload/mp9_latest_package.xsl"/>
+   <xsl:import href="../../../ada_2_fhir-r4/mp/9.3.0/payload/mp9_latest_package.xsl"/>
    <xsl:param name="logLevel"
               select="$logINFO"
               as="xs:string"/>

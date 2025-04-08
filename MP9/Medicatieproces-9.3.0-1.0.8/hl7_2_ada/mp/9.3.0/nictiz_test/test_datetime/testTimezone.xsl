@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- == Provenance: YATC-internal/hl7-2-ada/env/mp/9.3.0/nictiz_test/test_datetime/testTimezone.xsl == -->
-<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.8; 2025-04-07T14:39:48.07+02:00 == -->
+<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.8; 2025-04-08T17:27:28.82+02:00 == -->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -29,12 +29,12 @@
     -->
    <!-- ================================================================== -->
    <!-- this import is to avoid compilation errors when running outside of oXygen with the super cool main files functionality -->
-   <xsl:import href="../../../../../ada-2-fhir-r4/env/mp/9.3.0/beschikbaarstellen_medicatiegegevens/payload/beschikbaarstellen_medicatiegegevens_2_fhir.xsl"/>
+   <xsl:import href="../../../../../ada_2_fhir-r4/mp/9.3.0/beschikbaarstellen_medicatiegegevens/payload/beschikbaarstellen_medicatiegegevens_2_fhir.xsl"/>
    <!-- these imports are for the format date templates that we really need to test -->
    <xsl:import href="../../../../../common/includes/2_hl7_hl7_include.xsl"/>
-   <xsl:import href="../../../../../common/includes/2_fhir_fhir_include-d539e144.xsl"/>
+   <xsl:import href="../../../../../common/includes/2_fhir_fhir_include-d551e151.xsl"/>
    <xsl:import href="../../../../../common/includes/hl7_2_ada_hl7_include.xsl"/>
-   <xsl:import href="../../../../../common/includes/fhir_2_ada_fhir_include-d539e225.xsl"/>
+   <xsl:import href="../../../../../common/includes/fhir_2_ada_fhir_include-d551e231.xsl"/>
    <xsl:output omit-xml-declaration="yes"
                indent="yes"/>
    <!-- this stylesheet aims to test ada_2_hl7, hl7_2_ada, ada_2_fhir, fhir_2_ada for handling dates (with or without timezone) -->

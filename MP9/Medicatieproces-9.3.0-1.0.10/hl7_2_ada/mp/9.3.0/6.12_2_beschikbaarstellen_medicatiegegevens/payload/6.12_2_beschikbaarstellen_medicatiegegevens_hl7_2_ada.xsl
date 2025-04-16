@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- == Provenance: YATC-internal/hl7-2-ada/env/mp/9.3.0/6.12_2_beschikbaarstellen_medicatiegegevens/payload/6.12_2_beschikbaarstellen_medicatiegegevens_hl7_2_ada.xsl == -->
-<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.10; 2025-04-16T17:40:18.95+02:00 == -->
+<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.10; 2025-04-16T18:06:20.52+02:00 == -->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -49,7 +49,7 @@
                  select="'2.16.840.1.113883.2.4.3.11.60.20.77.4.301'"/>
    <xsl:variable name="transactionEffectiveDate"
                  as="xs:dateTime"
-                 select="'2022-02-07T00:00:00'"/>
+                 select="xs:dateTime('2022-02-07T00:00:00')"/>
    <xsl:variable name="adaFormname"
                  select="'medicatiegegevens'"/>
    <xsl:variable name="mpVersion"

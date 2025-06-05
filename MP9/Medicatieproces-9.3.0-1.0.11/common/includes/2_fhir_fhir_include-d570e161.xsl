@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- == Provenance: YATC-internal/ada-2-fhir-r4/env/fhir/2_fhir_fhir_include.xsl == -->
-<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.11; 2025-06-05T14:13:26.48+02:00 == -->
+<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.11; 2025-06-05T16:01:14.01+02:00 == -->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -634,8 +634,6 @@
                  select="'2.16.840.1.113883.2.4.3.11.60.40.1'"/>
    <xsl:param name="fhirVersion"
               select="'R4'"/>
-   <xsl:param name="patientTokensXml"
-              select="document('../../../ada-2-fhir/env/fhir/QualificationTokens.xml')"/>
    <xsl:param name="fhirMetadata"
               as="element()*">
       <xsl:call-template name="buildFhirMetadata">

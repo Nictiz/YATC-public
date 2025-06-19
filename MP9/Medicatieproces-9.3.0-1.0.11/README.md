@@ -8,7 +8,7 @@ Wijzigingen tov distributie 1.0.10
 - zie release notes: https://informatiestandaarden.nictiz.nl/wiki/mp:V3.0.0-rc.1_releasenotes
 - MP-1931, remove redundant dependency on QualificationTokens.xml
 
-Created: 2025-06-05 16:01:12
+Created: 2025-06-19 11:36:52
 
 This distribution was created by the YATC distribute component.
 

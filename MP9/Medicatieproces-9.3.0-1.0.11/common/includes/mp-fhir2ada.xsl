@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- == Provenance: YATC-shared/xsl/util/mp-fhir2ada.xsl == -->
-<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.11; 2025-06-05T16:01:14.01+02:00 == -->
+<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.11; 2025-06-19T11:36:53.19+02:00 == -->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -111,7 +111,8 @@
             </xsl:if>
             <!-- finally simply copy the FHIR Timing element as is present in the HL7v3 message -->
             <adaextension>
-               <xsl:copy-of select=".."/>
+               <!-- MP-1965: due to an obscure Saxon 9.7 bug we prefer to not use copy-of here, however sequence works fine -->
+               <xsl:sequence select=".."/>
             </adaextension>
          </toedieningsschema>
       </xsl:for-each>

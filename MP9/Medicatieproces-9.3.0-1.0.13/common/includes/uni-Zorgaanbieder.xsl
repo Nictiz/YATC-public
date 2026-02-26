@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- == Provenance: YATC-internal/hl7-2-ada/env/zibs/2020/payload/uni-Zorgaanbieder.xsl == -->
+<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.13; 2026-02-26T13:01:29.91+01:00 == -->
+<xsl:stylesheet exclude-result-prefixes="#all"
+                version="2.0"
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:hl7="urn:hl7-org:v3"
+                xmlns:sdtc="urn:hl7-org:sdtc"
+                xmlns:nf="http://www.nictiz.nl/functions"
+                xmlns:hl7nl="urn:hl7-nl:v3"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                xmlns:uuid="http://www.uuid.org"
+                xmlns:local="urn:fhir:stu3:functions"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+   <xsl:output method="xml"
+               indent="yes"/>
+   <xsl:strip-space elements="*"/>
+   <xsl:template name="uni-Zorgaanbieder"
+                 match="hl7:Organization | hl7:representedOrganization | hl7:scopingEntity"
+                 mode="HandleOrganization">
+      <!-- Create ada healthcare_provider using hl7:Organization -->
+      <xsl:param name="adaId"
+                 as="xs:string?"
+                 select="generate-id(.)">
+         <!-- Optional parameter to specify the ada id for this ada element. Defaults to a generate-id of context element -->
+      </xsl:param>
+      <zorgaanbieder>
+         <xsl:attribute name="id"
+                        select="$adaId"/>
+         <!-- id is required -->
+         <xsl:call-template name="handleII">
+            <xsl:with-param name="in"
+                            select="hl7:id"/>
+            <xsl:with-param name="elemName">zorgaanbieder_identificatienummer</xsl:with-param>
+            <xsl:with-param name="nullIfMissing">NI</xsl:with-param>
+         </xsl:call-template>
+         <xsl:call-template name="handleST">
+            <xsl:with-param name="in"
+                            select="(hl7:name | hl7:desc)[1]"/>
+            <xsl:with-param name="elemName">organisatie_naam</xsl:with-param>
+         </xsl:call-template>
+         <xsl:call-template name="handleTELtoContactInformation">
+            <xsl:with-param name="in"
+                            select="hl7:telecom"/>
+            <xsl:with-param name="language"
+                            select="$language"/>
+         </xsl:call-template>
+         <xsl:call-template name="handleADtoAddressInformation">
+            <xsl:with-param name="in"
+                            select="hl7:addr"/>
+            <xsl:with-param name="language"
+                            select="$language"/>
+         </xsl:call-template>
+         <xsl:call-template name="handleCV">
+            <xsl:with-param name="in"
+                            select="hl7:code"/>
+            <xsl:with-param name="elemName">organisatie_type</xsl:with-param>
+         </xsl:call-template>
+      </zorgaanbieder>
+   </xsl:template>
+   <xsl:template match="hl7:Organization | hl7:representedOrganization | hl7:scopingEntity"
+                 name="template_2.16.840.1.113883.2.4.3.11.60.121.10.33_20210701"
+                 mode="uni-Zorgaanbieder">
+      <!-- zib2020 zorgaanbieder -->
+      <xsl:param name="hl7-current-organization"
+                 select=".">
+         <!-- input hl7 organization -->
+      </xsl:param>
+      <xsl:param name="generateId"
+                 as="xs:boolean?"
+                 select="false()">
+         <!-- whether or not to output an ada id on the root element, optional, default to false() -->
+      </xsl:param>
+      <xsl:for-each select="$hl7-current-organization">
+         <zorgaanbieder>
+            <xsl:if test="$generateId">
+               <xsl:attribute name="id">
+                  <xsl:value-of select="generate-id()"/>
+               </xsl:attribute>
+            </xsl:if>
+            <xsl:call-template name="handleII">
+               <xsl:with-param name="in"
+                               select="hl7:id"/>
+               <xsl:with-param name="elemName">zorgaanbieder_identificatienummer</xsl:with-param>
+            </xsl:call-template>
+            <!-- organisatienaam has 1..1 R in MP 9 ADA transactions, but is not always present in HL7 input messages.  -->
+            <!-- fill with nullFlavor if necessary -->
+            <xsl:call-template name="handleST">
+               <xsl:with-param name="in"
+                               select="hl7:name | hl7:desc"/>
+               <xsl:with-param name="elemName">organisatie_naam</xsl:with-param>
+               <xsl:with-param name="nullIfMissing">NI</xsl:with-param>
+            </xsl:call-template>
+            <!-- afdeling_specialisme -->
+            <xsl:call-template name="handleCV">
+               <xsl:with-param name="in"
+                               select="hl7:asOrganizationPartOf/hl7:code"/>
+               <xsl:with-param name="elemName">afdeling_specialisme</xsl:with-param>
+            </xsl:call-template>
+            <!-- contactgegevens -->
+            <xsl:call-template name="handleTELtoContactInformation">
+               <xsl:with-param name="in"
+                               select="hl7:telecom"/>
+            </xsl:call-template>
+            <!-- adresgegevens -->
+            <xsl:call-template name="handleADtoAddressInformation">
+               <xsl:with-param name="in"
+                               select="hl7:addr"/>
+               <xsl:with-param name="language">nl-NL</xsl:with-param>
+            </xsl:call-template>
+            <!-- organisatie_type -->
+            <xsl:call-template name="handleCV">
+               <xsl:with-param name="in"
+                               select="hl7:standardIndustryClassCode"/>
+               <xsl:with-param name="elemName">organisatie_type</xsl:with-param>
+            </xsl:call-template>
+         </zorgaanbieder>
+      </xsl:for-each>
+   </xsl:template>
+</xsl:stylesheet>

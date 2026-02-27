@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- == Provenance: YATC-internal/ada-2-fhir-r4/env/zibs/2020/payload/0.11.0-beta.1/nl-core-wounds.WoundCharacteristics.xsl == -->
-<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.12; 2026-02-13T13:07:12.23+01:00 == -->
+<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.12; 2026-02-27T13:57:54.56+01:00 == -->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -39,7 +39,8 @@
    <xsl:variable name="profileNameWoundCharacteristics"
                  select="'nl-core-wounds.WoundCharacteristics'"/>
    <!-- ================================================================== -->
-   <xsl:template match="(brandwond | decubitus_wond | wond)[wond_weefsel/@value or wond_infectie/@value or wond_vochtigheid/@value or wond_rand/@value or wondlengte/@value or wondbreedte/@value or wonddiepte/@value or datum_laatste_verbandwissel/@value]"
+   <!-- do not use brackets like: (brandwond | decubitus_wond | wond) as this is officially not supported in XSLT 2.0 match attribute with an HE Saxon version and the BTD won't handle it -->
+   <xsl:template match="brandwond[wond_weefsel/@value or wond_infectie/@value or wond_vochtigheid/@value or wond_rand/@value or wondlengte/@value or wondbreedte/@value or wonddiepte/@value or datum_laatste_verbandwissel/@value]                   | decubitus_wond[wond_weefsel/@value or wond_infectie/@value or wond_vochtigheid/@value or wond_rand/@value or wondlengte/@value or wondbreedte/@value or wonddiepte/@value or datum_laatste_verbandwissel/@value]                             | wond[wond_weefsel/@value or wond_infectie/@value or wond_vochtigheid/@value or wond_rand/@value or wondlengte/@value or wondbreedte/@value or wonddiepte/@value or datum_laatste_verbandwissel/@value]"
                  name="nl-core-wounds.WoundCharacteristics"
                  mode="nl-core-wounds.WoundCharacteristics"
                  as="element(f:Observation)?">
@@ -303,7 +304,8 @@
       </xsl:for-each>
    </xsl:template>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-   <xsl:template match="(brandwond | decubitus_wond | wond)[wond_weefsel/@value or wond_infectie/@value or wond_vochtigheid/@value or wond_rand/@value or wondlengte/@value or wondbreedte/@value or wonddiepte/@value or datum_laatste_verbandwissel/@value]"
+   <!-- do not use brackets like: (brandwond | decubitus_wond | wond) as this is officially not supported in XSLT 2.0 match attribute with an HE Saxon version and the BTD won't handle it -->
+   <xsl:template match="brandwond[wond_weefsel/@value or wond_infectie/@value or wond_vochtigheid/@value or wond_rand/@value or wondlengte/@value or wondbreedte/@value or wonddiepte/@value or datum_laatste_verbandwissel/@value]                   | decubitus_wond[wond_weefsel/@value or wond_infectie/@value or wond_vochtigheid/@value or wond_rand/@value or wondlengte/@value or wondbreedte/@value or wonddiepte/@value or datum_laatste_verbandwissel/@value]                             | wond[wond_weefsel/@value or wond_infectie/@value or wond_vochtigheid/@value or wond_rand/@value or wondlengte/@value or wondbreedte/@value or wonddiepte/@value or datum_laatste_verbandwissel/@value]"
                  mode="_generateDisplay">
       <xsl:text>Wound finding</xsl:text>
    </xsl:template>

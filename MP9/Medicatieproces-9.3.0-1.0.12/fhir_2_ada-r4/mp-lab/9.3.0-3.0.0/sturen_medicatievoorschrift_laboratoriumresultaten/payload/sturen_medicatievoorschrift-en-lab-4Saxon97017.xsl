@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- == Provenance: YATC-internal/fhir-2-ada-r4/env/mp-lab/9.3.0-3.0.0/sturen_medicatievoorschrift_laboratoriumresultaten/payload/sturen_medicatievoorschrift-en-lab-4Saxon97017.xsl == -->
-<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.12; 2026-02-27T13:57:54.56+01:00 == -->
+<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.12; 2026-03-03T13:51:13.41+01:00 == -->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -29,7 +29,7 @@
         The full text of the license is available at http://www.gnu.org/copyleft/lesser.html
     -->
    <!-- ================================================================== -->
-   <xsl:import href="../../../../../fhir_2_ada-r4/mp/9.3.0/sturen_medicatievoorschrift/payload/sturen_medicatievoorschrift_2_ada.xsl"/>
+   <xsl:import href="../../../../mp/9.3.0/sturen_medicatievoorschrift/payload/sturen_medicatievoorschrift_2_ada.xsl"/>
    <!--  <xsl:import href="../../lab/3.0.0/sturen_laboratoriumresultaten/payload/sturen_laboratoriumresultaten_2_ada.xsl"/>-->
    <!-- ================================================================== -->
    <xsl:template match="/">

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- == Provenance: YATC-shared/xsl/util/mp-4testinstances.xsl == -->
-<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.12; 2026-02-27T13:57:54.56+01:00 == -->
+<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.12; 2026-03-03T13:51:13.41+01:00 == -->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -317,7 +317,7 @@
                            <xsl:when test="toedieningsschema/is_flexibel/@value = 'false'">- let op, exacte toedientijd(en)</xsl:when>
                         </xsl:choose>
                      </xsl:variable>
-                     <xsl:value-of select="normalize-space(concat(string-join($zo-nodig, ' '), ' ', string-join($weekdag-string, ' '), ' ', string-join($frequentie-string, ' '), $interval-string, ' ', string-join($toedientijd-string, ' '), ' ', string-join($keerdosis-string, ' '), ' ', string-join($dagdeel-string, ' '), ' ', $toedieningsduur-string, ' ', string-join($toedieningssnelheid-string, ' '), string-join($maxdose-string, ' '), $isFlexible))"/>
+                     <xsl:value-of select="normalize-space(concat(string-join($zo-nodig, ' '), ' ', string-join($frequentie-string, ' '), $interval-string, ' ', string-join($weekdag-string, ' '), ' ', string-join($toedientijd-string, ' '), ' ', string-join($keerdosis-string, ' '), ' ', string-join($dagdeel-string, ' '), ' ', $toedieningsduur-string, ' ', string-join($toedieningssnelheid-string, ' '), string-join($maxdose-string, ' '), $isFlexible))"/>
                   </xsl:for-each>
                </xsl:otherwise>
             </xsl:choose>

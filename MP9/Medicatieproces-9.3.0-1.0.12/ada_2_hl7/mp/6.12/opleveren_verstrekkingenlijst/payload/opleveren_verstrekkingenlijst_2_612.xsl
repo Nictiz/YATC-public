@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- == Provenance: YATC-internal/ada-2-hl7/env/mp/6.12/opleveren_verstrekkingenlijst/payload/opleveren_verstrekkingenlijst_2_612.xsl == -->
-<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.12; 2026-02-27T13:57:54.56+01:00 == -->
+<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.12; 2026-03-03T13:51:13.41+01:00 == -->
 <xsl:stylesheet version="2.0"
                 exclude-result-prefixes="#all"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"

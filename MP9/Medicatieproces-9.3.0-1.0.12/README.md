@@ -2,12 +2,9 @@
 
 Distribution: MP9-Medicatieproces-9.3.0
 
-Version: 1.0.12, gebaseerd op MP9 3.0.0-rc.1
+Version: 1.0.12
 
-Wijzigingen tov distributie 1.0.11
-- MP-2139 - Fallback on text only for complex parallell 6.12 dosageInstruction
-
-Created: 2026-02-27 13:57:53
+Created: 2026-03-03 13:51:13
 
 This distribution was created by the YATC distribute component.
 

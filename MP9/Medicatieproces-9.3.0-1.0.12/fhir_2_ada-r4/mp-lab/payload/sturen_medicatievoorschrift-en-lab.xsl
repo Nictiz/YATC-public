@@ -27,8 +27,8 @@
         The full text of the license is available at http://www.gnu.org/copyleft/lesser.html
     -->
    <!-- ================================================================== -->
-   <xsl:import href="../../../../../common/includes/sturen_laboratoriumresultaten_2_ada.xsl"/>
-   <xsl:import href="../../../../mp/9.3.0/sturen_medicatievoorschrift/payload/sturen_medicatievoorschrift_2_ada.xsl"/>
+   <xsl:import href="../../../common/includes/sturen_laboratoriumresultaten_2_ada.xsl"/>
+   <xsl:import href="../../mp/9.3.0/sturen_medicatievoorschrift/payload/sturen_medicatievoorschrift_2_ada.xsl"/>
    <!-- ================================================================== -->
    <xsl:template match="/">
       <xsl:variable name="data"

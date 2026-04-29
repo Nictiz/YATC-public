@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- == Provenance: YATC-internal/ada-2-hl7/env/mp/6.12/test_instances/wrapper/opleveren_verstrekkingenlijst_2_612_wrapper.xsl == -->
+<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.16; 2026-04-29T11:02:12.55+02:00 == -->
+<xsl:stylesheet version="2.0"
+                exclude-result-prefixes="#all"
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns="urn:hl7-org:v3"
+                xmlns:hl7="urn:hl7-org:v3"
+                xmlns:yatcs="https://nictiz.nl/ns/YATC-shared"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                xmlns:local="#local.2024011810474696534670100"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+   <!-- ================================================================== -->
+   <!--
+        TBD
+    -->
+   <!-- ================================================================== -->
+   <!--
+        Copyright © Nictiz
+        
+        This program is free software; you can redistribute it and/or modify it under the terms of the
+        GNU Lesser General Public License as published by the Free Software Foundation; either version
+        2.1 of the License, or (at your option) any later version.
+        
+        This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+        without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+        See the GNU Lesser General Public License for more details.
+        
+        The full text of the license is available at http://www.gnu.org/copyleft/lesser.html
+    -->
+   <!-- ================================================================== -->
+   <!-- import the xsl that does everything for normal processing -->
+   <xsl:import href="../../opleveren_verstrekkingenlijst/wrapper/opleveren_verstrekkingenlijst_2_612_wrapper.xsl"/>
+   <!-- import the xsl that does specific handling for test instances -->
+   <xsl:import href="../../../../../common/includes/mp-4testinstances.xsl"/>
+   <!-- param to influence whether to output schematron references, typically only needed for test instances -->
+   <xsl:param name="schematronRef"
+              as="xs:boolean"
+              select="true()"/>
+</xsl:stylesheet>

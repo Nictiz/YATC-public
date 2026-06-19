@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- == Provenance: YATC-internal/ada-2-fhir-r4/env/zibs/2020/payload/0.5-beta1/nl-core-AddressInformation.xsl == -->
-<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.17; 2026-06-19T14:36:35.72+02:00 == -->
+<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.17; 2026-06-19T15:12:41.28+02:00 == -->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -50,7 +50,7 @@
       </xsl:param>
       <xsl:for-each select="$in">
          <address>
-            <xsl:for-each select="adres_soort">
+            <xsl:for-each select="adres_soort[@code]">
                <extension url="http://nictiz.nl/fhir/StructureDefinition/ext-AddressInformation.AddressType">
                   <valueCodeableConcept>
                      <xsl:call-template name="code-to-CodeableConcept">
@@ -81,12 +81,12 @@
             </xsl:for-each>
             <xsl:variable name="lineItems"
                           as="element()*">
-               <xsl:for-each select="straat">
+               <xsl:for-each select="straat[@value]">
                   <extension url="http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-streetName">
                      <valueString value="{normalize-space(@value)}"/>
                   </extension>
                </xsl:for-each>
-               <xsl:for-each select="huisnummer">
+               <xsl:for-each select="huisnummer[@value]">
                   <extension url="http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-houseNumber">
                      <valueString value="{normalize-space(@value)}"/>
                   </extension>
@@ -97,17 +97,17 @@
                         If only a HouseNumberLetter is known, send just that. No trailing space is required.
                         If only a HouseNumberAddition is known, communicate that with a leading space.
                     -->
-               <xsl:if test="huisnummerletter | huisnummertoevoeging">
+               <xsl:if test="(huisnummerletter | huisnummertoevoeging)[@value]">
                   <extension url="http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-buildingNumberSuffix">
                      <valueString value="{replace(concat(huisnummerletter/normalize-space(@value), ' ', huisnummertoevoeging/normalize-space(@value)), '\s+$', '')}"/>
                   </extension>
                </xsl:if>
-               <xsl:for-each select="aanduiding_bij_nummer">
+               <xsl:for-each select="aanduiding_bij_nummer[@code]">
                   <extension url="http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-additionalLocator">
                      <valueString value="{normalize-space(@code)}"/>
                   </extension>
                </xsl:for-each>
-               <xsl:for-each select="additionele_informatie">
+               <xsl:for-each select="additionele_informatie[@value]">
                   <extension url="http://hl7.org/fhir/StructureDefinition/iso21090-ADXP-unitID">
                      <valueString value="{normalize-space(@value)}"/>
                   </extension>
@@ -118,29 +118,31 @@
                   <xsl:copy-of select="$lineItems"/>
                </line>
             </xsl:if>
-            <xsl:for-each select="woonplaats">
+            <xsl:for-each select="woonplaats[@value]">
                <city value="{normalize-space(@value)}"/>
             </xsl:for-each>
-            <xsl:for-each select="gemeente">
+            <xsl:for-each select="gemeente[@value]">
                <district value="{normalize-space(@value)}"/>
             </xsl:for-each>
-            <xsl:for-each select="postcode">
+            <xsl:for-each select="postcode[@value]">
                <postalCode value="{normalize-space(@value)}"/>
             </xsl:for-each>
-            <xsl:for-each select="land">
+            <xsl:for-each select="land[@displayName | @value | @code | @nullFlavor | @originalText]">
                <country>
                   <xsl:if test="@displayName">
                      <xsl:attribute name="value"
                                     select="@displayName"/>
                   </xsl:if>
-                  <extension url="http://nictiz.nl/fhir/StructureDefinition/ext-CodeSpecification">
-                     <valueCodeableConcept>
-                        <xsl:call-template name="code-to-CodeableConcept">
-                           <xsl:with-param name="in"
-                                           select="."/>
-                        </xsl:call-template>
-                     </valueCodeableConcept>
-                  </extension>
+                  <xsl:if test="@value | @code | @nullFlavor | @originalText">
+                     <extension url="http://nictiz.nl/fhir/StructureDefinition/ext-CodeSpecification">
+                        <valueCodeableConcept>
+                           <xsl:call-template name="code-to-CodeableConcept">
+                              <xsl:with-param name="in"
+                                              select="."/>
+                           </xsl:call-template>
+                        </valueCodeableConcept>
+                     </extension>
+                  </xsl:if>
                </country>
             </xsl:for-each>
          </address>

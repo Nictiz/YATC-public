@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- == Provenance: YATC-internal/ada-2-fhir-r4/env/mp/9.3.0/2_fhir_mp93_include.xsl == -->
-<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.17; 2026-06-19T15:12:41.28+02:00 == -->
+<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.17; 2026-06-19T16:47:52.73+02:00 == -->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -58,9 +58,19 @@
               as="xs:string?"/>
    <xsl:param name="fhirMetadata"
               as="element()*">
+      <!-- MP-2219 special handling for toediener zorgaanbieder, in FHIR R4 only PracitionerRole is allowed, not Location or Organization -->
+      <xsl:variable name="toedienerZorgaanbieder"
+                    as="element()*">
+         <xsl:for-each select=".//medicatietoediening/toediener/zorgaanbieder/zorgaanbieder[@value]">
+            <!-- create an artificial empty zorgverlener so that we'll get a PracitionerRole in metadata -->
+            <zorgverlener xmlns="">
+               <xsl:copy-of select="ancestor::data//zorgaanbieder[@id = current()/@value]"/>
+            </zorgverlener>
+         </xsl:for-each>
+      </xsl:variable>
       <xsl:call-template name="buildFhirMetadata">
          <xsl:with-param name="in"
-                         select=".//(patient[not(parent::toediener)] |.//medicamenteuze_behandeling_id/parent::node() | medicamenteuze_behandeling/*[not(self::identificatie)] | reden_van_voorschrijven/probleem | */afleverlocatie | bouwstenen/* | documentgegevens/auteur/auteur_is_zorgaanbieder/zorgaanbieder)"/>
+                         select=".//(patient[not(parent::toediener)] |.//medicamenteuze_behandeling_id/parent::node() | medicamenteuze_behandeling/*[not(self::identificatie)] | reden_van_voorschrijven/probleem | */afleverlocatie | bouwstenen/* | documentgegevens/auteur/auteur_is_zorgaanbieder/zorgaanbieder) | $toedienerZorgaanbieder"/>
       </xsl:call-template>
    </xsl:param>
    <xsl:variable name="commonEntries"
@@ -155,7 +165,7 @@
             </resource>
          </entry>
          <!-- Whenever the author of a MedicationUse is a HealthcareProvider, it is represented by a Location instead of an Organization -->
-         <xsl:if test="current-group()/@id = ../../medicamenteuze_behandeling/medicatiegebruik/auteur/auteur_is_zorgaanbieder/zorgaanbieder/@value">
+         <xsl:if test="current-group()/@id = ../..//medicatiegebruik/auteur/auteur_is_zorgaanbieder/zorgaanbieder/@value">
             <entry>
                <fullUrl value="{$fhirMetadata[nm:resource-type/text() = 'Location'][nm:group-key/text() = $zabKey]/nm:full-url/text()}"/>
                <resource>
@@ -167,9 +177,9 @@
             </entry>
          </xsl:if>
       </xsl:for-each-group>
-      <xsl:for-each-group select="/adaxml/data/*/medicamenteuze_behandeling/medicatietoediening/toediener/zorgaanbieder/zorgaanbieder/nf:resolveAdaInstance(., /)"
+      <xsl:for-each-group select="/adaxml/data/*//medicatietoediening/toediener/zorgaanbieder/zorgaanbieder/nf:resolveAdaInstance(., /)"
                           group-by="nf:getGroupingKeyDefault(.)">
-         <!-- entry for PractitionerRole -->
+         <!-- entry for PractitionerRole, even though there is a zorgaanbieder in the data, sigh -->
          <xsl:variable name="zabKey"
                        select="current-grouping-key()"/>
          <entry>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- == Provenance: YATC-internal/ada-2-fhir-r4/env/mp/9.3.0/payload/2.0.0-rc.7/mp-MedicationAdministration2.xsl == -->
-<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.17; 2026-06-19T15:12:41.28+02:00 == -->
+<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.17; 2026-06-19T16:47:52.73+02:00 == -->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -312,9 +312,11 @@ The full text of the license is available at http://www.gnu.org/copyleft/lesser.
                            </xsl:call-template>
                         </xsl:when>
                         <xsl:when test="self::zorgaanbieder">
+                           <!-- MP-2219, FHIR does not allow a reference to Location or Organization here, so we use zorgverlener for the map to get a PractitionerRole reference, 
+                                        which we also specifically created in $fhirMetadata  -->
                            <xsl:call-template name="makeReference">
                               <xsl:with-param name="profile"
-                                              select="$ada2resourceType/nm:map[@ada = current()/local-name()][@resource = 'Location']/@profile"/>
+                                              select="$ada2resourceType/nm:map[@ada = 'zorgverlener'][@resource = 'PractitionerRole']/@profile"/>
                            </xsl:call-template>
                         </xsl:when>
                         <xsl:when test="self::toediener_is_patient">

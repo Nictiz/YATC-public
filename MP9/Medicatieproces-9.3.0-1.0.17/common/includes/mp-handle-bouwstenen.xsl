@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- == Provenance: YATC-internal/hl7-2-ada/env/mp/mp-handle-bouwstenen.xsl == -->
-<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.17; 2026-06-19T16:47:52.73+02:00 == -->
+<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.17; 2026-06-23T09:09:23.28+02:00 == -->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -239,7 +239,7 @@
       <!--  get rid of the now (in step 2) obsolete temporary deduplication key, don't want it in the end result ada xml  -->
    </xsl:template>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-   <xsl:template match="(farmaceutisch_product | contactpersoon | zorgaanbieder[not(zorgaanbieder)] | zorgaanbieder[not(zorgaanbieder)] | zorgverlener[not(zorgverlener)] | voorstel_gegevens/medicamenteuze_behandeling | voorstel_gegevens/medicatieafspraak | voorstel_gegevens/verstrekkingsverzoek)[not(parent::bouwstenen)]"
+   <xsl:template match="farmaceutisch_product[not(parent::bouwstenen)] | contactpersoon[not(parent::bouwstenen)] | zorgaanbieder[not(zorgaanbieder)][not(parent::bouwstenen)] | zorgverlener[not(zorgverlener)][not(parent::bouwstenen)] | voorstel_gegevens/medicamenteuze_behandeling | voorstel_gegevens/medicatieafspraak | voorstel_gegevens/verstrekkingsverzoek"
                  mode="deduplicateBouwstenenStep2">
       <!-- Find the correct reference in the deduplication mode in step 2  -->
       <xsl:copy>
@@ -252,7 +252,7 @@
       </xsl:copy>
    </xsl:template>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-   <xsl:template match="medicamenteuze_behandeling[not(following-sibling::medicamenteuze_behandeling)][not(@datatype = 'reference')]"
+   <xsl:template match="medicamenteuze_behandeling[not(following-sibling::medicamenteuze_behandeling)][not(@datatype = 'reference')] | data/*/*[local-name() = $adaMPBouwsteenNames][not(following-sibling::*[local-name() = $adaMPBouwsteenNames])][not(@datatype = 'reference')]"
                  mode="handleBouwstenen">
       <!-- Bouwstenen are directly after the last medicamenteuze_behandeling -->
       <xsl:copy>
@@ -260,12 +260,12 @@
                               mode="handleBouwstenen"/>
       </xsl:copy>
       <bouwstenen>
-         <xsl:apply-templates select="../medicamenteuze_behandeling//contactpersoon"
+         <xsl:apply-templates select="..//contactpersoon[not(parent::bouwstenen)]"
                               mode="addBouwstenen"/>
-         <xsl:apply-templates select="../medicamenteuze_behandeling//farmaceutisch_product"
+         <xsl:apply-templates select="..//farmaceutisch_product[not(parent::bouwstenen)]"
                               mode="addBouwstenen"/>
          <!-- zorgverlener has a bouwstenen reference to zorgaanbieder, some special handling here -->
-         <xsl:for-each select="../(medicamenteuze_behandeling | voorstel_gegevens)//zorgverlener[not(zorgverlener)]">
+         <xsl:for-each select="..//zorgverlener[not(zorgverlener)][not(parent::bouwstenen)]">
             <xsl:copy>
                <xsl:apply-templates select="@*"
                                     mode="addBouwstenen"/>
@@ -285,7 +285,7 @@
                                     mode="addBouwstenen"/>
             </xsl:copy>
          </xsl:for-each>
-         <xsl:for-each select="../(medicamenteuze_behandeling | voorstel_gegevens)//zorgaanbieder[not(zorgaanbieder)]">
+         <xsl:for-each select="..//zorgaanbieder[not(zorgaanbieder)][not(parent::bouwstenen)]">
             <xsl:copy>
                <xsl:apply-templates select="node() | @*"
                                     mode="addBouwstenen"/>

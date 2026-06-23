@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- == Provenance: YATC-shared/xsl/util/units.xsl == -->
-<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.17; 2026-06-23T09:09:23.28+02:00 == -->
+<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.17; 2026-06-23T10:45:15.6+02:00 == -->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -792,7 +792,7 @@
                   <xsl:attribute name="displayName"
                                  select="$UCUM2GstdMap[@UCUMCode = normalize-space($UCUM)]/@GstdDisplayName"/>
                </xsl:when>
-               <!-- unsupported input value, log message and do nothing -->
+               <!-- unsupported input value, log message and export the UCUM as is -->
                <xsl:otherwise>
                   <xsl:call-template name="util:logMessage">
                      <xsl:with-param name="level"
@@ -801,6 +801,13 @@
 <xsl:value-of select="$UCUM"/>
                      </xsl:with-param>
                   </xsl:call-template>
+                  <xsl:attribute name="code"
+                                 select="$UCUM"/>
+                  <xsl:attribute name="codeSystem"
+                                 select="$oidUCUM"/>
+                  <xsl:attribute name="codeSystemName">UCUM</xsl:attribute>
+                  <xsl:attribute name="displayName"
+                                 select="$UCUM"/>
                </xsl:otherwise>
             </xsl:choose>
          </xsl:when>

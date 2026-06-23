@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- == Provenance: YATC-internal/hl7-2-ada/env/mp/hl7_2_ada_mp_include.xsl == -->
-<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.17; 2026-06-23T09:09:23.28+02:00 == -->
+<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.17; 2026-06-23T10:45:15.6+02:00 == -->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -2159,115 +2159,6 @@
                  displayName="{$hl7NullFlavorMap[@hl7NullFlavor = 'UNK']/@displayName}"/>
          </xsl:with-param>
       </xsl:call-template>
-   </xsl:template>
-   <xd:doc>
-      <xd:desc/>
-      <xd:param name="hl7-num-or-denom"/>
-   </xd:doc>
-   <xsl:template name="mp9-ingredient-eenheid">
-      <xsl:param name="hl7-num-or-denom"
-                 select="."
-                 as="element()?"/>
-      <!-- @unit kán leeg zijn als de default waarde '1' is, dus stuks -->
-      <!-- @unit is ook leeg als de waarde gerepresenteerd wordt door een nullFlavor, wat vooral legaal is bij nullFlavor QS - aanvullen tot -->
-      <xsl:choose>
-         <xsl:when test="$hl7-num-or-denom[@value]">
-            <xsl:for-each select="$hl7-num-or-denom[@value]">
-               <xsl:choose>
-                  <xsl:when test="hl7:translation[@codeSystem = $oidGStandaardBST902THES2]">
-                     <xsl:for-each select="hl7:translation">
-                        <xsl:call-template name="mp9-code-attribs">
-                           <xsl:with-param name="current-hl7-code"
-                                           select="."/>
-                        </xsl:call-template>
-                     </xsl:for-each>
-                  </xsl:when>
-                  <xsl:otherwise>
-                     <!-- translate UCUM unit to Gstd -->
-                     <xsl:call-template name="UCUM2GstdBasiseenheid">
-                        <xsl:with-param name="UCUM">
-                           <xsl:choose>
-                              <xsl:when test="./@unit">
-                                 <xsl:value-of select="./@unit"/>
-                              </xsl:when>
-                              <xsl:otherwise>
-                                 <xsl:value-of select="'1'"/>
-                              </xsl:otherwise>
-                           </xsl:choose>
-                        </xsl:with-param>
-                     </xsl:call-template>
-                  </xsl:otherwise>
-               </xsl:choose>
-            </xsl:for-each>
-         </xsl:when>
-         <xsl:when test="$hl7-num-or-denom[@nullFlavor]">
-            <xsl:variable name="currentNullFlavor"
-                          select="./@nullFlavor"/>
-            <xsl:attribute name="code"
-                           select="$currentNullFlavor"/>
-            <xsl:attribute name="codeSystem"
-                           select="$oidHL7NullFlavor"/>
-            <xsl:attribute name="displayName"
-                           select="$hl7NullFlavorMap[@hl7NullFlavor = $currentNullFlavor]/@displayName"/>
-         </xsl:when>
-         <xsl:otherwise>
-            <!-- no value, no nullFlavor, let's set a default nullFlavor  -->
-            <xsl:attribute name="code">NI</xsl:attribute>
-            <xsl:attribute name="codeSystem"
-                           select="$oidHL7NullFlavor"/>
-            <xsl:attribute name="displayName">geen informatie</xsl:attribute>
-         </xsl:otherwise>
-      </xsl:choose>
-   </xsl:template>
-   <xd:doc>
-      <xd:desc/>
-      <xd:param name="hl7-num-or-denom"/>
-   </xd:doc>
-   <xsl:template name="mp9-ingredient-waarde">
-      <xsl:param name="hl7-num-or-denom"
-                 as="node()"/>
-      <xsl:variable name="gstd-translation"
-                    select="$hl7-num-or-denom/hl7:translation[@codeSystem = $oidGStandaardBST902THES2]"/>
-      <xsl:choose>
-         <xsl:when test="$gstd-translation">
-            <xsl:attribute name="value"
-                           select="$gstd-translation/@value"/>
-         </xsl:when>
-         <xsl:when test="./@nullFlavor">
-            <xsl:attribute name="nullFlavor"
-                           select="./@nullFlavor"/>
-         </xsl:when>
-         <xsl:otherwise>
-            <xsl:attribute name="value"
-                           select="./@value"/>
-         </xsl:otherwise>
-      </xsl:choose>
-   </xsl:template>
-   <xd:doc>
-      <xd:desc>Ingrediënt waarde en eenheid</xd:desc>
-      <xd:param name="hl7-num-or-denom">HL7 nominator or denominator</xd:param>
-   </xd:doc>
-   <xsl:template name="mp-ingredient-waarde-en-eenheid">
-      <xsl:param name="hl7-num-or-denom"/>
-      <!-- waarde -->
-      <xsl:for-each select="$hl7-num-or-denom">
-         <xsl:variable name="ada-elemName"
-                       select="'waarde'"/>
-         <xsl:element name="{$ada-elemName}">
-            <xsl:call-template name="mp9-ingredient-waarde">
-               <xsl:with-param name="hl7-num-or-denom"
-                               select="$hl7-num-or-denom"/>
-            </xsl:call-template>
-         </xsl:element>
-         <xsl:variable name="ada-elemName"
-                       select="'eenheid'"/>
-         <xsl:element name="{$ada-elemName}">
-            <xsl:call-template name="mp9-ingredient-eenheid">
-               <xsl:with-param name="hl7-num-or-denom"
-                               select="$hl7-num-or-denom"/>
-            </xsl:call-template>
-         </xsl:element>
-      </xsl:for-each>
    </xsl:template>
    <xd:doc>
       <xd:desc>Creates an ada interval element based on a HL7-PIVL_TS.</xd:desc>

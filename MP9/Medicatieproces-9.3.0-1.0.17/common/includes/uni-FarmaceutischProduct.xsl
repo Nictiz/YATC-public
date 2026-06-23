@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- == Provenance: YATC-internal/hl7-2-ada/env/zibs/2020/payload/uni-FarmaceutischProduct.xsl == -->
-<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.17; 2026-06-23T09:09:23.28+02:00 == -->
+<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.17; 2026-06-23T10:45:15.6+02:00 == -->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -176,8 +176,8 @@
                      <xsl:call-template name="UCUM2GstdBasiseenheid">
                         <xsl:with-param name="UCUM">
                            <xsl:choose>
-                              <xsl:when test="./@unit">
-                                 <xsl:value-of select="./@unit"/>
+                              <xsl:when test="@unit">
+                                 <xsl:value-of select="@unit"/>
                               </xsl:when>
                               <xsl:otherwise>
                                  <xsl:value-of select="'1'"/>

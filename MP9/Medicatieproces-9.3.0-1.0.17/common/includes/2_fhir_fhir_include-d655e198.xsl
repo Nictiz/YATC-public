@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- == Provenance: YATC-internal/ada-2-fhir-r4/env/fhir/2_fhir_fhir_include.xsl == -->
-<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.17; 2026-06-23T09:09:23.28+02:00 == -->
+<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.17; 2026-06-23T10:45:15.6+02:00 == -->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -1404,11 +1404,11 @@
    <xsl:template name="_buildMedicationQuantity">
       <!-- Helper template to build the a quantity for medication. -->
       <xsl:param name="adaValue"
-                 as="element()">
+                 as="element()?">
          <!-- The ada element containing the value of quantity -->
       </xsl:param>
       <xsl:param name="adaUnit"
-                 as="element()">
+                 as="element()?">
          <!-- The ada alement containing the code/codeSystem in Gstd eenheden -->
       </xsl:param>
       <!-- G-Standaard (Simple)Quantity -->
@@ -1426,10 +1426,35 @@
       </xsl:for-each>
       <!-- UCUM -->
       <value value="{$adaValue/@value}"/>
-      <xsl:if test="string-length($adaUnit[@codeSystem=$oidGStandaardBST902THES2]/@displayName) gt 0">
-         <unit value="{$adaUnit[@codeSystem=$oidGStandaardBST902THES2]/@displayName}"/>
+      <xsl:if test="string-length($adaUnit/@displayName) gt 0">
+         <unit value="{$adaUnit/@displayName}"/>
       </xsl:if>
-      <system value="{$oidMap[@oid=$oidUCUM]/@uri}"/>
-      <code value="{nf:convertGstdBasiseenheid2UCUM($adaUnit[@codeSystem=$oidGStandaardBST902THES2]/@code)}"/>
+      <xsl:choose>
+         <xsl:when test="$adaUnit[@codeSystem = $oidGStandaardBST902THES2]/@code">
+            <system value="{$oidMap[@oid=$oidUCUM]/@uri}"/>
+            <code value="{nf:convertGstdBasiseenheid2UCUM($adaUnit[@codeSystem=$oidGStandaardBST902THES2]/@code)}"/>
+         </xsl:when>
+         <xsl:when test="$adaUnit[@codeSystem = $oidUCUM]/@code">
+            <system value="{$oidMap[@oid=$oidUCUM]/@uri}"/>
+            <code value="{$adaUnit[@codeSystem = $oidUCUM]/@code}"/>
+         </xsl:when>
+         <xsl:otherwise>
+            <!-- should not happen, but garbage in garbage out -->
+            <system>
+               <xsl:choose>
+                  <xsl:when test="nf:isOID($adaUnit/@codeSystem)">
+                     <xsl:attribute name="value"
+                                    select="concat('urn:oid:', $adaUnit/@codeSystem)"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                     <!-- true garbage -->
+                     <xsl:attribute name="value"
+                                    select="$adaUnit/@codeSystem"/>
+                  </xsl:otherwise>
+               </xsl:choose>
+            </system>
+            <code value="{$adaUnit/@code}"/>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
 </xsl:stylesheet>

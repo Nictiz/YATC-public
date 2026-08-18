@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- == Provenance: YATC-internal/hl7-2-ada/env/mp/9.3.0/sturen_voorstel_medicatieafspraak/payload/sturen_voorstel_medicatieafspraak_hl7_2_ada.xsl == -->
+<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.18; 2026-08-18T10:31:07.01+02:00 == -->
+<xsl:stylesheet exclude-result-prefixes="#all"
+                version="2.0"
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:hl7="urn:hl7-org:v3"
+                xmlns:sdtc="urn:hl7-org:sdtc"
+                xmlns:nf="http://www.nictiz.nl/functions"
+                xmlns:hl7nl="urn:hl7-nl:v3"
+                xmlns:yatcs="https://nictiz.nl/ns/YATC-shared"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl"
+                xmlns:local="#local.2024120415184415353170100"
+                xmlns:pharm="urn:ihe:pharm:medication"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+   <!-- ================================================================== -->
+   <!--
+        TBD
+    -->
+   <!-- ================================================================== -->
+   <!--
+        Copyright © Nictiz
+        
+        This program is free software; you can redistribute it and/or modify it under the terms of the
+        GNU Lesser General Public License as published by the Free Software Foundation; either version
+        2.1 of the License, or (at your option) any later version.
+        
+        This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+        without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+        See the GNU Lesser General Public License for more details.
+        
+        The full text of the license is available at http://www.gnu.org/copyleft/lesser.html
+    -->
+   <!-- ================================================================== -->
+   <xsl:import href="../../../../../common/includes/all-zibs.xsl"/>
+   <xsl:import href="../../../../../common/includes/mp-handle-bouwstenen.xsl"/>
+   <xsl:import href="../../../../../common/includes/uni-Voorstelgegevens.xsl"/>
+   <xsl:output method="xml"
+               indent="yes"
+               exclude-result-prefixes="#all"
+               omit-xml-declaration="yes"/>
+   <!-- Dit is een conversie van MP 9.1.0 naar ADA 9.0 voorschrift bericht -->
+   <!-- parameter to control whether or not the result should contain a reference to the ada xsd -->
+   <xsl:param name="outputSchemaRef"
+              as="xs:boolean"
+              select="true()"/>
+   <xsl:param name="schemaFileString"
+              as="xs:string?">../../hl7_2_ada/mp/9.3.0/sturen_voorstel_medicatieafspraak/ada_schemas/sturen_voorstel_medicatieafspraak.xsd</xsl:param>
+   <!-- whether or not this hl7_2_ada conversion should deduplicate bouwstenen, such as products, health providers, health professionals, contact persons -->
+   <xsl:param name="deduplicateAdaBouwstenen"
+              as="xs:boolean?"
+              select="false()"/>
+   <!--        <xsl:param name="deduplicateAdaBouwstenen" as="xs:boolean?" select="true()"/>-->
+   <!-- schakelparameter voor nieuwe MBHid -->
+   <xsl:param name="outputNewMbhModel"
+              as="xs:boolean"
+              select="true()"/>
+   <!-- parameter om creation/lastupdate date stabiel te houden om wijzigingen te beperken in testomgevingen, defaults to current-datetime() -->
+   <xsl:param name="creationLastupdate"
+              as="xs:dateTime"
+              select="current-dateTime()"/>
+   <xsl:variable name="medicatiegegevensLijst"
+                 select="//hl7:organizer[hl7:code/@codeSystem = '2.16.840.1.113883.2.4.3.11.60.20.77.4'] | //hl7:ClinicalDocument"/>
+   <xsl:variable name="filename"
+                 select="tokenize(base-uri(/), '/')[last()]"/>
+   <xsl:variable name="extension"
+                 select="tokenize($filename, '\.')[last()]"/>
+   <xsl:variable name="idBasedOnFilename"
+                 select="replace($filename, concat('.', $extension, '$'), '')"/>
+   <xsl:param name="theId">
+      <xsl:choose>
+         <xsl:when test="string-length($idBasedOnFilename) gt 0">
+            <xsl:value-of select="$idBasedOnFilename"/>
+         </xsl:when>
+         <xsl:when test="string-length($medicatiegegevensLijst/../../../hl7:id/@extension) gt 0">
+            <!-- let's use the extension of the message id -->
+            <xsl:value-of select="$medicatiegegevensLijst/../../../hl7:id/@extension"/>
+         </xsl:when>
+         <xsl:otherwise>
+            <xsl:value-of select="generate-id(.)"/>
+         </xsl:otherwise>
+      </xsl:choose>
+   </xsl:param>
+   <!-- ================================================================== -->
+   <xsl:template match="/">
+      <!-- Template to start conversion for stand alone use.  -->
+      <xsl:variable name="patient-recordTarget"
+                    select="//hl7:recordTarget/hl7:patientRole"/>
+      <xsl:call-template name="Voorschrift-90-ADA">
+         <xsl:with-param name="patient"
+                         select="$patient-recordTarget"/>
+      </xsl:call-template>
+   </xsl:template>
+   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+   <xsl:template name="Voorschrift-90-ADA">
+      <!-- Create adaxml for transaction sturen_voorstel_medicatieafspraak -->
+      <xsl:param name="patient"
+                 select="//hl7:recordTarget/hl7:patientRole">
+         <!-- HL7 patient -->
+      </xsl:param>
+      <xsl:call-template name="doGeneratedComment">
+         <xsl:with-param name="in"
+                         select="//*[hl7:ControlActProcess]"/>
+      </xsl:call-template>
+      <xsl:variable name="adaXml">
+         <adaxml>
+            <xsl:if test="$outputSchemaRef">
+               <xsl:attribute name="xsi:noNamespaceSchemaLocation">../ada_schemas/ada_sturen_voorstel_medicatieafspraak.xsd</xsl:attribute>
+            </xsl:if>
+            <meta status="new"
+                  created-by="generated"
+                  last-update-by="generated">
+               <xsl:attribute name="creation-date"
+                              select="$creationLastupdate"/>
+               <xsl:attribute name="last-update-date"
+                              select="$creationLastupdate"/>
+            </meta>
+            <data>
+               <sturen_voorstel_medicatieafspraak app="mp-mp93"
+                                                  shortName="sturen_voorstel_medicatieafspraak"
+                                                  formName="sturen_voorstel_medicatieafspraak"
+                                                  transactionRef="2.16.840.1.113883.2.4.3.11.60.20.77.4.325"
+                                                  transactionEffectiveDate="2022-02-07T00:00:00"
+                                                  versionDate=""
+                                                  prefix="mp-"
+                                                  language="nl-NL"
+                                                  title="{$theId}"
+                                                  id="{$theId}">
+                  <xsl:for-each select="$patient">
+                     <xsl:call-template name="template_2.16.840.1.113883.2.4.3.11.60.3.10.1_20210701">
+                        <xsl:with-param name="in"
+                                        select="."/>
+                        <xsl:with-param name="language"
+                                        select="$language"/>
+                     </xsl:call-template>
+                  </xsl:for-each>
+                  <!-- medicatiebouwstenen -->
+                  <xsl:variable name="component"
+                                select="//*[@moodCode = 'PRP'][hl7:code/@code = $maCode]"/>
+                  <xsl:for-each-group select="$component"
+                                      group-by="concat(                             hl7:entryRelationship/hl7:procedure[hl7:templateId/@root = $templateId-medicamenteuze-behandeling]/hl7:id/@root,                             hl7:entryRelationship/hl7:procedure[hl7:templateId/@root = $templateId-medicamenteuze-behandeling]/hl7:id/@extension                             )">
+                     <xsl:variable name="mbhHl7Id"
+                                   select="current-group()[1]/hl7:entryRelationship/hl7:procedure[hl7:templateId/@root = $templateId-medicamenteuze-behandeling]/hl7:id[1]"
+                                   as="element(hl7:id)?"/>
+                     <xsl:variable name="mbhAdaIdTemp"
+                                   as="xs:string?"
+                                   select="generate-id(current-group()[1]/hl7:entryRelationship/hl7:procedure[hl7:templateId/@root = $templateId-medicamenteuze-behandeling][1])"/>
+                     <xsl:variable name="mbhAdaId"
+                                   as="xs:string">
+                        <xsl:choose>
+                           <xsl:when test="string-length($mbhAdaIdTemp) gt 0">
+                              <xsl:value-of select="$mbhAdaIdTemp"/>
+                           </xsl:when>
+                           <xsl:otherwise>mbh-1</xsl:otherwise>
+                        </xsl:choose>
+                     </xsl:variable>
+                     <!-- altijd oud model opbouwen -->
+                     <medicamenteuze_behandeling id="{$mbhAdaId}">
+                        <xsl:for-each select="$mbhHl7Id">
+                           <identificatie>
+                              <xsl:if test="@extension">
+                                 <xsl:attribute name="value"
+                                                select="@extension"/>
+                              </xsl:if>
+                              <xsl:if test="@root">
+                                 <xsl:attribute name="root"
+                                                select="@root"/>
+                              </xsl:if>
+                           </identificatie>
+                        </xsl:for-each>
+                        <xsl:for-each select="current-group()[hl7:code/@code = $maCode]">
+                           <xsl:call-template name="template_2.16.840.1.113883.2.4.3.11.60.20.77.10.9430_20221122132432">
+                              <xsl:with-param name="ma_hl7"
+                                              select="."/>
+                           </xsl:call-template>
+                        </xsl:for-each>
+                     </medicamenteuze_behandeling>
+                     <voorstel_gegevens>
+                        <xsl:for-each select="current-group()">
+                           <xsl:call-template name="uni-Voorstel">
+                              <xsl:with-param name="inContainer"
+                                              select="$medicatiegegevensLijst"/>
+                              <xsl:with-param name="inComponent"
+                                              select="."/>
+                              <xsl:with-param name="outputNewMbhModel"
+                                              select="$outputNewMbhModel"/>
+                              <xsl:with-param name="mbhAdaId"
+                                              select="$mbhAdaId"/>
+                              <xsl:with-param name="mbhHl7Id"
+                                              select="$mbhHl7Id"/>
+                              <xsl:with-param name="maAdaId"
+                                              select="concat('medicatieafspraak1_', $theId)"/>
+                           </xsl:call-template>
+                        </xsl:for-each>
+                     </voorstel_gegevens>
+                  </xsl:for-each-group>
+                  <!-- lengte / gewicht van vóór 9.1.0 die in MA zitten ook converteren -->
+                  <xsl:if test="//*[hl7:templateId/@root = ($templateId-lichaamslengte, $templateId-lichaamsgewicht)]">
+                     <bouwstenen>
+                        <!-- lichaamslengte  -->
+                        <xsl:for-each select="//*[hl7:templateId/@root = $templateId-lichaamslengte]">
+                           <xsl:call-template name="uni-Lichaamslengte"/>
+                        </xsl:for-each>
+                        <!-- lichaamsgewicht  -->
+                        <xsl:for-each select="//*[hl7:templateId/@root = $templateId-lichaamsgewicht]">
+                           <xsl:call-template name="uni-Lichaamsgewicht"/>
+                        </xsl:for-each>
+                     </bouwstenen>
+                  </xsl:if>
+               </sturen_voorstel_medicatieafspraak>
+            </data>
+         </adaxml>
+      </xsl:variable>
+      <xsl:variable name="adaXmlWithBouwstenen">
+         <xsl:choose>
+            <xsl:when test="$deduplicateAdaBouwstenen = true()">
+               <xsl:variable name="adaXmlDeduplicated">
+                  <xsl:apply-templates select="$adaXml"
+                                       mode="deduplicateBouwstenenStep1"/>
+               </xsl:variable>
+               <xsl:apply-templates select="$adaXmlDeduplicated"
+                                    mode="deduplicateBouwstenenStep2"/>
+            </xsl:when>
+            <xsl:otherwise>
+               <!-- don't deduplicate the bouwstenen -->
+               <xsl:apply-templates select="$adaXml"
+                                    mode="handleBouwstenen"/>
+            </xsl:otherwise>
+         </xsl:choose>
+      </xsl:variable>
+      <xsl:choose>
+         <xsl:when test="$outputNewMbhModel">
+            <xsl:apply-templates select="$adaXmlWithBouwstenen"
+                                 mode="flattenMbhModel"/>
+         </xsl:when>
+         <xsl:otherwise>
+            <xsl:copy-of select="$adaXmlWithBouwstenen"/>
+         </xsl:otherwise>
+      </xsl:choose>
+   </xsl:template>
+   <xsl:template match="node() | @*"
+                 mode="flattenMbhModel">
+      <xsl:param name="mbhId"
+                 as="element(identificatie)?"/>
+      <xsl:param name="mbhRef"
+                 as="xs:string?"/>
+      <xsl:copy>
+         <xsl:apply-templates select="@*"
+                              mode="flattenMbhModel"/>
+         <xsl:apply-templates select="node()"
+                              mode="flattenMbhModel">
+            <xsl:with-param name="mbhId"
+                            select="$mbhId"/>
+            <xsl:with-param name="mbhRef"
+                            select="$mbhRef"/>
+         </xsl:apply-templates>
+      </xsl:copy>
+   </xsl:template>
+   <xsl:template match="medicamenteuze_behandeling"
+                 mode="flattenMbhModel">
+      <xsl:variable name="thisMbhId"
+                    select="identificatie[1]"
+                    as="element(identificatie)?"/>
+      <xsl:variable name="thisMbhRef"
+                    select="string(@id)"
+                    as="xs:string?"/>
+      <xsl:apply-templates select="node()[not(self::identificatie)]"
+                           mode="flattenMbhModel">
+         <xsl:with-param name="mbhId"
+                         select="$thisMbhId"/>
+         <xsl:with-param name="mbhRef"
+                         select="$thisMbhRef"/>
+      </xsl:apply-templates>
+   </xsl:template>
+   <xsl:template match="medicatieafspraak | verstrekkingsverzoek"
+                 mode="flattenMbhModel">
+      <xsl:param name="mbhId"
+                 as="element(identificatie)?"/>
+      <xsl:param name="mbhRef"
+                 as="xs:string?"/>
+      <xsl:copy>
+         <xsl:apply-templates select="@*"
+                              mode="flattenMbhModel"/>
+         <xsl:apply-templates select="identificatie"
+                              mode="flattenMbhModel"/>
+         <xsl:if test="$mbhId and not(medicamenteuze_behandeling_id)">
+            <medicamenteuze_behandeling_id>
+               <xsl:copy-of select="$mbhId/@*"/>
+            </medicamenteuze_behandeling_id>
+         </xsl:if>
+         <xsl:apply-templates select="node()[not(self::identificatie)]"
+                              mode="flattenMbhModel">
+            <xsl:with-param name="mbhId"
+                            select="$mbhId"/>
+            <xsl:with-param name="mbhRef"
+                            select="$mbhRef"/>
+         </xsl:apply-templates>
+      </xsl:copy>
+   </xsl:template>
+   <xsl:template match="voorstel"
+                 mode="flattenMbhModel">
+      <xsl:param name="mbhId"
+                 as="element(identificatie)?"/>
+      <xsl:param name="mbhRef"
+                 as="xs:string?"/>
+      <xsl:copy>
+         <xsl:apply-templates select="@*"
+                              mode="flattenMbhModel"/>
+         <xsl:apply-templates select="identificatie"
+                              mode="flattenMbhModel"/>
+         <!-- oude referentie-wrapper verwijderen -->
+         <xsl:if test="$mbhId and not(medicamenteuze_behandeling_id)">
+            <medicamenteuze_behandeling_id>
+               <xsl:copy-of select="$mbhId/@*"/>
+            </medicamenteuze_behandeling_id>
+         </xsl:if>
+         <xsl:apply-templates select="node()[not(self::identificatie or self::medicamenteuze_behandeling)]"
+                              mode="flattenMbhModel">
+            <xsl:with-param name="mbhId"
+                            select="$mbhId"/>
+            <xsl:with-param name="mbhRef"
+                            select="$mbhRef"/>
+         </xsl:apply-templates>
+      </xsl:copy>
+   </xsl:template>
+</xsl:stylesheet>

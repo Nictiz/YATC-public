@@ -10,7 +10,16 @@ Wijzigingen tov distributie 1.0.17
   - hl7-2-ada. MP 612. An error is logged when no patient in input instead of silently continuing.
   - ada-2-fhir-r4. MP9 3.0. A runtime error is avoided when there is no patient in input. An error is logged instead.
 - MP-2299. Fix in XSLT so that repeat period cyclic schedule is outputted also when the rest of the administration schedule is contained within an adaextension (the FHIRTiming). 
-
+- MP-2308. Applied generic XSLT-templates fhir-2-ada-r4 for:
+  - MGB/gebruiksperiode/tijdsduur
+  - MGB/volgens_afspraak_indicator
+  - MVE/MBHid
+  - MVE/verbruiksduur
+  - MVE/verstrekte_hoeveelheid
+  - MVE/aanschrijf_datum
+  - MVE/medicatieverstrekkings_datum_tijd
+  - MA/relatieMGB
+  - MA/medicatieafspraak_stop_type
 
 
 Created: 2026-08-14 15:00:26

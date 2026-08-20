@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- == Provenance: YATC-internal/fhir-2-ada-r4/env/mp/9.3.0/payload/2.0.0-rc.7/mp-MedicationAgreement.xsl == -->
-<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.18; 2026-08-18T10:31:07.01+02:00 == -->
+<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.18; 2026-08-20T14:36:33.25+02:00 == -->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -164,29 +164,25 @@
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
    <xsl:template match="f:extension[@url = $urlExtMedicationAgreementRelationMedicationUse]"
                  mode="mp-MedicationAgreement">
-      <!-- Template to convert f:extension/relatedMedicationUse to aanvullende_informatie element. -->
-      <relatie_medicatiegebruik>
-         <identificatie value="{f:valueReference/f:identifier/f:value/@value}"
-                        root="{f:valueReference/f:identifier/f:system/replace(@value, 'urn:oid:', '')}"/>
-      </relatie_medicatiegebruik>
+      <!-- Template to convert f:extension/relatedMedicationUse to relatie_medicatiegebruik element. -->
+      <xsl:for-each select="f:valueReference">
+         <relatie_medicatiegebruik>
+            <xsl:call-template name="Reference-to-identificatie"/>
+         </relatie_medicatiegebruik>
+      </xsl:for-each>
    </xsl:template>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
    <xsl:template match="f:modifierExtension[@url = $urlExtStoptype]"
                  mode="mp-MedicationAgreement">
-      <!-- Template to resolve f:modifierExtension ext-Medication-stop-type. -->
-      <xsl:apply-templates select="f:valueCodeableConcept"
-                           mode="#current"/>
-   </xsl:template>
-   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-   <xsl:template match="f:valueCodeableConcept"
-                 mode="mp-MedicationAgreement">
-      <!-- Template to convert f:valueCodeableConcept to stoptype. -->
-      <xsl:call-template name="CodeableConcept-to-code">
-         <xsl:with-param name="in"
-                         select="."/>
-         <xsl:with-param name="adaElementName"
-                         select="'medicatieafspraak_stop_type'"/>
-      </xsl:call-template>
+      <!-- Template to resolve this f:modifierExtension to medicatieafspraak_stop_type -->
+      <xsl:for-each select="f:valueCodeableConcept">
+         <xsl:call-template name="CodeableConcept-to-code">
+            <xsl:with-param name="in"
+                            select="."/>
+            <xsl:with-param name="adaElementName"
+                            select="'medicatieafspraak_stop_type'"/>
+         </xsl:call-template>
+      </xsl:for-each>
    </xsl:template>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
    <xsl:template match="f:priorPrescription"

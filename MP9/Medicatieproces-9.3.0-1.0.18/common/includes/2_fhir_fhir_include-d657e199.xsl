@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- == Provenance: YATC-internal/ada-2-fhir/env/fhir/2_fhir_fhir_include.xsl == -->
-<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.18; 2026-08-18T10:31:07.01+02:00 == -->
+<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.18; 2026-08-20T14:36:33.25+02:00 == -->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -478,16 +478,23 @@
             <xsl:for-each select="$in/@codeSystem">
                <system value="{local:getUri(.)}"/>
             </xsl:for-each>
-            <xsl:if test="$in/@codeSystemVersion">
-               <version>
-                  <xsl:call-template name="string-to-string">
-                     <xsl:with-param name="in"
-                                     select="$in"/>
-                     <xsl:with-param name="inAttributeName"
-                                     select="'codeSystemVersion'"/>
-                  </xsl:call-template>
-               </version>
-            </xsl:if>
+            <!-- 2026-08-05 Do not map codeSystemVersion. 
+                    In the V3 world this is a string. In FHIR this is a formal attribute used in validation. 
+                    There is no way to know that the codeSystemVersion attribute actually contains the relevant 
+                    version of the codeSystem. ADA generated from ART-DECOR usually has this attribute to mean 
+                    the ART-DECOR version of the codeSystem as an xs:dateTime. In practice no codeSystem ever 
+                    has a full dateTime as version. CodeSystems SHALL NOT delete codes from it so it should also 
+                    not matter what the instance says the version is. The only thing that might matter is a binding 
+                    the formally restricts to a certain version, in which case the validation will indicate whether 
+                    or not the instance code is valid within in that version. Agqin: no version needed in the instance -->
+            <!--<xsl:if test="$in/@codeSystemVersion">
+                    <version>
+                        <xsl:call-template name="string-to-string">
+                            <xsl:with-param name="in" select="$in"/>
+                            <xsl:with-param name="inAttributeName" select="'codeSystemVersion'"/>
+                        </xsl:call-template>
+                    </version>
+                </xsl:if>-->
             <code value="{normalize-space($theCode)}"/>
             <xsl:if test="$in/@displayName">
                <display>
@@ -517,14 +524,10 @@
       <xsl:variable name="unit-UCUM"
                     select="$in/nf:convertTime_ADA_unit2UCUM_FHIR(@unit)"/>
       <xsl:choose>
-         <xsl:when test="$in[@value | @unit]">
-            <xsl:if test="$in[@value]">
-               <value value="{replace($in/@value, '(^\s+)|(\s+$)', '')}"/>
-            </xsl:if>
-            <xsl:if test="$in[@unit]">
-               <unit value="{replace($in/@unit, '(^\s+)|(\s+$)', '')}"/>
-            </xsl:if>
+         <xsl:when test="$in[@value]">
+            <value value="{replace($in/@value, '(^\s+)|(\s+$)', '')}"/>
             <xsl:if test="$unit-UCUM">
+               <unit value="{replace($in/@unit, '(^\s+)|(\s+$)', '')}"/>
                <system value="{local:getUri($oidUCUM)}"/>
                <code value="{$unit-UCUM}"/>
             </xsl:if>
@@ -1058,7 +1061,7 @@
    </xsl:function>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
    <xsl:template name="format2FHIRDate">
-      <!-- Formats ada normal or relativeDate(time) or HL7 dateTime to FHIR date(Time) or Touchstone T variable string based on input precision and dateT -->
+      <!-- Formats ada normal or relativeDate(time) or HL7 dateTime to FHIR date(Time) or Conformancelab T variable string based on input precision and dateT -->
       <xsl:param name="dateTime"
                  as="xs:string?">
          <!-- Input ada or HL7 date(Time). Incomplete time is zero-filled to seconds. -->
@@ -1070,7 +1073,7 @@
       <xsl:param name="dateT"
                  as="xs:date?"
                  select="$dateT">
-         <!-- Optional parameter. The T-date for which a relativeDate must be calculated. If not given a Touchstone like parameterised string is outputted -->
+         <!-- Optional parameter. The T-date for which a relativeDate must be calculated. If not given a Conformancelab like parameterised string is outputted -->
       </xsl:param>
       <xsl:variable name="processedDateTime"
                     select="normalize-space($dateTime)"/>
@@ -1206,17 +1209,32 @@
                   </xsl:choose>
                </xsl:when>
                <xsl:otherwise>
-                  <!-- output a relative date for Touchstone -->
-                  <xsl:value-of select="concat('${DATE, T, ', $yearMonthDay, ', ', $sign, $amount, '}')"/>
-                  <xsl:choose>
-                     <xsl:when test="$time castable as xs:time">
-                        <!-- we'll assume the timezone (required in FHIR) because there is no way of knowing the T-date -->
-                        <xsl:value-of select="concat('T', $time, '+02:00')"/>
-                     </xsl:when>
-                     <xsl:when test="upper-case($derivedPrecision) = ('SECOND', 'SECONDS', 'SECONDEN', 'SEC', 'S')">
-                        <xsl:value-of select="'T00:00:00+02:00'"/>
-                     </xsl:when>
-                  </xsl:choose>
+                  <!-- CLI-107: output a relative date or dateTime for Conformancelab, which leads to timezone being calculated depending on the date that is calculated (summer/winter time) -->
+                  <xsl:variable name="hasTime"
+                                select="$time castable as xs:time"/>
+                  <xsl:value-of select="if ($hasTime) then '${DATETIME, T' else '${DATE, T'"/>
+                  <!-- Strip out unneccessary '+0D' or '-0D' patterns -->
+                  <xsl:if test="$amount != '0'">
+                     <xsl:value-of select="concat(', ', $yearMonthDay, ', ', $sign, $amount)"/>
+                  </xsl:if>
+                  <!-- Conformancelab assumes 00:00:00 if no $time is specified, so no need to add it in that case -->
+                  <xsl:if test="$hasTime">
+                     <xsl:variable name="timeParts"
+                                   select="tokenize($time, ':')"/>
+                     <xsl:if test="$timeParts[1] != '00'">
+                        <xsl:text>, h, +</xsl:text>
+                        <xsl:value-of select="$timeParts[1]"/>
+                     </xsl:if>
+                     <xsl:if test="$timeParts[2] != '00'">
+                        <xsl:text>, m, +</xsl:text>
+                        <xsl:value-of select="$timeParts[2]"/>
+                     </xsl:if>
+                     <xsl:if test="$timeParts[3] != '00'">
+                        <xsl:text>, s, +</xsl:text>
+                        <xsl:value-of select="$timeParts[3]"/>
+                     </xsl:if>
+                  </xsl:if>
+                  <xsl:value-of select="'}'"/>
                </xsl:otherwise>
             </xsl:choose>
          </xsl:when>

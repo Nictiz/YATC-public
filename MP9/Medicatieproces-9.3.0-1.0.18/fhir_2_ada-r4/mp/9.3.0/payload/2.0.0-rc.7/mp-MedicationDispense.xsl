@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- == Provenance: YATC-internal/fhir-2-ada-r4/env/mp/9.3.0/payload/2.0.0-rc.7/mp-MedicationDispense.xsl == -->
-<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.18; 2026-08-18T10:31:07.01+02:00 == -->
+<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.18; 2026-08-20T14:36:33.25+02:00 == -->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -81,8 +81,12 @@
    <xsl:template match="f:extension[@url eq $urlExtPharmaceuticalTreatmentIdentifier]"
                  mode="nl-core-MedicationDispense">
       <!-- Template to f:extension[@url eq $urlExtPharmaceuticalTreatmentIdentifier] to identificatie indirect -->
-      <identificatie value="{replace(f:valueIdentifier/f:value/@value, 'urn:oid:', '')}"
-                     root="{replace(f:valueIdentifier/f:system/@value, 'urn:oid:', '')}"/>
+      <xsl:call-template name="Identifier-to-identificatie">
+         <xsl:with-param name="adaElementName"
+                         select="'identificatie'"/>
+         <xsl:with-param name="in"
+                         select="f:valueIdentifier"/>
+      </xsl:call-template>
    </xsl:template>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
    <xsl:template match="f:authorizingPrescription"
@@ -125,8 +129,10 @@
    <xsl:template match="f:daysSupply"
                  mode="nl-core-MedicationDispense">
       <!-- Template to f:daysSupply convert to verbruiksduur -->
-      <verbruiksduur value="{f:value/@value}"
-                     unit="{f:unit/@value}"/>
+      <xsl:call-template name="Duration-to-hoeveelheid">
+         <xsl:with-param name="adaElementName"
+                         select="'verbruiksduur'"/>
+      </xsl:call-template>
    </xsl:template>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
    <xsl:template match="f:medicationReference"
@@ -142,10 +148,12 @@
                  mode="nl-core-MedicationDispense">
       <!-- Template to convert to verstrekte_hoeveelheid -->
       <verstrekte_hoeveelheid>
-         <aantal value="{f:extension/f:valueQuantity/f:value/@value}"/>
-         <eenheid code="{f:extension/f:valueQuantity/f:code/@value}"
-                  codeSystem="{replace(f:extension/f:valueQuantity/f:system/@value, 'urn:oid:', '')}"
-                  displayName="{f:unit/@value}"/>
+         <xsl:call-template name="GstdQuantity2ada">
+            <xsl:with-param name="adaElementNameWaarde"
+                            select="'aantal'"/>
+            <xsl:with-param name="adaElementNameEenheid"
+                            select="'eenheid'"/>
+         </xsl:call-template>
       </verstrekte_hoeveelheid>
    </xsl:template>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
@@ -161,29 +169,27 @@
    <xsl:template match="f:extension[@url = 'http://nictiz.nl/fhir/StructureDefinition/ext-MedicationDispense.RequestDate']/f:valueDateTime"
                  mode="nl-core-MedicationDispense">
       <!-- Template to convert f:extension[@url = 'http://nictiz.nl/fhir/StructureDefinition/ext-MedicationDispense.RequestDate']/f:valueDateTime to aanschrijf_datum -->
-      <aanschrijf_datum datatype="datetime">
-         <xsl:attribute name="value">
-            <xsl:call-template name="format2ADADate">
-               <xsl:with-param name="dateTime"
-                               select="./@value">
-               </xsl:with-param>
-            </xsl:call-template>
-         </xsl:attribute>
-      </aanschrijf_datum>
+      <xsl:call-template name="datetime-to-datetime">
+         <xsl:with-param name="in"
+                         select="."/>
+         <xsl:with-param name="adaElementName"
+                         select="'aanschrijf_datum'"/>
+         <xsl:with-param name="adaDatatype"
+                         select="'datetime'"/>
+      </xsl:call-template>
    </xsl:template>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
    <xsl:template match="f:whenHandedOver"
                  mode="nl-core-MedicationDispense">
       <!-- Template to convert f:whenHandedOver to medicatieverstrekkings_datum_tijd -->
-      <medicatieverstrekkings_datum_tijd datatype="datetime">
-         <xsl:attribute name="value">
-            <xsl:call-template name="format2ADADate">
-               <xsl:with-param name="dateTime"
-                               select="./@value">
-               </xsl:with-param>
-            </xsl:call-template>
-         </xsl:attribute>
-      </medicatieverstrekkings_datum_tijd>
+      <xsl:call-template name="datetime-to-datetime">
+         <xsl:with-param name="in"
+                         select="."/>
+         <xsl:with-param name="adaElementName"
+                         select="'medicatieverstrekkings_datum_tijd'"/>
+         <xsl:with-param name="adaDatatype"
+                         select="'datetime'"/>
+      </xsl:call-template>
    </xsl:template>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
    <xsl:template match="f:identifier"

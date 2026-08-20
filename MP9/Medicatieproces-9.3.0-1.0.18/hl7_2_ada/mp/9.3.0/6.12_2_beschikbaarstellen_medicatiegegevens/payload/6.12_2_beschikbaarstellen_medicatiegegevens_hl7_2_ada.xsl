@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- == Provenance: YATC-internal/hl7-2-ada/env/mp/9.3.0/6.12_2_beschikbaarstellen_medicatiegegevens/payload/6.12_2_beschikbaarstellen_medicatiegegevens_hl7_2_ada.xsl == -->
-<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.18; 2026-08-18T10:31:07.01+02:00 == -->
+<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.18; 2026-08-20T14:36:33.25+02:00 == -->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -112,9 +112,9 @@
             <data>
                <xsl:for-each select="$dispense-lists">
                   <xsl:variable name="patient"
-                                select="./hl7:subject/hl7:Patient"/>
+                                select="hl7:subject/hl7:Patient"/>
                   <xsl:variable name="dispense-events"
-                                select="./hl7:component/hl7:medicationDispenseEvent"/>
+                                select="hl7:component/hl7:medicationDispenseEvent"/>
                   <beschikbaarstellen_medicatiegegevens app="mp-mp93"
                                                         shortName="{$transactionName}"
                                                         formName="{$adaFormname}"
@@ -125,6 +125,24 @@
                      <xsl:attribute name="title">Generated from HL7v3 verstrekkingenlijst 6.12 xml</xsl:attribute>
                      <xsl:attribute name="id"
                                     select="tokenize(base-uri(), '/')[last()]"/>
+                     <xsl:if test="count($patient) = 0">
+                        <!-- ouch, no patient in input -->
+                        <xsl:call-template name="util:logMessage">
+                           <xsl:with-param name="level"
+                                           select="$logERROR"/>
+                           <xsl:with-param name="msg"
+                                           select="'No patient found in input 6.12 message (hl7:MedicationDispenseList/hl7:subject/hl7:Patient). Please investigate.'"/>
+                        </xsl:call-template>
+                     </xsl:if>
+                     <xsl:if test="count($patient) gt 1">
+                        <!-- ouch, no patient in input -->
+                        <xsl:call-template name="util:logMessage">
+                           <xsl:with-param name="level"
+                                           select="$logERROR"/>
+                           <xsl:with-param name="msg"
+                                           select="'More than one patient found in input 6.12 message (hl7:MedicationDispenseList/hl7:subject/hl7:Patient). Please investigate.'"/>
+                        </xsl:call-template>
+                     </xsl:if>
                      <xsl:for-each select="$patient">
                         <xsl:call-template name="template_2.16.840.1.113883.2.4.3.11.60.3.10.1_20180601000000"/>
                      </xsl:for-each>
@@ -538,14 +556,34 @@
             </xsl:apply-templates>
             <!-- 6.12 kent geen aanvullende informatie en toelichting in vrije tekst -->
             <!--<aanvullende_informatie value="16" code="16" codeSystem="2.16.840.1.113883.2.4.3.11.60.20.77.5.2.14.2053" displayName="Melding lareb"/>
-         <toelichting value="toelichting bij TA"/>-->
-            <!-- MP 6.1x heeft wel een relatie naar het voorschrift (medicatieafspraak + verstrekkingsverzoek) en die stoppen we in relatie_medicatieafspraak. -->
+                    <toelichting value="toelichting bij TA"/>-->
+            <!-- MP 6.1x heeft wel een relatie naar het voorschrift (medicatieafspraak + verstrekkingsverzoek) en die stoppen we in relatie_medicatieafspraak. 
+                     MP-2124: met een prefix OID '1.3.6.1.4.1.58606.1.5.'-->
+            <xsl:variable name="MAprefixOid"
+                          select="'1.3.6.1.4.1.58606.1.5'"/>
+            <xsl:variable name="prescriptionId"
+                          select=".//hl7:product/hl7:dispensedMedication/hl7:directTargetOf/hl7:prescription/hl7:id[@root | @extension]"/>
             <relatie_medicatieafspraak>
                <xsl:choose>
-                  <xsl:when test=".//hl7:product/hl7:dispensedMedication/hl7:directTargetOf/hl7:prescription/hl7:id[@root | @extension]">
+                  <xsl:when test="$prescriptionId">
+                     <xsl:variable name="newHl7Id"
+                                   as="element(hl7:id)">
+                        <hl7:id extension="{$prescriptionId/@extension}">
+                           <xsl:attribute name="root">
+                              <xsl:choose>
+                                 <xsl:when test="starts-with($prescriptionId/@root, $MAprefixOid)">
+                                    <xsl:value-of select="$prescriptionId/@root"/>
+                                 </xsl:when>
+                                 <xsl:otherwise>
+                                    <xsl:value-of select="concat($MAprefixOid, '.', $prescriptionId/@root)"/>
+                                 </xsl:otherwise>
+                              </xsl:choose>
+                           </xsl:attribute>
+                        </hl7:id>
+                     </xsl:variable>
                      <xsl:call-template name="handleII">
                         <xsl:with-param name="in"
-                                        select=".//hl7:product/hl7:dispensedMedication/hl7:directTargetOf/hl7:prescription/hl7:id[@root | @extension]"/>
+                                        select="$newHl7Id"/>
                         <xsl:with-param name="elemName">identificatie</xsl:with-param>
                      </xsl:call-template>
                   </xsl:when>

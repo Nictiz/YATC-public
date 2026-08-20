@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- == Provenance: YATC-internal/ada-2-fhir-r4/env/mp/9.3.0/beschikbaarstellen_medicatiegegevens/payload/beschikbaarstellen_medicatiegegevens_2_fhir.xsl == -->
-<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.18; 2026-08-18T10:31:07.01+02:00 == -->
+<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.18; 2026-08-20T14:36:33.25+02:00 == -->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -78,17 +78,11 @@
    <!-- ================================================================== -->
    <xsl:template match="/">
       <!-- Start conversion. Handle interaction specific stuff for "beschikbaarstellen medicatiegegevens". -->
-      <xsl:call-template name="Medicatiegegevens_90">
-         <xsl:with-param name="mbh"
-                         select="//beschikbaarstellen_medicatiegegevens/medicamenteuze_behandeling"/>
-      </xsl:call-template>
+      <xsl:call-template name="Medicatiegegevens_90"/>
    </xsl:template>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
    <xsl:template name="Medicatiegegevens_90">
       <!-- Build a FHIR Bundle of type searchset. -->
-      <xsl:param name="mbh">
-         <!-- ada medicamenteuze behandeling -->
-      </xsl:param>
       <xsl:if test="$schematronXsdLinkInOutput">
          <xsl:processing-instruction name="xml-model">href="http://hl7.org/fhir/R4/bundle.sch" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"</xsl:processing-instruction>
       </xsl:if>

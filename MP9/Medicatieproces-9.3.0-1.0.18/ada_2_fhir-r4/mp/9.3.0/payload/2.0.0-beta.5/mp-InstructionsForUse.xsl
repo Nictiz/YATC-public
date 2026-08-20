@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- == Provenance: YATC-internal/ada-2-fhir-r4/env/mp/9.3.0/payload/2.0.0-beta.5/mp-InstructionsForUse.xsl == -->
-<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.18; 2026-08-18T10:31:07.01+02:00 == -->
+<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.18; 2026-08-20T14:36:33.25+02:00 == -->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -71,7 +71,7 @@
          <!-- The ADA instance to extract the rendered dosage instruction from -->
       </xsl:param>
       <xsl:for-each select="$in">
-         <xsl:for-each select="herhaalperiode_cyclisch_schema[@value | @unit]">
+         <xsl:for-each select="herhaalperiode_cyclisch_schema[@value != '']">
             <modifierExtension url="http://nictiz.nl/fhir/StructureDefinition/ext-InstructionsForUse.RepeatPeriodCyclicalSchedule">
                <valueDuration>
                   <xsl:call-template name="hoeveelheid-to-Duration"/>

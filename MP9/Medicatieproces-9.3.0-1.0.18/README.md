@@ -11,6 +11,7 @@ Wijzigingen tov distributie 1.0.17
   - ada-2-fhir-r4. MP9 3.0. A runtime error is avoided when there is no patient in input. An error is logged instead.
 - MP-2299. Fix in XSLT so that repeat period cyclic schedule is outputted also when the rest of the administration schedule is contained within an adaextension (the FHIRTiming). 
 - MP-2308. Applied generic XSLT-templates fhir-2-ada-r4 for:
+  - MGB/reden_wijzigen_of_stoppen_gebruik
   - MGB/gebruiksperiode/tijdsduur
   - MGB/volgens_afspraak_indicator
   - MVE/MBHid

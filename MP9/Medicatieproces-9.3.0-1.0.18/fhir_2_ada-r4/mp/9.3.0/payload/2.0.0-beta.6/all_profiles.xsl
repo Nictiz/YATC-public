@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- == Provenance: YATC-internal/fhir-2-ada-r4/env/mp/9.3.0/payload/2.0.0-beta.6/all_profiles.xsl == -->
-<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.18; 2026-08-20T14:36:33.25+02:00 == -->
+<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.18; 2026-08-24T13:24:43.7+02:00 == -->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -14,7 +14,7 @@
                 xmlns:local="urn:fhir:stu3:functions"
                 xmlns:nm="http://www.nictiz.nl/mappings"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-   <xsl:import href="../../../../../common/includes/all_zibs-d657e301.xsl"/>
+   <xsl:import href="../../../../../common/includes/all_zibs-d660e305.xsl"/>
    <xsl:import href="../2.0.0-beta.5/ext-MedicationAgreementPeriodOfUseCondition.xsl"/>
    <xsl:import href="../2.0.0-beta.5/ext-RegistrationDateTime.xsl"/>
    <xsl:import href="../2.0.0-beta.5/mp-AdministrationAgreement.xsl"/>

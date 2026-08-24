@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- == Provenance: YATC-internal/ada-2-hl7/env/mp/2_hl7_mp_include.xsl == -->
-<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.18; 2026-08-20T14:36:33.25+02:00 == -->
+<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.18; 2026-08-24T13:24:43.7+02:00 == -->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -221,8 +221,8 @@
                      <xsl:call-template name="template_2.16.840.1.113883.2.4.3.11.60.20.77.10.9021_20150305000000_2">
                         <xsl:with-param name="Gstd_unit"
                                         select="./eenheid"/>
-                        <xsl:with-param name="Gstd_value"
-                                        select="$value"/>
+                        <xsl:with-param name="GstdValueElem"
+                                        select="waarde"/>
                      </xsl:call-template>
                   </xsl:when>
                   <xsl:otherwise>
@@ -481,7 +481,8 @@
          <!-- The ada element containing the Gstd value. Defaults to context. -->
       </xsl:param>
       <xsl:param name="Gstd_value"
-                 as="xs:string?">
+                 as="xs:string?"
+                 select="$GstdValueElem/@value">
          <!-- The value converted to Gstd for dose quantity -->
       </xsl:param>
       <xsl:param name="Gstd_unit"
@@ -491,42 +492,45 @@
       <xsl:if test="$Gstd_unit">
          <xsl:attribute name="unit"
                         select="nf:convertGstdBasiseenheid2UCUM($Gstd_unit/@code)"/>
-         <translation>
-            <xsl:attribute name="value"
-                           select="$Gstd_value"/>
-            <xsl:attribute name="code"
-                           select="$Gstd_unit/@code"/>
-            <xsl:if test="string-length($Gstd_unit/@displayName) gt 0">
-               <xsl:attribute name="displayName"
-                              select="$Gstd_unit/@displayName"/>
-            </xsl:if>
-            <xsl:choose>
-               <xsl:when test="string-length($Gstd_unit/@codeSystem) gt 0">
-                  <xsl:attribute name="codeSystem"
-                                 select="$Gstd_unit/@codeSystem"/>
-               </xsl:when>
-               <xsl:otherwise>
-                  <!-- should not happen -->
-                  <xsl:attribute name="codeSystem">
-                     <xsl:value-of select="$oidGStandaardBST902THES2"/>
-                  </xsl:attribute>
-               </xsl:otherwise>
-            </xsl:choose>
-            <xsl:if test="string-length($Gstd_unit/@codeSystemName) gt 0">
-               <xsl:attribute name="codeSystemName"
-                              select="$Gstd_unit/@codeSystemName"/>
-            </xsl:if>
-         </translation>
-         <xsl:for-each select="($GstdValueElem | $Gstd_unit)/adaextension/translation">
+         <!-- only output a calculated G-std translation if it is not already there in adaextension -->
+         <xsl:if test="not(($GstdValueElem | $Gstd_unit)/adaextension/translation[@codeSystem = $oidGStandaardBST902THES2])">
             <translation>
-               <!-- default to Gstd value, but ... -->
                <xsl:attribute name="value"
                               select="$Gstd_value"/>
-               <!-- ... take the @value from the adaextension if it is there -->
-               <xsl:copy-of select="@*"/>
+               <xsl:attribute name="code"
+                              select="$Gstd_unit/@code"/>
+               <xsl:if test="string-length($Gstd_unit/@displayName) gt 0">
+                  <xsl:attribute name="displayName"
+                                 select="$Gstd_unit/@displayName"/>
+               </xsl:if>
+               <xsl:choose>
+                  <xsl:when test="string-length($Gstd_unit/@codeSystem) gt 0">
+                     <xsl:attribute name="codeSystem"
+                                    select="$Gstd_unit/@codeSystem"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                     <!-- should not happen -->
+                     <xsl:attribute name="codeSystem">
+                        <xsl:value-of select="$oidGStandaardBST902THES2"/>
+                     </xsl:attribute>
+                  </xsl:otherwise>
+               </xsl:choose>
+               <xsl:if test="string-length($Gstd_unit/@codeSystemName) gt 0">
+                  <xsl:attribute name="codeSystemName"
+                                 select="$Gstd_unit/@codeSystemName"/>
+               </xsl:if>
             </translation>
-         </xsl:for-each>
+         </xsl:if>
       </xsl:if>
+      <xsl:for-each select="($GstdValueElem | $Gstd_unit)/adaextension/translation">
+         <translation>
+            <!-- default to Gstd value, but ... -->
+            <xsl:attribute name="value"
+                           select="$Gstd_value"/>
+            <!-- ... take the @value from the adaextension if it is there -->
+            <xsl:copy-of select="@*"/>
+         </translation>
+      </xsl:for-each>
    </xsl:template>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
    <xsl:template name="template_2.16.840.1.113883.2.4.3.11.60.20.77.10.9048_20160614145840">
@@ -539,6 +543,8 @@
                      <xsl:call-template name="template_2.16.840.1.113883.2.4.3.11.60.20.77.10.9164_20170118000000_2">
                         <xsl:with-param name="Gstd_value"
                                         select="@value"/>
+                        <xsl:with-param name="AdaGstdValueElement"
+                                        select="."/>
                         <xsl:with-param name="Gstd_unit"
                                         select="../eenheid | ../../eenheid"/>
                      </xsl:call-template>
@@ -549,6 +555,8 @@
                      <xsl:call-template name="template_2.16.840.1.113883.2.4.3.11.60.20.77.10.9164_20170118000000_2">
                         <xsl:with-param name="Gstd_value"
                                         select="@value"/>
+                        <xsl:with-param name="AdaGstdValueElement"
+                                        select="."/>
                         <xsl:with-param name="Gstd_unit"
                                         select="../../eenheid"/>
                      </xsl:call-template>
@@ -559,6 +567,8 @@
                      <xsl:call-template name="template_2.16.840.1.113883.2.4.3.11.60.20.77.10.9164_20170118000000_2">
                         <xsl:with-param name="Gstd_value"
                                         select="@value"/>
+                        <xsl:with-param name="AdaGstdValueElement"
+                                        select="."/>
                         <xsl:with-param name="Gstd_unit"
                                         select="../../eenheid"/>
                      </xsl:call-template>
@@ -586,6 +596,8 @@
          <xsl:call-template name="template_2.16.840.1.113883.2.4.3.11.60.20.77.10.9164_20170118000000_2">
             <xsl:with-param name="Gstd_value"
                             select="aantal/@value"/>
+            <xsl:with-param name="AdaGstdValueElement"
+                            select="aantal"/>
             <xsl:with-param name="Gstd_unit"
                             select="eenheid"/>
          </xsl:call-template>
@@ -1136,7 +1148,7 @@
       <xsl:param name="MBHroot"/>
       <!-- Backward compatible van MBHid -->
       <xsl:variable name="mbhId"
-                    select="(./medicamenteuze_behandeling_id,             $MBHroot/identificatie,             ancestor::medicamenteuze_behandeling/identificatie)[1]"/>
+                    select="                 (./medicamenteuze_behandeling_id,                 $MBHroot/identificatie,                 ancestor::medicamenteuze_behandeling/identificatie)[1]"/>
       <!--MP MedBeh identificatie-->
       <procedure classCode="PROC"
                  moodCode="EVN">
@@ -2069,32 +2081,69 @@
                  as="xs:string?">
          <!-- The value converted to Gstd for dose quantity -->
       </xsl:param>
+      <xsl:param name="AdaGstdValueElement"
+                 as="element()?">
+         <!-- The ada value element for dose quantity -->
+      </xsl:param>
       <xsl:param name="Gstd_unit"
                  as="element()?">
          <!-- The ada element (typically eenheid) that contains the Gstd unit, but may have additional translation elements in adaextension -->
       </xsl:param>
-      <xsl:attribute name="value"
-                     select="$Gstd_value"/>
-      <xsl:call-template name="template_2.16.840.1.113883.2.4.3.11.60.20.77.10.9021_20150305000000_2">
-         <xsl:with-param name="Gstd_value"
-                         select="$Gstd_value"/>
-         <xsl:with-param name="Gstd_unit"
-                         select="$Gstd_unit"/>
-      </xsl:call-template>
+      <!-- give precedence to original UCUM and translations if present in ada -->
+      <xsl:choose>
+         <xsl:when test="$AdaGstdValueElement/adaextension/originalUCUM[@value][@unit]">
+            <xsl:attribute name="value"
+                           select="$AdaGstdValueElement/adaextension/originalUCUM/@value"/>
+            <xsl:attribute name="unit"
+                           select="$AdaGstdValueElement/adaextension/originalUCUM/@unit"/>
+            <xsl:for-each select="$AdaGstdValueElement/adaextension/translation">
+               <translation>
+                  <xsl:copy-of select="@*"/>
+               </translation>
+            </xsl:for-each>
+         </xsl:when>
+         <xsl:otherwise>
+            <xsl:attribute name="value"
+                           select="$Gstd_value"/>
+            <xsl:call-template name="template_2.16.840.1.113883.2.4.3.11.60.20.77.10.9021_20150305000000_2">
+               <xsl:with-param name="Gstd_value"
+                               select="$Gstd_value"/>
+               <xsl:with-param name="GstdValueElem"
+                               select="$AdaGstdValueElement"/>
+               <xsl:with-param name="Gstd_unit"
+                               select="$Gstd_unit"/>
+            </xsl:call-template>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
    <xsl:template name="template_2.16.840.1.113883.2.4.3.11.60.20.77.10.9165_20170118000000"
                  match="verstrekte_hoeveelheid | te_verstrekken_hoeveelheid"
                  mode="handleLogisticQuantity">
       <!-- verstrekte_hoeveelheid and te verstrekken hoeveelheid in verstrekking(sverzoek)  -->
-      <xsl:attribute name="value"
-                     select="aantal/@value"/>
-      <xsl:call-template name="template_2.16.840.1.113883.2.4.3.11.60.20.77.10.9021_20150305000000_2">
-         <xsl:with-param name="Gstd_unit"
-                         select="eenheid"/>
-         <xsl:with-param name="Gstd_value"
-                         select="aantal/@value"/>
-      </xsl:call-template>
+      <xsl:choose>
+         <xsl:when test="aantal/adaextension/originalUCUM[@value][@unit]">
+            <xsl:attribute name="value"
+                           select="aantal/adaextension/originalUCUM/@value"/>
+            <xsl:attribute name="unit"
+                           select="aantal/adaextension/originalUCUM/@unit"/>
+            <xsl:for-each select="aantal/adaextension/translation">
+               <translation>
+                  <xsl:copy-of select="@*"/>
+               </translation>
+            </xsl:for-each>
+         </xsl:when>
+         <xsl:otherwise>
+            <xsl:attribute name="value"
+                           select="aantal/@value"/>
+            <xsl:call-template name="template_2.16.840.1.113883.2.4.3.11.60.20.77.10.9021_20150305000000_2">
+               <xsl:with-param name="Gstd_unit"
+                               select="eenheid"/>
+               <xsl:with-param name="GstdValueElem"
+                               select="aantal"/>
+            </xsl:call-template>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
    <xsl:template name="template_2.16.840.1.113883.2.4.3.11.60.20.77.10.9166_20170516000000"
@@ -4124,6 +4173,8 @@
          <xsl:call-template name="template_2.16.840.1.113883.2.4.3.11.60.20.77.10.9164_20170118000000_2">
             <xsl:with-param name="Gstd_value"
                             select="aantal/@value"/>
+            <xsl:with-param name="AdaGstdValueElement"
+                            select="aantal"/>
             <xsl:with-param name="Gstd_unit"
                             select="eenheid"/>
          </xsl:call-template>

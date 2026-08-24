@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- == Provenance: YATC-internal/fhir-2-ada-r4/env/mp/9.3.0/payload/2.0.0-rc.7/mp-MedicationDispense.xsl == -->
-<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.18; 2026-08-20T14:36:33.25+02:00 == -->
+<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.18; 2026-08-24T13:24:43.7+02:00 == -->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -52,7 +52,7 @@
          <xsl:apply-templates select="f:performer"
                               mode="#current"/>
          <!--verstrekte_hoeveelheid-->
-         <xsl:apply-templates select="f:quantity[f:extension/@url = 'http://hl7.org/fhir/StructureDefinition/iso21090-PQ-translation']"
+         <xsl:apply-templates select="f:quantity"
                               mode="#current"/>
          <!-- verstrekt_geneesmiddel -->
          <xsl:apply-templates select="f:medicationReference"
@@ -144,16 +144,20 @@
       </verstrekt_geneesmiddel>
    </xsl:template>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-   <xsl:template match="f:quantity[f:extension/@url = 'http://hl7.org/fhir/StructureDefinition/iso21090-PQ-translation']"
+   <xsl:template match="f:quantity"
                  mode="nl-core-MedicationDispense">
       <!-- Template to convert to verstrekte_hoeveelheid -->
       <verstrekte_hoeveelheid>
-         <xsl:call-template name="GstdQuantity2ada">
-            <xsl:with-param name="adaElementNameWaarde"
-                            select="'aantal'"/>
-            <xsl:with-param name="adaElementNameEenheid"
-                            select="'eenheid'"/>
+         <xsl:call-template name="GstdProductQuantityValue">
+            <xsl:with-param name="in"
+                            select="."/>
          </xsl:call-template>
+         <xsl:for-each select="f:extension[@url = $ext-iso21090-PQ-translation]/f:valueQuantity[contains(f:system/@value, $oidGStandaardBST902THES2)]">
+            <eenheid code="{f:code/@value}"
+                     displayName="{f:unit/@value}"
+                     codeSystem="{$oidGStandaardBST902THES2}"
+                     codeSystemName="{$oidMap[@oid=$oidGStandaardBST902THES2]/@displayName}"/>
+         </xsl:for-each>
       </verstrekte_hoeveelheid>
    </xsl:template>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->

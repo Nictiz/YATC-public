@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- == Provenance: YATC-internal/ada-2-fhir-r4/env/mp/9.3.0/payload/2.0.0-rc.7/all_profiles.xsl == -->
-<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.18; 2026-08-20T14:36:33.25+02:00 == -->
+<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.18; 2026-08-24T13:24:43.7+02:00 == -->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -15,7 +15,7 @@
                 xmlns:nm="http://www.nictiz.nl/mappings"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
    <!-- MP9 3.0.0-rc.1 uses fhir nl-core 0.11.0-beta.1 https://simplifier.net/packages/nictiz.fhir.nl.r4.nl-core/0.11.0-beta.1 -->
-   <xsl:import href="all_zibs-d657e197.xsl"/>
+   <xsl:import href="all_zibs-d660e200.xsl"/>
    <xsl:import href="mp-functions.xsl"/>
    <xsl:import href="../../ada_2_fhir-r4/mp/9.3.0/payload/2.0.0-rc.7/mp-AdministrationAgreement.xsl"/>
    <xsl:import href="../../ada_2_fhir-r4/mp/9.3.0/payload/2.0.0-rc.7/mp-DispenseRequest.xsl"/>

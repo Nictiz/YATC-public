@@ -9,6 +9,7 @@ Wijzigingen tov distributie 1.0.17
 - MP-2280
   - hl7-2-ada. MP 612. An error is logged when no patient in input instead of silently continuing.
   - ada-2-fhir-r4. MP9 3.0. A runtime error is avoided when there is no patient in input. An error is logged instead.
+- MP-2288. When the G-standard unit is missing, the UCUM unit is now used as a fallback. The XSLT has been improved by giving preference to the original UCUM and it's translations where available.
 - MP-2299. Fix in XSLT so that repeat period cyclic schedule is outputted also when the rest of the administration schedule is contained within an adaextension (the FHIRTiming). 
 - MP-2308. Applied generic XSLT-templates fhir-2-ada-r4 for:
   - MGB/reden_wijzigen_of_stoppen_gebruik
@@ -22,8 +23,7 @@ Wijzigingen tov distributie 1.0.17
   - MA/relatieMGB
   - MA/medicatieafspraak_stop_type
 
-
-Created: 2026-08-20 14:36:33
+Created: 2026-08-24 13:24:43
 
 This distribution was created by the YATC distribute component.
 

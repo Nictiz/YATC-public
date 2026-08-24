@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- == Provenance: YATC-internal/hl7-2-ada/env/mp/9.3.0/6.12_2_beschikbaarstellen_medicatiegegevens/payload/6.12_2_beschikbaarstellen_medicatiegegevens_hl7_2_ada.xsl == -->
-<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.18; 2026-08-20T14:36:33.25+02:00 == -->
+<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.18; 2026-08-24T13:24:43.7+02:00 == -->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -52,8 +52,8 @@
               select="('TA', 'MVE')">
       <!-- parameter to influence which MP9 bouwstenen to output -->
    </xsl:param>
-   <xsl:variable name="logLevel"
-                 select="$logERROR"/>
+   <xsl:param name="logLevel"
+              select="$logERROR"/>
    <xsl:variable name="transactionName"
                  select="'beschikbaarstellen_medicatiegegevens'"/>
    <xsl:variable name="transactionOid"
@@ -673,12 +673,10 @@
                </verstrekker>
             </xsl:for-each>
             <!-- verstrekte hoeveelheid -->
-            <xsl:for-each select="hl7:quantity[.//(@value | @unit | @nullFlavor)]">
-               <xsl:call-template name="mp9-verstrekteHoeveelheid">
-                  <xsl:with-param name="hl7-quantity"
-                                  select="."/>
-               </xsl:call-template>
-            </xsl:for-each>
+            <xsl:call-template name="mp9-verstrekteHoeveelheid">
+               <xsl:with-param name="hl7-quantity"
+                               select="hl7:quantity[.//(@value | @unit | @nullFlavor)]"/>
+            </xsl:call-template>
             <!-- verstrekt_geneesmiddel  -->
             <xsl:for-each select=".//hl7:product/hl7:dispensedMedication/hl7:MedicationKind[.//@*[normalize-space()] or .//text()[normalize-space()]]">
                <verstrekt_geneesmiddel>
@@ -744,56 +742,10 @@
       <xsl:variable name="UCUMUnit"
                     select="$hl7-quantity/@unit"
                     as="xs:string*"/>
-      <xsl:choose>
-         <xsl:when test="not($hl7-quantity)">
-            <xsl:if test="$logLevel = $logDEBUG">
-               <xsl:comment>geen verstrekte hoeveelheid in input</xsl:comment>
-            </xsl:if>
-         </xsl:when>
-         <!-- typical case, Gstd translation should be there and should be unique -->
-         <xsl:when test="count(distinct-values($hl7-quantity//hl7:translation[@codeSystem = $oidGStandaardBST902THES2]/@code)) = 1">
-            <xsl:for-each select="$hl7-quantity">
-               <xsl:for-each select="hl7:translation[@codeSystem = $oidGStandaardBST902THES2][@value]">
-                  <verstrekte_hoeveelheid>
-                     <aantal value="{@value}"/>
-                     <eenheid>
-                        <xsl:call-template name="mp9-code-attribs">
-                           <xsl:with-param name="current-hl7-code"
-                                           select="."/>
-                        </xsl:call-template>
-                     </eenheid>
-                  </verstrekte_hoeveelheid>
-               </xsl:for-each>
-            </xsl:for-each>
-         </xsl:when>
-         <!-- when G-std translation is not there, we may be able to find it using UCUM -->
-         <xsl:when test="string-length($UCUM2GstdMap[@UCUMCode = normalize-space($hl7-quantity/@unit)]/@GstdCode) gt 0">
-            <xsl:for-each select="$hl7-quantity">
-               <verstrekte_hoeveelheid>
-                  <aantal value="{@value}"/>
-                  <eenheid>
-                     <xsl:call-template name="UCUM2GstdBasiseenheid">
-                        <xsl:with-param name="UCUM"
-                                        select="@unit"/>
-                     </xsl:call-template>
-                  </eenheid>
-               </verstrekte_hoeveelheid>
-            </xsl:for-each>
-         </xsl:when>
-         <xsl:otherwise>
-            <xsl:if test="$logLevel = $logDEBUG">
-               <xsl:comment>Found verstrekte_hoeveelheid in input, but not able to convert it. Please check the hl7 quantity in dispense event with id 
-<xsl:value-of select="$hl7-quantity/../hl7:id/@extension"/>
-               </xsl:comment>
-            </xsl:if>
-            <xsl:call-template name="util:logMessage">
-               <xsl:with-param name="level"
-                               select="$logERROR"/>
-               <xsl:with-param name="msg">Found verstrekte_hoeveelheid in input, but not able to convert it. Please check the hl7 quantity in dispense event with id 
-<xsl:value-of select="$hl7-quantity/../hl7:id/@extension"/>
-               </xsl:with-param>
-            </xsl:call-template>
-         </xsl:otherwise>
-      </xsl:choose>
+      <xsl:call-template name="mp9-hoeveelheid">
+         <xsl:with-param name="hl7-quantity"
+                         select="$hl7-quantity"/>
+         <xsl:with-param name="adaElementName">verstrekte_hoeveelheid</xsl:with-param>
+      </xsl:call-template>
    </xsl:template>
 </xsl:stylesheet>

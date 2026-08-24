@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- == Provenance: YATC-internal/hl7-2-ada/env/zibs/2020/payload/uni-Medicatieverstrekking.xsl == -->
-<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.18; 2026-08-20T14:36:33.25+02:00 == -->
+<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.18; 2026-08-24T13:24:43.7+02:00 == -->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -70,7 +70,10 @@
             <!-- verstrekte_hoeveelheid -->
             <xsl:for-each select="hl7:quantity[.//(@value | @code | @unit | @nullFlavor)]">
                <verstrekte_hoeveelheid>
-                  <aantal value="{(hl7:translation[@codeSystem = $oidGStandaardBST902THES2]/@value)[1]}"/>
+                  <xsl:call-template name="mp9-productQuantityValue">
+                     <xsl:with-param name="in"
+                                     select="."/>
+                  </xsl:call-template>
                   <xsl:call-template name="handleCV">
                      <xsl:with-param name="in"
                                      select="(hl7:translation[@codeSystem = $oidGStandaardBST902THES2])[1]"/>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- == Provenance: YATC-internal/hl7-2-ada/env/zibs/2020/payload/uni-Gebruiksinstructie.xsl == -->
-<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.18; 2026-08-20T14:36:33.25+02:00 == -->
+<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.18; 2026-08-24T13:24:43.7+02:00 == -->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -15,7 +15,7 @@
                 xmlns:uuid="http://www.uuid.org"
                 xmlns:local="urn:fhir:stu3:functions"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-   <xsl:import href="fhir_2_ada_fhir_include-d657e173.xsl"/>
+   <xsl:import href="fhir_2_ada_fhir_include-d660e175.xsl"/>
    <xsl:import href="mp-fhir2ada.xsl"/>
    <xsl:output method="xml"
                indent="yes"/>
@@ -228,17 +228,15 @@
                            <keerdosis>
                               <!-- aantal -->
                               <aantal>
-                                 <xsl:for-each select="hl7:low/hl7:translation[@codeSystem = $oidGStandaardBST902THES2]">
-                                    <minimum_waarde value="{@value}"/>
-                                 </xsl:for-each>
-                                 <xsl:for-each select="hl7:center/hl7:translation[@codeSystem = $oidGStandaardBST902THES2]">
-                                    <nominale_waarde value="{@value}"/>
-                                 </xsl:for-each>
-                                 <xsl:for-each select="hl7:high/hl7:translation[@codeSystem = $oidGStandaardBST902THES2]">
-                                    <maximum_waarde value="{@value}"/>
-                                 </xsl:for-each>
+                                 <xsl:call-template name="mp9-productQuantityValue">
+                                    <xsl:with-param name="in"
+                                                    select="*"/>
+                                 </xsl:call-template>
                               </aantal>
                               <xsl:for-each select="(*/hl7:translation[@codeSystem = $oidGStandaardBST902THES2])[1]">
+                                 <!-- this is a bit opportunistic to assume that the first one will be the same as all, 
+                                                but since MP-2288 we are also exporting the original UCUM and we use thát in the 2fhir and 2hl7
+                                                so this is really not a problem -->
                                  <eenheid>
                                     <xsl:call-template name="mp9-code-attribs">
                                        <xsl:with-param name="current-hl7-code"
@@ -269,7 +267,10 @@
                               </xsl:for-each>
                               <xsl:for-each select="hl7:maxDoseQuantity[.//(@value | @unit)]">
                                  <maximale_dosering>
-                                    <aantal value="{hl7:numerator/@value}"/>
+                                    <xsl:call-template name="mp9-productQuantityValue">
+                                       <xsl:with-param name="in"
+                                                       select="hl7:numerator"/>
+                                    </xsl:call-template>
                                     <xsl:for-each select="(hl7:numerator/hl7:translation[@codeSystem = $oidGStandaardBST902THES2])[1]">
                                        <eenheid>
                                           <xsl:call-template name="mp9-code-attribs">

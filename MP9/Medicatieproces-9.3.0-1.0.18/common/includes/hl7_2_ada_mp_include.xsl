@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- == Provenance: YATC-internal/hl7-2-ada/env/mp/hl7_2_ada_mp_include.xsl == -->
-<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.18; 2026-08-20T14:36:33.25+02:00 == -->
+<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.18; 2026-08-24T13:24:43.7+02:00 == -->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -1272,21 +1272,10 @@
                                  </criterium>
                               </xsl:for-each>
                               <xsl:for-each select="hl7:maxDoseQuantity[.//(@value | @unit)]">
-                                 <maximale_dosering>
-                                    <aantal value="{hl7:numerator/@value}"/>
-                                    <xsl:for-each select="(hl7:numerator/hl7:translation[@codeSystem = $oidGStandaardBST902THES2])[1]">
-                                       <eenheid>
-                                          <xsl:call-template name="mp9-code-attribs">
-                                             <xsl:with-param name="current-hl7-code"
-                                                             select="."/>
-                                          </xsl:call-template>
-                                       </eenheid>
-                                    </xsl:for-each>
-                                    <xsl:for-each select="hl7:denominator[@value | @unit]">
-                                       <tijdseenheid value="{@value}"
-                                                     unit="{nf:convertTime_UCUM2ADA_unit(@unit)}"/>
-                                    </xsl:for-each>
-                                 </maximale_dosering>
+                                 <xsl:call-template name="mp9-maximaleDosering">
+                                    <xsl:with-param name="hl7-maxDoseQuantity"
+                                                    select="."/>
+                                 </xsl:call-template>
                               </xsl:for-each>
                            </zo_nodig>
                         </xsl:if>
@@ -2005,21 +1994,10 @@
                                  </criterium>
                               </xsl:for-each>
                               <xsl:for-each select="hl7:maxDoseQuantity[.//(@value | @unit)]">
-                                 <maximale_dosering>
-                                    <aantal value="{hl7:numerator/@value}"/>
-                                    <xsl:for-each select="(hl7:numerator/hl7:translation[@codeSystem = $oidGStandaardBST902THES2])[1]">
-                                       <eenheid>
-                                          <xsl:call-template name="mp9-code-attribs">
-                                             <xsl:with-param name="current-hl7-code"
-                                                             select="."/>
-                                          </xsl:call-template>
-                                       </eenheid>
-                                    </xsl:for-each>
-                                    <xsl:for-each select="hl7:denominator[@value | @unit]">
-                                       <tijdseenheid value="{@value}"
-                                                     unit="{nf:convertTime_UCUM2ADA_unit(@unit)}"/>
-                                    </xsl:for-each>
-                                 </maximale_dosering>
+                                 <xsl:call-template name="mp9-maximaleDosering">
+                                    <xsl:with-param name="hl7-maxDoseQuantity"
+                                                    select="."/>
+                                 </xsl:call-template>
                               </xsl:for-each>
                            </zo_nodig>
                         </xsl:if>
@@ -2188,6 +2166,206 @@
       </xsl:for-each>
    </xsl:template>
    <xd:doc>
+      <xd:desc>Creates an ada element based on 612 hl7:medicationDispenseEvent input, wraps an element around the one template mp9-aantalEnEenheid creates.</xd:desc>
+      <xd:param name="hl7-quantity">the HL7 quantity element</xd:param>
+      <xd:param name="adaElementName">the ada element name for the output</xd:param>
+   </xd:doc>
+   <xsl:template name="mp9-hoeveelheid">
+      <xsl:param name="hl7-quantity"
+                 as="element()*"/>
+      <xsl:param name="adaElementName"
+                 as="xs:string"
+                 select="'hoeveelheid'"/>
+      <xsl:variable name="hl7Id"
+                    select="($hl7-quantity[1]/ancestor::hl7:medicationDispenseEvent/hl7:id | ./ancestor-or-self::hl7:medicationDispenseEvent/hl7:id)[1]"/>
+      <xsl:variable name="baseEndLogMessage"
+                    select="concat('Please check the hl7 ', $hl7-quantity/local-name(), ' in dispense event with id/@extension: ', $hl7Id/@extension)"/>
+      <xsl:if test="$logLevel = $logDEBUG">
+         <xsl:comment>mp9-hoeveelheid</xsl:comment>
+      </xsl:if>
+      <xsl:if test="count($hl7-quantity) = 0">
+         <xsl:if test="$logLevel = $logDEBUG">
+            <xsl:comment>geen hl7 quantity (mp9-hoeveelheid for 
+<xsl:value-of select="$adaElementName"/>) in input</xsl:comment>
+         </xsl:if>
+         <xsl:call-template name="util:logMessage">
+            <xsl:with-param name="level"
+                            select="$logDEBUG"/>
+            <xsl:with-param name="msg">Geen hl7 quantity (mp9-hoeveelheid for 
+<xsl:value-of select="$adaElementName"/>) in input. 
+<xsl:value-of select="$baseEndLogMessage"/>
+            </xsl:with-param>
+         </xsl:call-template>
+      </xsl:if>
+      <xsl:for-each select="$hl7-quantity">
+         <xsl:element name="{$adaElementName}">
+            <xsl:call-template name="mp9-aantalEnEenheid">
+               <xsl:with-param name="hl7-quantity"
+                               select="."/>
+               <xsl:with-param name="adaElementName"
+                               select="$adaElementName"/>
+            </xsl:call-template>
+         </xsl:element>
+      </xsl:for-each>
+   </xsl:template>
+   <xd:doc>
+      <xd:desc>Creates an ada element based on a HL7 input.</xd:desc>
+      <xd:param name="hl7-quantity">the HL7 quantity element</xd:param>
+      <xd:param name="adaElementName">the ada element name for the output</xd:param>
+   </xd:doc>
+   <xsl:template name="mp9-aantalEnEenheid">
+      <xsl:param name="hl7-quantity"
+                 as="element()*"/>
+      <xsl:param name="adaElementName"
+                 as="xs:string"
+                 select="'hoeveelheid'">
+         <!--Only used for log messages-->
+      </xsl:param>
+      <xsl:variable name="hl7Id"
+                    select="($hl7-quantity[1]/ancestor::hl7:medicationDispenseEvent/hl7:id | ./ancestor-or-self::hl7:medicationDispenseEvent/hl7:id)[1]"/>
+      <xsl:variable name="baseEndLogMessage"
+                    select="concat('Please check the hl7 ', $hl7-quantity/local-name(), ' in dispense event with id/@extension: ', $hl7Id/@extension)"/>
+      <xsl:if test="$logLevel = $logDEBUG">
+         <xsl:comment>mp9-aantalEnEenheid</xsl:comment>
+      </xsl:if>
+      <xsl:if test="count($hl7-quantity) = 0">
+         <xsl:if test="$logLevel = $logDEBUG">
+            <xsl:comment>geen hl7 quantity (mp9-hoeveelheid) in input</xsl:comment>
+         </xsl:if>
+         <xsl:call-template name="util:logMessage">
+            <xsl:with-param name="level"
+                            select="$logDEBUG"/>
+            <xsl:with-param name="msg">Geen hl7 quantity (mp9-hoeveelheid) in input. 
+<xsl:value-of select="$baseEndLogMessage"/>
+            </xsl:with-param>
+         </xsl:call-template>
+      </xsl:if>
+      <!-- only output the eenheid dataset element if all units are the same -->
+      <!-- MP-2288, when there is no unit but there is value, the unit is '1' by default -->
+      <xsl:variable name="defaultUCUMUnits"
+                    as="element()*">
+         <xsl:for-each select="$hl7-quantity[not(@unit)][@value] | $hl7-quantity//hl7:*[not(self::hl7:translation)][not(@unit)][@value]">
+            <xsl:element name="{local-name()}">
+               <xsl:copy-of select="@value"/>
+               <xsl:attribute name="unit"
+                              select="'1'"/>
+            </xsl:element>
+         </xsl:for-each>
+      </xsl:variable>
+      <xsl:variable name="quantityUCUMUnits"
+                    as="xs:string*">
+         <xsl:sequence select="$hl7-quantity/@unit, $hl7-quantity//hl7:*/@unit, $defaultUCUMUnits/@unit"/>
+      </xsl:variable>
+      <xsl:for-each select="$hl7-quantity">
+         <xsl:call-template name="mp9-aantal">
+            <xsl:with-param name="baseEndLogMessage"
+                            select="$baseEndLogMessage"/>
+         </xsl:call-template>
+         <xsl:choose>
+            <!-- typical case, Gstd translation should be there and should be unique -->
+            <xsl:when test="count(distinct-values($hl7-quantity//hl7:translation[@codeSystem = $oidGStandaardBST902THES2]/@code)) = 1">
+               <!-- requirement is same Gstd unit in one dosage -->
+               <xsl:for-each select="(.//hl7:translation[@codeSystem = $oidGStandaardBST902THES2])[1]">
+                  <eenheid>
+                     <xsl:call-template name="mp9-code-attribs">
+                        <xsl:with-param name="current-hl7-code"
+                                        select="."/>
+                     </xsl:call-template>
+                  </eenheid>
+               </xsl:for-each>
+            </xsl:when>
+            <!-- when G-std translation is not there (or not unique), we may be able to find it using UCUM, we still need only one unique unit in the input -->
+            <xsl:when test="count(distinct-values($quantityUCUMUnits)) = 1 and string-length($UCUM2GstdMap[@UCUMCode = normalize-space($quantityUCUMUnits[1])]/@GstdCode) gt 0">
+               <!-- let's log the anomaly with G-std stuff -->
+               <xsl:choose>
+                  <xsl:when test="count(distinct-values(.//hl7:translation[@codeSystem = $oidGStandaardBST902THES2]/@code)) = 0">
+                     <xsl:call-template name="util:logMessage">
+                        <xsl:with-param name="level"
+                                        select="$logERROR"/>
+                        <xsl:with-param name="msg">Found 
+<xsl:value-of select="$adaElementName"/> in input without G-std unit, this is not allowed. However we still converted making use of the UCUM unit. 
+<xsl:value-of select="$baseEndLogMessage"/>
+                        </xsl:with-param>
+                     </xsl:call-template>
+                  </xsl:when>
+                  <xsl:when test="count(distinct-values(.//hl7:translation[@codeSystem = $oidGStandaardBST902THES2]/@code)) gt 1">
+                     <xsl:call-template name="util:logMessage">
+                        <xsl:with-param name="level"
+                                        select="$logERROR"/>
+                        <xsl:with-param name="msg">Found 
+<xsl:value-of select="$adaElementName"/> in input with multiple G-std units, this is not allowed. However we still converted assuming the UCUM unit is correct. 
+<xsl:value-of select="$baseEndLogMessage"/>
+                        </xsl:with-param>
+                     </xsl:call-template>
+                  </xsl:when>
+               </xsl:choose>
+               <eenheid>
+                  <xsl:call-template name="UCUM2GstdBasiseenheid">
+                     <xsl:with-param name="UCUM"
+                                     select="$quantityUCUMUnits[1]"/>
+                  </xsl:call-template>
+               </eenheid>
+            </xsl:when>
+            <xsl:otherwise>
+               <xsl:if test="$logLevel = $logDEBUG">
+                  <xsl:comment>Found 
+<xsl:value-of select="$adaElementName"/> in input, but not able to properly convert it. 
+<xsl:value-of select="$baseEndLogMessage"/>
+                  </xsl:comment>
+               </xsl:if>
+               <xsl:call-template name="util:logMessage">
+                  <xsl:with-param name="level"
+                                  select="$logERROR"/>
+                  <xsl:with-param name="msg">Found 
+<xsl:value-of select="$adaElementName"/> in input, but not able to properly convert it. 
+<xsl:value-of select="$baseEndLogMessage"/>
+                  </xsl:with-param>
+               </xsl:call-template>
+            </xsl:otherwise>
+         </xsl:choose>
+      </xsl:for-each>
+   </xsl:template>
+   <xd:doc>
+      <xd:desc/>
+      <xd:param name="baseEndLogMessage"/>
+   </xd:doc>
+   <xsl:template name="mp9-aantal">
+      <xsl:param name="baseEndLogMessage"
+                 as="xs:string*"/>
+      <xsl:choose>
+         <xsl:when test=".[@value] and not(./*[not(self::hl7:translation)][@value])">
+            <xsl:call-template name="mp9-productQuantityValue">
+               <xsl:with-param name="in"
+                               select="."/>
+            </xsl:call-template>
+         </xsl:when>
+         <xsl:when test="./*[not(self::hl7:translation)][@value] and not(.[@value])">
+            <aantal>
+               <xsl:call-template name="mp9-productQuantityValue">
+                  <xsl:with-param name="in"
+                                  select="./*[@value]"/>
+               </xsl:call-template>
+            </aantal>
+         </xsl:when>
+         <xsl:otherwise>
+            <!-- should not happen -->
+            <xsl:call-template name="util:logMessage">
+               <xsl:with-param name="level"
+                               select="$logERROR"/>
+               <xsl:with-param name="msg">Found an invalid quantity in hl7. 
+<xsl:value-of select="$baseEndLogMessage"/>
+               </xsl:with-param>
+            </xsl:call-template>
+            <xsl:for-each select=".[@value] | ./*[not(self::hl7:translation)][@value]">
+               <xsl:call-template name="mp9-productQuantityValue">
+                  <xsl:with-param name="in"
+                                  select="."/>
+               </xsl:call-template>
+            </xsl:for-each>
+         </xsl:otherwise>
+      </xsl:choose>
+   </xsl:template>
+   <xd:doc>
       <xd:desc>Creates an ada keerdosis element based on a HL7 input.</xd:desc>
       <xd:param name="hl7-doseQuantity">the HL7 doseQuantity element</xd:param>
    </xd:doc>
@@ -2196,148 +2374,108 @@
       <xsl:if test="$logLevel = $logDEBUG">
          <xsl:comment>mp9-keerdosis</xsl:comment>
       </xsl:if>
-      <!-- only output if all units are the same -->
-      <xsl:variable name="doseUCUMUnits"
-                    select="$hl7-doseQuantity/@unit | $hl7-doseQuantity//hl7:*/@unit"
-                    as="xs:string*"/>
-      <xsl:choose>
-         <xsl:when test="not($hl7-doseQuantity)">
-            <xsl:if test="$logLevel = $logDEBUG">
-               <xsl:comment>geen keerdosis in input</xsl:comment>
-            </xsl:if>
-         </xsl:when>
-         <!-- typical case, Gstd translation should be there and should be unique -->
-         <xsl:when test="count(distinct-values($hl7-doseQuantity//hl7:translation[@codeSystem = $oidGStandaardBST902THES2]/@code)) = 1">
-            <xsl:for-each select="$hl7-doseQuantity">
-               <keerdosis>
-                  <aantal>
-                     <xsl:for-each select="hl7:low/hl7:translation[@codeSystem = $oidGStandaardBST902THES2]">
-                        <min value="{@value}">
-                           <xsl:for-each select="../hl7:translation[@codeSystem = $oidNHGTabe361Gebruikseenheid]">
-                              <adaextension>
-                                 <translation value="{@value}">
-                                    <xsl:call-template name="mp9-code-attribs">
-                                       <xsl:with-param name="current-hl7-code"
-                                                       select="."/>
-                                    </xsl:call-template>
-                                 </translation>
-                              </adaextension>
-                           </xsl:for-each>
-                        </min>
-                     </xsl:for-each>
-                     <xsl:for-each select="hl7:center/hl7:translation[@codeSystem = $oidGStandaardBST902THES2] | ./hl7:translation[@codeSystem = $oidGStandaardBST902THES2]">
-                        <vaste_waarde value="{@value}">
-                           <xsl:for-each select="../hl7:translation[@codeSystem = $oidNHGTabe361Gebruikseenheid]">
-                              <adaextension>
-                                 <translation value="{@value}">
-                                    <xsl:call-template name="mp9-code-attribs">
-                                       <xsl:with-param name="current-hl7-code"
-                                                       select="."/>
-                                    </xsl:call-template>
-                                 </translation>
-                              </adaextension>
-                           </xsl:for-each>
-                        </vaste_waarde>
-                     </xsl:for-each>
-                     <xsl:for-each select="hl7:high/hl7:translation[@codeSystem = $oidGStandaardBST902THES2]">
-                        <max value="{@value}">
-                           <xsl:for-each select="../hl7:translation[@codeSystem = $oidNHGTabe361Gebruikseenheid]">
-                              <adaextension>
-                                 <translation value="{@value}">
-                                    <xsl:call-template name="mp9-code-attribs">
-                                       <xsl:with-param name="current-hl7-code"
-                                                       select="."/>
-                                    </xsl:call-template>
-                                 </translation>
-                              </adaextension>
-                           </xsl:for-each>
-                        </max>
-                     </xsl:for-each>
-                  </aantal>
-                  <!-- requirement is same Gstd unit in one dosage -->
-                  <xsl:for-each select="(.//hl7:translation[@codeSystem = $oidGStandaardBST902THES2])[1]">
-                     <eenheid>
-                        <xsl:call-template name="mp9-code-attribs">
-                           <xsl:with-param name="current-hl7-code"
-                                           select="."/>
-                        </xsl:call-template>
-                     </eenheid>
-                  </xsl:for-each>
-               </keerdosis>
-            </xsl:for-each>
-         </xsl:when>
-         <!-- when G-std translation is not there (or not unique), we may be able to find it using UCUM, we still need only one unique unit in the input -->
-         <xsl:when test="count(distinct-values($doseUCUMUnits)) = 1 and string-length($UCUM2GstdMap[@UCUMCode = normalize-space($doseUCUMUnits[1])]/@GstdCode) gt 0">
-            <xsl:for-each select="$hl7-doseQuantity">
-               <keerdosis>
-                  <aantal>
-                     <xsl:for-each select="hl7:low">
-                        <min value="{@value}">
-                           <xsl:for-each select="hl7:translation[@codeSystem = $oidNHGTabe361Gebruikseenheid]">
-                              <adaextension>
-                                 <translation value="{@value}">
-                                    <xsl:call-template name="mp9-code-attribs">
-                                       <xsl:with-param name="current-hl7-code"
-                                                       select="."/>
-                                    </xsl:call-template>
-                                 </translation>
-                              </adaextension>
-                           </xsl:for-each>
-                        </min>
-                     </xsl:for-each>
-                     <xsl:for-each select="hl7:center | .[@value and @unit]">
-                        <vaste_waarde value="{@value}">
-                           <xsl:for-each select="hl7:translation[@codeSystem = $oidNHGTabe361Gebruikseenheid]">
-                              <adaextension>
-                                 <translation value="{@value}">
-                                    <xsl:call-template name="mp9-code-attribs">
-                                       <xsl:with-param name="current-hl7-code"
-                                                       select="."/>
-                                    </xsl:call-template>
-                                 </translation>
-                              </adaextension>
-                           </xsl:for-each>
-                        </vaste_waarde>
-                     </xsl:for-each>
-                     <xsl:for-each select="hl7:high">
-                        <max value="{@value}">
-                           <xsl:for-each select="hl7:translation[@codeSystem = $oidNHGTabe361Gebruikseenheid]">
-                              <adaextension>
-                                 <translation value="{@value}">
-                                    <xsl:call-template name="mp9-code-attribs">
-                                       <xsl:with-param name="current-hl7-code"
-                                                       select="."/>
-                                    </xsl:call-template>
-                                 </translation>
-                              </adaextension>
-                           </xsl:for-each>
-                        </max>
-                     </xsl:for-each>
-                  </aantal>
-                  <eenheid>
-                     <xsl:call-template name="UCUM2GstdBasiseenheid">
-                        <xsl:with-param name="UCUM"
-                                        select="$doseUCUMUnits[1]"/>
-                     </xsl:call-template>
-                  </eenheid>
-               </keerdosis>
-            </xsl:for-each>
-         </xsl:when>
-         <xsl:otherwise>
-            <xsl:if test="$logLevel = $logDEBUG">
-               <xsl:comment>Found keerdosis in input, but not able to convert it. Please check the hl7 doseQuantity in dispense event with id 
-<xsl:value-of select="$hl7-doseQuantity/../hl7:id/@extension"/>
-               </xsl:comment>
-            </xsl:if>
-            <xsl:call-template name="util:logMessage">
-               <xsl:with-param name="level"
-                               select="$logERROR"/>
-               <xsl:with-param name="msg">Found keerdosis in input, but not able to convert it. Please check the hl7 doseQuantity in dispense event with id 
-<xsl:value-of select="$hl7-doseQuantity/../hl7:id/@extension"/>
-               </xsl:with-param>
+      <xsl:call-template name="mp9-hoeveelheid">
+         <xsl:with-param name="hl7-quantity"
+                         select="$hl7-doseQuantity"/>
+         <xsl:with-param name="adaElementName">keerdosis</xsl:with-param>
+      </xsl:call-template>
+   </xsl:template>
+   <xd:doc>
+      <xd:desc>Creates an ada keerdosis element based on a HL7 input.</xd:desc>
+      <xd:param name="hl7-maxDoseQuantity">the HL7 maxDoseQuantity element</xd:param>
+   </xd:doc>
+   <xsl:template name="mp9-maximaleDosering">
+      <xsl:param name="hl7-maxDoseQuantity"
+                 select="."/>
+      <xsl:if test="$logLevel = $logDEBUG">
+         <xsl:comment>mp9-maximaleDosering</xsl:comment>
+      </xsl:if>
+      <xsl:for-each select="$hl7-maxDoseQuantity">
+         <maximale_dosering>
+            <xsl:call-template name="mp9-aantalEnEenheid">
+               <xsl:with-param name="hl7-quantity"
+                               select="hl7:numerator"/>
+               <xsl:with-param name="adaElementName"
+                               select="'maximale_dosering'"/>
             </xsl:call-template>
-         </xsl:otherwise>
-      </xsl:choose>
+            <xsl:for-each select="hl7:denominator[@value | @unit]">
+               <tijdseenheid value="{@value}"
+                             unit="{nf:convertTime_UCUM2ADA_unit(@unit)}"/>
+            </xsl:for-each>
+         </maximale_dosering>
+      </xsl:for-each>
+   </xsl:template>
+   <xd:doc>
+      <xd:desc/>
+      <xd:param name="in"/>
+   </xd:doc>
+   <xsl:template name="mp9-productQuantityValue">
+      <!-- Handle G-standard and UCUM unit stuff with MP product quantity's -->
+      <xsl:param name="in"
+                 as="element()*">
+         <!-- The input hl7 element containing the product quantity -->
+      </xsl:param>
+      <xsl:for-each select="$in">
+         <xsl:variable name="adaElementName"
+                       as="xs:string">
+            <xsl:choose>
+               <xsl:when test="self::hl7:low">
+                  <xsl:value-of select="'min'"/>
+               </xsl:when>
+               <xsl:when test="self::hl7:center">
+                  <xsl:value-of select="'vaste_waarde'"/>
+               </xsl:when>
+               <xsl:when test="self::hl7:high">
+                  <xsl:value-of select="'max'"/>
+               </xsl:when>
+               <xsl:when test="self::hl7:quantity[parent::hl7:medicationDispenseEvent]">
+                  <xsl:value-of select="'aantal'"/>
+               </xsl:when>
+               <xsl:otherwise>
+                  <xsl:value-of select="'aantal'"/>
+               </xsl:otherwise>
+            </xsl:choose>
+         </xsl:variable>
+         <xsl:element name="{$adaElementName}">
+            <xsl:attribute name="value">
+               <!-- give preference to G-std value if present -->
+               <xsl:choose>
+                  <xsl:when test="hl7:translation[@codeSystem = $oidGStandaardBST902THES2][@code][@value]">
+                     <xsl:value-of select="(hl7:translation[@codeSystem = $oidGStandaardBST902THES2][@code][@value])[1]/@value"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                     <!-- fallback on UCUM -->
+                     <xsl:value-of select="@value"/>
+                  </xsl:otherwise>
+               </xsl:choose>
+            </xsl:attribute>
+            <!-- stick all the original information in extensions, useful for putting it in FHIR later -->
+            <!-- first the originalUCUM stuff -->
+            <adaextension>
+               <originalUCUM value="{@value}">
+                  <xsl:attribute name="unit">
+                     <xsl:choose>
+                        <xsl:when test="@unit">
+                           <xsl:value-of select="@unit"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                           <xsl:value-of select="'1'"/>
+                        </xsl:otherwise>
+                     </xsl:choose>
+                  </xsl:attribute>
+               </originalUCUM>
+               <!-- and the original translations -->
+               <xsl:for-each select="hl7:translation">
+                  <translation value="{@value}">
+                     <xsl:call-template name="mp9-code-attribs">
+                        <xsl:with-param name="current-hl7-code"
+                                        select="."/>
+                     </xsl:call-template>
+                  </translation>
+               </xsl:for-each>
+            </adaextension>
+         </xsl:element>
+      </xsl:for-each>
    </xsl:template>
    <xd:doc>
       <xd:desc/>
@@ -3187,24 +3325,10 @@
             </xsl:if>
             <!-- maximale_dosering  -->
             <xsl:for-each select="$max-dose[.//@value]">
-               <xsl:if test="$logLevel = $logDEBUG">
-                  <xsl:comment>maximale dosering</xsl:comment>
-               </xsl:if>
-               <maximale_dosering>
-                  <xsl:for-each select="(./hl7:numerator/hl7:translation[@codeSystem = $oidGStandaardBST902THES2])">
-                     <aantal value="{@value}"/>
-                     <eenheid>
-                        <xsl:call-template name="mp9-code-attribs">
-                           <xsl:with-param name="current-hl7-code"
-                                           select="."/>
-                        </xsl:call-template>
-                     </eenheid>
-                  </xsl:for-each>
-                  <xsl:for-each select="(./hl7:denominator)">
-                     <tijdseenheid value="{@value}"
-                                   unit="{nf:convertTime_UCUM2ADA_unit(./@unit)}"/>
-                  </xsl:for-each>
-               </maximale_dosering>
+               <xsl:call-template name="mp9-maximaleDosering">
+                  <xsl:with-param name="hl7-maxDoseQuantity"
+                                  select="."/>
+               </xsl:call-template>
             </xsl:for-each>
          </zo_nodig>
       </xsl:if>
@@ -3238,24 +3362,10 @@
             </xsl:for-each>
             <!-- maximale_dosering  -->
             <xsl:for-each select="$max-dose[.//@value]">
-               <xsl:if test="$logLevel = $logDEBUG">
-                  <xsl:comment>maximale dosering</xsl:comment>
-               </xsl:if>
-               <maximale_dosering>
-                  <xsl:for-each select="(./hl7:numerator/hl7:translation[@codeSystem = $oidGStandaardBST902THES2])">
-                     <aantal value="{@value}"/>
-                     <eenheid>
-                        <xsl:call-template name="mp9-code-attribs">
-                           <xsl:with-param name="current-hl7-code"
-                                           select="."/>
-                        </xsl:call-template>
-                     </eenheid>
-                  </xsl:for-each>
-                  <xsl:for-each select="(./hl7:denominator)">
-                     <tijdseenheid value="{@value}"
-                                   unit="{nf:convertTime_UCUM2ADA_unit(./@unit)}"/>
-                  </xsl:for-each>
-               </maximale_dosering>
+               <xsl:call-template name="mp9-maximaleDosering">
+                  <xsl:with-param name="hl7-maxDoseQuantity"
+                                  select="."/>
+               </xsl:call-template>
             </xsl:for-each>
          </zo_nodig>
       </xsl:if>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- == Provenance: YATC-internal/ada-2-fhir-r4/env/mp/9.3.0/2_fhir_mp93_include.xsl == -->
-<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.18; 2026-08-25T11:32:38.29+02:00 == -->
+<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.18; 2026-08-27T17:36:23.96+02:00 == -->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -70,7 +70,7 @@
       </xsl:variable>
       <xsl:call-template name="buildFhirMetadata">
          <xsl:with-param name="in"
-                         select=".//(patient[*] |.//medicamenteuze_behandeling_id/parent::node() | medicamenteuze_behandeling/*[not(self::identificatie)] | reden_van_voorschrijven/probleem | */afleverlocatie | bouwstenen/* | documentgegevens/auteur/auteur_is_zorgaanbieder/zorgaanbieder) | $toedienerZorgaanbieder"/>
+                         select=".//(patient[not(parent::toediener)] |.//medicamenteuze_behandeling_id/parent::node() | medicamenteuze_behandeling/*[not(self::identificatie)] | reden_van_voorschrijven/probleem | */afleverlocatie | bouwstenen/* | documentgegevens/auteur/auteur_is_zorgaanbieder/zorgaanbieder) | $toedienerZorgaanbieder"/>
       </xsl:call-template>
    </xsl:param>
    <xsl:variable name="commonEntries"

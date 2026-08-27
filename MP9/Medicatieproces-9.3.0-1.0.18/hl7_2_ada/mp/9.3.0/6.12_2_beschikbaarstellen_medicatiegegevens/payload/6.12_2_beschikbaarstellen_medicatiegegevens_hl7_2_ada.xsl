@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- == Provenance: YATC-internal/hl7-2-ada/env/mp/9.3.0/6.12_2_beschikbaarstellen_medicatiegegevens/payload/6.12_2_beschikbaarstellen_medicatiegegevens_hl7_2_ada.xsl == -->
-<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.18; 2026-08-25T11:32:38.29+02:00 == -->
+<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.18; 2026-08-27T17:36:23.96+02:00 == -->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -561,6 +561,8 @@
                      MP-2124: met een prefix OID '1.3.6.1.4.1.58606.1.5.'-->
             <xsl:variable name="MAprefixOid"
                           select="'1.3.6.1.4.1.58606.1.5'"/>
+            <xsl:variable name="MP9to612prefixOid"
+                          select="'1.3.6.1.4.1.58606.1.3'"/>
             <xsl:variable name="prescriptionId"
                           select=".//hl7:product/hl7:dispensedMedication/hl7:directTargetOf/hl7:prescription/hl7:id[@root | @extension]"/>
             <relatie_medicatieafspraak>
@@ -571,14 +573,26 @@
                         <hl7:id extension="{$prescriptionId/@extension}">
                            <xsl:attribute name="root">
                               <xsl:choose>
+                                 <xsl:when test="starts-with($prescriptionId/@root, $MP9to612prefixOid)">
+                                    <!-- This is an MP9-EVS which has sent a 6.12 prescripion to a 6.12 AIS. We want the true MP9-MA in the translated TA -->
+                                    <xsl:value-of select="replace(string($prescriptionId/@root), '^1\.3\.6\.1\.4\.1\.58606\.1\.3\.', '')"/>
+                                 </xsl:when>
                                  <xsl:when test="starts-with($prescriptionId/@root, $MAprefixOid)">
+                                    <!-- This should not happen, but just to be sure let's not double add the same prefix -->
                                     <xsl:value-of select="$prescriptionId/@root"/>
                                  </xsl:when>
                                  <xsl:otherwise>
+                                    <!-- A true 6.12 prescription from a 6.12-EVS. We put a prefix in the OID. The 6.12-EVS should migrate to a MP9-MA with the same prefix, so that some day the TA/relatieMA will resolve in the MP9-world  -->
                                     <xsl:value-of select="concat($MAprefixOid, '.', $prescriptionId/@root)"/>
                                  </xsl:otherwise>
                               </xsl:choose>
                            </xsl:attribute>
+                           <!-- in one of the usecases above (an MP9-EVS which has sent a 6.12 prescripion to a 6.12 AIS. We want the true MP9-MA in the translated TA) we also need to update the extension -->
+                           <xsl:if test="starts-with($prescriptionId/@root, $MP9to612prefixOid)">
+                              <xsl:attribute name="extension">
+                                 <xsl:value-of select="tokenize(string($prescriptionId/@extension), '!')[1]"/>
+                              </xsl:attribute>
+                           </xsl:if>
                         </hl7:id>
                      </xsl:variable>
                      <xsl:call-template name="handleII">

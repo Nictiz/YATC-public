@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- == Provenance: YATC-internal/ada-2-hl7/env/zib2020bbr/payload/hl7-Informant-20210701.xsl == -->
-<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.18; 2026-08-25T11:32:38.29+02:00 == -->
+<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.18; 2026-08-27T17:36:23.96+02:00 == -->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"

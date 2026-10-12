@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- == Provenance: YATC-internal/hl7-2-ada/env/hl7/hl7_2_ada_hl7_include.xsl == -->
-<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.19; 2026-10-09T11:19:44.42+02:00 == -->
+<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.19; 2026-10-12T10:57:56.38+02:00 == -->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -1713,9 +1713,9 @@
                                   select="$logERROR"/>
                   <xsl:with-param name="msg">OID SHALL NOT have leading zeroes in its nodes: 
 <xsl:value-of select="@root"/>. This MUST be fixed in the source application before continuing.</xsl:with-param>
-                  <!-- Is this too strict? -->
+                  <!-- MP-2426 do not terminate because this happens in 6.12 production messages -->
                   <xsl:with-param name="terminate"
-                                  select="true()"/>
+                                  select="false()"/>
                </xsl:call-template>
             </xsl:when>
          </xsl:choose>

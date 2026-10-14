@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- == Provenance: YATC-internal/hl7-2-ada/env/mp/9.3.0/6.12_2_beschikbaarstellen_medicatiegegevens/payload/6.12_2_beschikbaarstellen_medicatiegegevens_hl7_2_ada.xsl == -->
-<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.19; 2026-10-12T10:57:56.38+02:00 == -->
+<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.19; 2026-10-14T11:01:00.28+02:00 == -->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -582,7 +582,7 @@
                                     <xsl:value-of select="$prescriptionId/@root"/>
                                  </xsl:when>
                                  <xsl:otherwise>
-                                    <!-- A true 6.12 prescription from a 6.12-EVS. We put a prefix in the OID. The 6.12-EVS should migrate to a MP9-MA with the same prefix, so that some day the TA/relatieMA will resolve in the MP9-world  -->
+                                    <!-- A true 6.12 or EDIFACT prescription from a 6.12-EVS. We put a prefix in the OID. The 6.12-EVS should migrate to a MP9-MA with the same prefix, so that some day the TA/relatieMA will resolve in the MP9-world  -->
                                     <xsl:value-of select="concat($MAprefixOid, '.', $prescriptionId/@root)"/>
                                  </xsl:otherwise>
                               </xsl:choose>
@@ -590,7 +590,7 @@
                            <!-- in one of the usecases above (an MP9-EVS which has sent a 6.12 prescripion to a 6.12 AIS. We want the true MP9-MA in the translated TA) we also need to update the extension -->
                            <xsl:if test="starts-with($prescriptionId/@root, $MP9to612prefixOid)">
                               <xsl:attribute name="extension">
-                                 <xsl:value-of select="tokenize(string($prescriptionId/@extension), '!')[1]"/>
+                                 <xsl:value-of select="replace(string($prescriptionId/@extension), '![^!]*$', '')"/>
                               </xsl:attribute>
                            </xsl:if>
                         </hl7:id>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- == Provenance: YATC-internal/ada-2-fhir/env/fhir/2_fhir_fhir_include.xsl == -->
-<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.19; 2026-10-12T10:57:56.38+02:00 == -->
+<!-- == Distribution: MP9-Medicatieproces-9.3.0; 1.0.19; 2026-10-14T11:01:00.28+02:00 == -->
 <xsl:stylesheet exclude-result-prefixes="#all"
                 version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -105,7 +105,7 @@
                </xsl:element>
             </xsl:when>
             <!-- Observation//value does not do valueDecimal, hence quantity without unit -->
-            <xsl:when test="$theDatatype = ('count','quantity', 'duration', 'currency', 'decimal', 'integer') or @unit">
+            <xsl:when test="$theDatatype = ('count','quantity', 'duration', 'currency', 'decimal', 'integer', 'ordinal') or @unit">
                <xsl:element name="{concat($elemName, 'Quantity')}"
                             namespace="http://hl7.org/fhir">
                   <xsl:call-template name="hoeveelheid-to-Quantity">
@@ -719,27 +719,48 @@
          <!-- ada element with datatype identifier -->
       </xsl:param>
       <xsl:choose>
-         <xsl:when test="$in[@nullFlavor and not(string-length(@root) gt 0 and @nullFlavor = 'MSK')]">
-            <extension url="{$urlExtHL7NullFlavor}">
-               <valueCode value="{$in/@nullFlavor}"/>
-            </extension>
-         </xsl:when>
-         <xsl:when test="$in[string-length(@root) gt 0][@root = $mask-ids-var] or $in[@nullFlavor = 'MSK' and string-length(@root) gt 0]">
+         <!-- Masking takes precedence over @nullFlavor -->
+         <xsl:when test="$in[string-length(@root) gt 0][@root = $mask-ids-var] |                              $in[string-length(@root) gt 0][@nullFlavor = 'MSK']">
             <system value="{local:getUri($in/@root)}"/>
             <value>
-               <extension url="http://hl7.org/fhir/StructureDefinition/data-absent-reason">
+               <extension url="{$urlExtHL7DataAbsentReason}">
                   <valueCode value="masked"/>
                </extension>
             </value>
          </xsl:when>
-         <xsl:when test="$in[@value | @root]">
-            <xsl:for-each select="$in/@root">
-               <system value="{local:getUri(.)}"/>
-            </xsl:for-each>
-            <xsl:for-each select="$in/@value">
-               <value value="{replace(., '(^\s+)|(\s+$)', '')}"/>
-            </xsl:for-each>
+         <xsl:when test="$in[@nullFlavor = 'MSK']">
+            <extension url="{$urlExtHL7DataAbsentReason}">
+               <valueCode value="masked"/>
+            </extension>
          </xsl:when>
+         <xsl:when test="$in[@nullFlavor]">
+            <extension url="{$urlExtHL7NullFlavor}">
+               <valueCode value="{$in/@nullFlavor}"/>
+            </extension>
+         </xsl:when>
+         <!--<xsl:when test="$in[@nullFlavor]">
+                <xsl:variable name="dataAbsentReasonCode" select="$nullFlavor_to_fhirDataAbsentReason//map[@inCode = $in/@nullFlavor]/@code"/>
+                <xsl:choose>
+                    <xsl:when test="$dataAbsentReasonCode">
+                        <extension url="{$urlExtHL7DataAbsentReason}">
+                            <valueCode value="{$dataAbsentReasonCode}"/>
+                        </extension>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <extension url="{$urlExtHL7NullFlavor}">
+                            <valueCode value="{$in/@nullFlavor}"/>
+                        </extension>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:when>-->
+         <xsl:otherwise>
+            <xsl:if test="$in/@root[not(. = '')]">
+               <system value="{local:getUri($in/@root)}"/>
+            </xsl:if>
+            <xsl:if test="$in/@value[not(. = '')]">
+               <value value="{replace($in/@value, '(^\s+)|(\s+$)', '')}"/>
+            </xsl:if>
+         </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
@@ -1211,7 +1232,7 @@
                <xsl:otherwise>
                   <!-- CLI-107: output a relative date or dateTime for Conformancelab, which leads to timezone being calculated depending on the date that is calculated (summer/winter time) -->
                   <xsl:variable name="hasTime"
-                                select="$time castable as xs:time"/>
+                                select="$time castable as xs:time and not(upper-case($derivedPrecision) = ('DAY', 'DAG', 'DAYS', 'DAGEN', 'D'))"/>
                   <xsl:value-of select="if ($hasTime) then '${DATETIME, T' else '${DATE, T'"/>
                   <!-- Strip out unneccessary '+0D' or '-0D' patterns -->
                   <xsl:if test="$amount != '0'">

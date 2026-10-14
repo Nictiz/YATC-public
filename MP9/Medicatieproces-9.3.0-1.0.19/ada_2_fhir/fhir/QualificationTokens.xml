@@ -764,13 +764,13 @@
         <bsn>999901783</bsn>
         <qualificationScript>MedMij Geboortezorg</qualificationScript>
     </array>
-    <array>
+    <!-- <array>
         <accessToken>Bearer 7f2b9c79-1c82-4883-aa93-5d0c7b1afd41</accessToken>
         <resourceId>EVAXXX-Ostendorf</resourceId>
         <familyName>XXX_Ostendorf</familyName>
         <bsn>999901783</bsn>
         <qualificationScript>MedMij Geboortezorg</qualificationScript>
-    </array>
+    </array> -->
     <array>
         <accessToken>Bearer 5ba27ab8-79ed-4fb8-b283-b33989c455f3</accessToken>
         <resourceId>FIONAXXX-Swart</resourceId>
@@ -778,7 +778,7 @@
         <bsn>999901448</bsn>
         <qualificationScript>MedMij Geboortezorg</qualificationScript>
     </array>
-    <array>
+    <!-- <array>
         <accessToken>Bearer 5ba27ab8-79ed-4fb8-b283-b33989c455f3</accessToken>
         <resourceId>TOMXXX-Swart</resourceId>
         <familyName>XXX_Swart</familyName>
@@ -791,7 +791,7 @@
         <familyName>XXX_Swart</familyName>
         <bsn>999901448</bsn>
         <qualificationScript>MedMij Geboortezorg</qualificationScript>
-    </array>
+    </array> -->
     <array>
         <accessToken>Bearer d7a212d5-ff26-43ef-9478-1146b993f870</accessToken>
         <resourceId>MICHAXXX-Yassien-Mohamed</resourceId>
